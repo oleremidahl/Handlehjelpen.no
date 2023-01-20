@@ -1,0 +1,19 @@
+.summary {
+    min-width: 400px;
+    width: 40%;
+    text-align: center;
+    margin: auto;
+    margin-top: 5%;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+/* .details {
+    height: 80%;
+    margin-top: auto;
+    width: 50%;
+    float: left;
+}
+
+. */

@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+html, .bodyDiv {
+  font-family: 'Montserrat', sans-serif;
+  margin: auto;
+  /* background-image: url("../images/image\ \(1\).jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover; */
+  background-color: #f8f8f8;
+/* rgb(255, 255, 255) */
+}
+
+.main {
+  min-height: 100vh;
+}
+

@@ -1,0 +1,21 @@
+.footer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* padding-left: 20px; */
+    background-color: rgb(233, 230, 231);
+    width: 100%;
+  }
+
+.footInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* min-width: 500px; */
+    /* margin-left: 10%; */
+    /* border: thin solid red; */
+    min-width: 250px;
+    width: 20%;
+    margin-right: 10%;
+}

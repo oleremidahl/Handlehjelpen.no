@@ -31,14 +31,16 @@ const { isLoaded, loadError } = useLoadScript({
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setSelectedLocation({ lat: latitude, lng: longitude });
+        if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(latitude, longitude), bermudaTriangle)){
+          setSelectedLocation({ lat: latitude, lng: longitude });
+          geocodeLatLng(selectedLocation.lat, selectedLocation.lng);
+        }
         // setLocation({ lat: latitude, lng: longitude });
       },
       (error) => {
         console.error(error);
       }
       );
-      geocodeLatLng(selectedLocation.lat, selectedLocation.lng);
   };
 
   const onMapLoad = (map: google.maps.Map) => {
@@ -68,7 +70,7 @@ const { isLoaded, loadError } = useLoadScript({
 
   const geocoder = new google.maps.Geocoder();
   function geocodeLatLng(lat: number, lng: number) {
-    if (google.maps.geometry.poly.containsLocation({lat,lng}, bermudaTriangle)){
+    if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(lat, lng), bermudaTriangle)){
       geocoder
         .geocode({ location: {lat: lat, lng: lng } })
         .then((response: { results: any[]; }) => {

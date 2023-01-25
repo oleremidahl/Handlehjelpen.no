@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../base";
 import "../css/product_card.css";
-// import GMapComp from "./GMapComp";
 import GoogleMapComponent from "./GoogleMapComponent";
 
 const OneOrderField = ({user} : {user: any | null}) => {
@@ -45,7 +44,7 @@ const OneOrderField = ({user} : {user: any | null}) => {
         if (isEmptyFields()){
             alert("Vennligst fyll inn alle felt!");
         }
-        if (items.length === 0) {
+        else if (items.length === 0) {
             alert("Ordren din er tom!")
         }
         else if (user){
@@ -73,7 +72,7 @@ const OneOrderField = ({user} : {user: any | null}) => {
     }
 
     return (
-        <div style={{minWidth: '400px', width: '60%', margin: 'auto', marginTop: '5%', display: 'flex', flexDirection: 'row'}}>
+        <div style={{minWidth: '400px', width: '80%', marginBottom: '20px', marginLeft: '10%', marginTop: '25px', display: 'flex', flexDirection: 'row'}}>
             <div style={{float: 'left', borderRight: '1px solid black', paddingRight: '10px', height: '100%', marginBottom: '20px'}}>
                 <h1 style={{marginTop: '15px'}}>Legg inn din ordre her</h1>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
@@ -87,11 +86,18 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 onKeyDown = {handleKeydown}
                 >
                 </textarea>
+                <br/>
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
                 <hr/>
                 <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpName(event.target.value)} placeholder="Navn" required></input>
                 <p style={{fontWeight: 'bold'}}>Hvor vil du ha det levert? </p>
+                <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
+                    <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
+                </p>
                 <GoogleMapComponent></GoogleMapComponent>
+                <p>Valgfritt: Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
+                <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
+                </p>
                 <textarea 
                 className="location"
                 onChange={event => setLocation(event.target.value)}

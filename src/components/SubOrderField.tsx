@@ -2,6 +2,7 @@ import { off, onValue, ref, update } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { auth, database } from "../base";
 import "../css/product_card.css";
+import GoogleMapComponent from "./GoogleMapComponent";
 
 const SubOrderField = () => {
 
@@ -58,7 +59,7 @@ const SubOrderField = () => {
     }
 
     return (
-        <div className="product_card" style={{textAlign: 'center', overflow: 'scroll', padding: '5px 20px', width: '95%', height: '100%'}}>
+        <div  style={{ padding: '5px 20px', minWidth: '400px', height: '100%', borderLeft: '1px solid black'}}>
                 {hasOrdered? 
                 <>
                     <p>
@@ -69,7 +70,7 @@ const SubOrderField = () => {
                 : 
                 <></>
                 }
-                <h2 style={{marginTop: '15px'}}>Du kan nå legge inn din ordre for {date}. {month}</h2>
+                <h2 style={{marginTop: '15px', marginLeft: 'auto', marginRight: 'auto'}}>Du kan nå legge inn din ordre for {date}. {month}</h2>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <input 
                 style={{border: 'thin solid black', borderRadius: '5px', background: 'white', minWidth: '80px', width: '50%'}}
@@ -88,7 +89,7 @@ const SubOrderField = () => {
                         </div>
                     )}
                 </ul> */}
-                <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til vare</button>
+                <button className="submitBtn" style={{marginLeft: '5px'}} onClick={() => handleAdd(inpGoods)}>Legg til vare</button>
                 <ul style={{textAlign: 'right', width: '50%', listStyleType: 'none'}}>
                     {items.map((item, index) => (
                     <li key={index}>
@@ -97,7 +98,16 @@ const SubOrderField = () => {
                     </li>
                     ))}
                 </ul>
-                <h2>Hvor vil du ha det levert?</h2>
+                <hr/>
+                <p style={{fontWeight: 'bold'}}>Hvor vil du ha det levert? </p>
+                <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
+                    <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
+                </p>
+                <GoogleMapComponent></GoogleMapComponent>
+                <hr/>
+                <p>Valgfritt: Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
+                <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
+                </p>
                 <textarea 
                 className="location"
                 onChange={event => setLocation(event.target.value)}

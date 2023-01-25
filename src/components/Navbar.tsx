@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { auth } from "../base";
 import "../css/navbar.css";
 
-const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+const Navbar = ({ isLoggedIn, isSubscribed }: { isLoggedIn: boolean, isSubscribed: boolean }) => {
 
     const signOut = async () => {
         await auth.signOut();
@@ -20,7 +20,7 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                         <p style={{paddingRight: '10px', borderRight: '1px solid black'}}>Engangskjøp</p>
                     </Link>
 
-                    <Link to={!isLoggedIn ? "/login" : "/SubPayment"}>
+                    <Link to={(isLoggedIn && isSubscribed) ? "/" : isLoggedIn ? "/SubPayment" : "/login"}>
                         <p style={{marginLeft: '10px'}}>Abonnement</p>
                     </Link>
                 </div>

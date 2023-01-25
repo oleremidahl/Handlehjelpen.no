@@ -37,14 +37,9 @@ function App() {
     isSubscribed = subData;
   }
 
-  const pullPaymentData = (paymentData: boolean) => {
-    paymentComplete = paymentData;
-  }
-
-
   return (
       <BrowserRouter>
-        <Navbar isLoggedIn = {isLoggedIn}/>
+        <Navbar isLoggedIn = {isLoggedIn} isSubscribed = {isSubscribed}/>
           <div className='main'>
               <Routes>
 

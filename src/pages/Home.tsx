@@ -18,6 +18,10 @@ const Home = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | null}) => 
 
     const [isSubscribed, setIsSubscibed] = useState(false)
 
+    const currentTime = new Date();
+    let hours = currentTime.getHours();
+    let minutes = currentTime.getMinutes();
+
     useEffect(() => {
         if (data){
             if (data.val().abonnement){
@@ -30,8 +34,10 @@ const Home = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | null}) => 
     })
 
       return (
-        <div style={{minHeight: '100%', width: '100%', overflow: 'auto'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', width: '70%', padding: '5%', margin: 'auto', marginTop: '5%'}}>
+        <>
+        {(hours >= 7 && hours < 24) || (hours === 23 && minutes === 0) ? 
+        <div style={{minWidth: '400px',  marginBottom: '20px', marginLeft: '10%', marginTop: '25px', display: 'flex', flexDirection: 'row'}}>
+            <div style={{paddingRight: '10px', height: '100%', marginBottom: '20px'}}>
                 <ProductCard
                     title = "Engangskjøp"
                     info = {oneTimeInfo}
@@ -40,20 +46,15 @@ const Home = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | null}) => 
                     link = "/OneOrder"
                     isLoggedIn = {null}
                 ></ProductCard>
-
+            </div>
+            {/* {isSubscribed ? 
+            <hr style={{border: 'none', borderLeft: '2px solid red', height: '100%', transform: 'rotate(90deg)'}}/>
+            :
+        <></> */}
+            {/* } */}
+            <div style={{ marginLeft: '20px', borderLeft: isSubscribed ? '1px black' : 'none'}}>
                 {isLoggedIn && isSubscribed?
-                    <div>
-                        {/* <p>Abonnementet ditt utløper {
-                            // get(ref(database, 'brukere/' + auth.currentUser?.uid + '/abonnement'))
-                            data.val().abonnement.AbonnementSlutt
-                            }
-                        </p> */}
-                        {/* <Link to={"/SubOrder"}>
-                            <Button>Klikk her for å legge inn morgendagens ordre</Button>
-                        </Link>  */}
-                        <SubOrderField></SubOrderField>
-
-                    </div>
+                    <SubOrderField></SubOrderField>
                     :
                     <ProductCard 
                     title = "Abonnement"
@@ -62,11 +63,20 @@ const Home = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | null}) => 
                     image = "https://sc01.alicdn.com/kf/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3/200006212/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3.jpg"
                     link = "/SubPayment"
                     isLoggedIn = {isLoggedIn}
-                ></ProductCard>
+                    ></ProductCard>
                 }
             </div>
         </div>
-    )
+            :
+            
+        <div className="product_card" style={{margin: 'auto', marginTop: '30px', padding: '10px'}}>
+            <h1>Vi har dessverre stengt</h1>
+            <p>Våre åpningstider alle dager: 07:00-23:00</p>
+            <p>Du kan fortsatt kjøpe abonnement ved å klikke "Abonnement", så kan du legge inn bestilling når vi åpner igjen. </p>
+        </div>
+          }
+        </>  
+        )
 }; 
 
 export default Home;

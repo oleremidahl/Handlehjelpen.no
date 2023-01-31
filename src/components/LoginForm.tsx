@@ -19,7 +19,8 @@ const LoginForm = () => {
         loginPsw: "", 
         regName: "", 
         regMail: "", 
-        regPsw: ""
+        regPsw: "",
+        tlf: ""
     });  
     
     function handleChange(evt: { target: { value: String; name: any; }; } ) {
@@ -39,6 +40,7 @@ const LoginForm = () => {
           set(ref(database, 'brukere/' + auth.currentUser?.uid), {
             Navn: credentials.regName, 
             Email: credentials.regMail,
+            Tlf: credentials.tlf,
           }
           
           )
@@ -76,6 +78,7 @@ const LoginForm = () => {
             <div className="form-container sign-up-container">
                 <h1>Lag Bruker</h1>
                 <input type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
+                <input type="phone" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
                 <input type="email" name="regMail" onChange={handleChange} placeholder="Email" id="regMail"/>
                 <input type="password" name="regPsw" onChange={handleChange} placeholder="Passord" id="regPassword"/>
                 <button className="loginformbutton" id="register" onClick={createAccount}>Registrer Deg</button>

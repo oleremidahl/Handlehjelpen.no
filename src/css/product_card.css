@@ -10,6 +10,8 @@
 	overflow: hidden;
 	height: 350px;
 	width: 400px;
+	padding: 7px;
+	margin: 10% auto 20px auto;
 }
 
 /* 	Product details  */
@@ -70,6 +72,7 @@
 	color: #eee;
 	padding: 0;
 	margin: 0;
+	width: 140px;
 	
 }
 
@@ -137,7 +140,7 @@
         OrderField CSS
    ------------------------ */
 
-.location {
+.additionalInfo {
 	font-family: sans-serif, Arial;
 	resize: none;
 	min-width: 80px;

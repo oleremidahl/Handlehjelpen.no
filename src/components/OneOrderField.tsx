@@ -1,5 +1,6 @@
-import { ref, update } from "firebase/database";
+import { onValue, ref, update } from "firebase/database";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../base";
 import "../css/product_card.css";
@@ -12,6 +13,27 @@ const OneOrderField = ({user} : {user: any | null}) => {
     const [inpGoods, setInpGoods] = useState("");
 
     const [inpName, setInpName] = useState("");
+    const [inpTlf, setInpTlf] = useState("");
+    let namePath = ref(database, 'brukere/' + auth.currentUser?.uid + '/Navn');
+    let phonePath = ref(database, 'brukere/' + auth.currentUser?.uid + '/Tlf');
+
+    useEffect(() => {
+        if (user){
+            onValue(namePath, (snapshot) => {
+                if (snapshot.exists()){
+                    setInpName(snapshot.val())
+                }
+                });
+            onValue(phonePath, (snapshot) => {
+                if (snapshot.exists()){
+                    setInpTlf(snapshot.val())
+                }
+                });
+        }
+    }, [])
+
+
+    const [additionalInfo, setAdditionalInfo] = useState("");
 
     const navigate = useNavigate();
 
@@ -42,10 +64,6 @@ const OneOrderField = ({user} : {user: any | null}) => {
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         var dateTime = date + '-' + today.getHours() + ":" + today.getMinutes();
         if (isEmptyFields()){
-            alert("Vennligst fyll inn alle felt!");
-        }
-        else if (items.length === 0) {
-            alert("Ordren din er tom!")
         }
         else if (user){
             update(ref(database, 'brukere/' + auth.currentUser?.uid + '/bestillinger/engangs/' + date), {
@@ -53,19 +71,46 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 Lokasjon: location,
                 Navn: inpName,
             });
-            navigate("/OneOrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
+            navigate("/OrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
         }
         else {
             update(ref(database, 'ikkeLoggetInn/bestillinger/' + dateTime + "-" + inpName), {
                 Varer: items,
                 Lokasjon: location,
             })
-            navigate("/OneOrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
+            navigate("/OrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
         }
     }
 
+    // function isEmptyFields() {
+    //     if (inpName === "" || location === ""){
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    var selectedLocation: any = null;
+    var selectedOption: string = '';
+    
+    const handleRetrievedVariables = (selectedL: any, selectedOp: string) => {
+        selectedLocation = selectedL;
+        selectedOption = selectedOp;
+    }
+
+    // const [isEmptyFields, setIsEmptyFields] = useState<boolean>(true);
+
     function isEmptyFields() {
-        if (inpName === "" || location === ""){
+        if(items.length === 0){
+            alert('Bestillingen din er tom!');
+            return true;
+        }
+        
+        else if (selectedOption === ''){
+            alert('Velg en transportmetode!');
+            return true;
+        }
+
+        else if(selectedLocation === null && additionalInfo.length === 0){
+            alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
             return true;
         }
         return false;
@@ -77,10 +122,9 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 <h1 style={{marginTop: '15px'}}>Legg inn din ordre her</h1>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <textarea 
-                style={{width: '90%', height: '70px', resize: 'none', overflowY: 'scroll'}}
-                className="orderArea" 
+                style={{width: '90%', height: '70px', resize: 'none', overflowY: 'scroll', padding: '3px', fontFamily: 'sans-serif'}}
                 name="varer"
-                placeholder="Her kan du legge inn hva du vil ha, det kan for eksempel være dagligvarer eller noe fra en av de lokale restaurantene. "
+                placeholder="Her kan du legge inn hva du vil ha, det kan for eksempel være dagligvarer eller noe fra en av våre andre samarbeidspartnere"
                 onChange={event => setInpGoods(event.target.value)} 
                 value = {inpGoods}
                 onKeyDown = {handleKeydown}
@@ -89,24 +133,24 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 <br/>
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
                 <hr/>
-                <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpName(event.target.value)} placeholder="Navn" required></input>
+                <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpName(event.target.value)} placeholder="Navn" value={inpName}></input>
+                <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpTlf(event.target.value)} placeholder="Tlf" value={inpTlf}></input>
                 <p style={{fontWeight: 'bold'}}>Hvor vil du ha det levert? </p>
                 <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
                     <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
                 </p>
-                <GoogleMapComponent></GoogleMapComponent>
+                <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
                 <p>Valgfritt: Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
                 <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
                 </p>
                 <textarea 
-                className="location"
-                onChange={event => setLocation(event.target.value)}
-                value = {location}
+                className="additionalInfo"
+                onChange={event => setAdditionalInfo(event.target.value)}
+                value = {additionalInfo}
                 ></textarea><br/>
-                <button className="submitBtn" onClick={handleOrder}>Send inn</button>
+                <button className="submitBtn" onClick={handleOrder}>Send inn bestilling</button>
             </div>
             <div style={{float: 'right', marginLeft: '20px', width: '40%'}}>
-                {/* <img src="https://sc01.alicdn.com/kf/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3/200006212/HTB1Cic9HFXXXXbZXpXXq6xXFXXX3.jpg" alt="Bilde"></img> */}
                 <h1 style={{marginTop: '15px'}}>Din ordre</h1>
                 <ul style={{textAlign: 'right', width: '50%', listStyleType: 'none'}}>
                     {items.map((item, index) => (

@@ -11,7 +11,6 @@ import Home from './pages/Home';
 
 import { AuthContext } from './context/AuthContext';
 import { DataContext } from './context/DataContext';
-import SubPayment from './pages/SubPayment';
 import OneOrderField from './components/OneOrderField';
 import OneOrderConfirmation from './components/OneOrderConfirmation';
 import ProfilePage from './pages/ProfilePage';
@@ -20,7 +19,6 @@ function App() {
   var user = useContext(AuthContext);
   var data = useContext(DataContext);
   var isLoggedIn : boolean;
-  var paymentComplete : boolean;
 
   if (user) isLoggedIn = true;
   else isLoggedIn = false;
@@ -29,17 +27,9 @@ function App() {
     document.body.classList.add('bodyDiv');
   })
 
-  // const [isSubscribed, setIsSubscribed] = useState(false)
-  var isSubscribed: boolean = false;
-
-  const pullSubData = (subData: boolean) => {
-    // setIsSubscribed(subData);
-    isSubscribed = subData;
-  }
-
   return (
       <BrowserRouter>
-        <Navbar isLoggedIn = {isLoggedIn} isSubscribed = {isSubscribed}/>
+        <Navbar isLoggedIn = {isLoggedIn} />
           <div className='main'>
               <Routes>
 
@@ -50,11 +40,9 @@ function App() {
 
                 <Route path='/login' element={<LoginForm/>}/>
 
-                <Route path='/SubPayment' element={<SubPayment props = {pullSubData}/>}/>
-
                 <Route path='/OneOrder' element={<OneOrderField user = {user}/>}/>
 
-                <Route path='/OneOrderConfirmation' element={<OneOrderConfirmation/>}/>
+                <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 
                 <Route path='/profile' element={<ProfilePage
                   isLoggedIn = {isLoggedIn}  

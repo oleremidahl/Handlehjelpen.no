@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../base";
 import "../css/navbar.css";
 
-const Navbar = ({ isLoggedIn, isSubscribed }: { isLoggedIn: boolean, isSubscribed: boolean }) => {
+const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
 
     const signOut = async () => {
         await auth.signOut();
@@ -15,14 +15,12 @@ const Navbar = ({ isLoggedIn, isSubscribed }: { isLoggedIn: boolean, isSubscribe
                 <Link to="/">
                     <div className="logo"></div>
                 </Link>
-                <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+                <div>
+                    {/* {pathName !== '/OneOrder' && pathName !== '/OrderConfirmation' && */}
                     <Link to="/OneOrder">
-                        <p style={{paddingRight: '10px', borderRight: '1px solid black'}}>Engangskjøp</p>
+                        <p className="submitBtn">BESTILL LEVERING</p>
                     </Link>
-
-                    <Link to={(isLoggedIn && isSubscribed) ? "/" : isLoggedIn ? "/SubPayment" : "/login"}>
-                        <p style={{marginLeft: '10px'}}>Abonnement</p>
-                    </Link>
+                    
                 </div>
                 {!isLoggedIn ?
                     <div>

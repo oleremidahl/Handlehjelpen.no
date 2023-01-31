@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import '../css/GMapStyles.css';
 
 declare const google: any;
 
-function GoogleMapComponent() {
+function GoogleMapComponent(props: any) {
   
   const containerStyle = {
     width: '400px',
@@ -23,9 +24,10 @@ function GoogleMapComponent() {
   const [searchInput, setSearchInput] = useState('');
   const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
   const [distancePrice, setDistancePrice] = useState<number>();
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState('Bil');
+  const { onRetrievedVariables } = props;
 
-
+  onRetrievedVariables(selectedLocation, selectedOption);
 
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyBaJL0qOKJmBO_DJeYZWa-WrrDfaAqv6xo",
@@ -134,7 +136,7 @@ const { isLoaded, loadError } = useLoadScript({
       else if (drivingTime > 20) drivingTime = drivingTime * 1.75;
       else if (drivingTime > 15) drivingTime = drivingTime * 1.5;
       
-      setDistancePrice(250 + (((drivingTime * 2)/60)*500))
+      setDistancePrice(Math.round(250 + (((drivingTime * 2)/60)*500)))
     }
   }
 
@@ -267,11 +269,13 @@ const { isLoaded, loadError } = useLoadScript({
         <button className="submitBtn" onClick={() => findPos()}>Klikk for å finne min posisjon</button>
         {selectedLocation && <p>{formattedAdress}</p>}
         <p>Destinasjonen kan nås med: <br/>
-        <select onChange={handleSelectChange}>
-          <option disabled selected>Velg</option>
-          <option value="Bil">Bil</option>
-          <option value="Båt">Båt</option>
-        </select>
+        <div className='select'>
+          <select onChange={handleSelectChange}>
+            <option value="Bil">Bil</option>
+            <option value="Båt">Båt</option>
+          </select>
+          <div className="select__arrow"></div>
+        </div>
         </p>
         {distancePrice && <p>Pris for levering: {distancePrice} kr</p>}
       </div>

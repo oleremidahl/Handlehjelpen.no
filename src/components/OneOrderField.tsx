@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../base";
 import "../css/product_card.css";
+import "../css/OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
 
 const OneOrderField = ({user} : {user: any | null}) => {
@@ -117,12 +118,11 @@ const OneOrderField = ({user} : {user: any | null}) => {
     }
 
     return (
-        <div style={{minWidth: '400px', width: '80%', marginBottom: '20px', marginLeft: '10%', marginTop: '25px', display: 'flex', flexDirection: 'row'}}>
-            <div style={{float: 'left', borderRight: '1px solid black', paddingRight: '10px', height: '100%', marginBottom: '20px'}}>
-                <h1 style={{marginTop: '15px'}}>Legg inn din ordre her</h1>
+        <div className="OrderForm">
+            <div className="OrderDetails">
+                <h1>Legg inn din ordre her</h1>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <textarea 
-                style={{width: '90%', height: '70px', resize: 'none', overflowY: 'scroll', padding: '3px', fontFamily: 'sans-serif'}}
                 name="varer"
                 placeholder="Her kan du legge inn hva du vil ha, det kan for eksempel være dagligvarer eller noe fra en av våre andre samarbeidspartnere"
                 onChange={event => setInpGoods(event.target.value)} 
@@ -130,17 +130,19 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 onKeyDown = {handleKeydown}
                 >
                 </textarea>
-                <br/>
+                <br/><br/>
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
                 <hr/>
-                <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpName(event.target.value)} placeholder="Navn" value={inpName}></input>
-                <input style={{background: 'white', border: 'thin solid black', width: '66%'}} onChange={event => setInpTlf(event.target.value)} placeholder="Tlf" value={inpTlf}></input>
-                <p style={{fontWeight: 'bold'}}>Hvor vil du ha det levert? </p>
+                <h3>Levering</h3>
                 <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
                     <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
                 </p>
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
-                <p>Valgfritt: Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
+                <hr/>
+                <h3>Kontakt informasjon</h3>
+                <input onChange={event => setInpName(event.target.value)} placeholder="Navn" value={inpName}></input>
+                <input onChange={event => setInpTlf(event.target.value)} placeholder="Tlf" value={inpTlf}></input>
+                <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
                 <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
                 </p>
                 <textarea 
@@ -150,13 +152,13 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 ></textarea><br/>
                 <button className="submitBtn" onClick={handleOrder}>Send inn bestilling</button>
             </div>
-            <div style={{float: 'right', marginLeft: '20px', width: '40%'}}>
-                <h1 style={{marginTop: '15px'}}>Din ordre</h1>
-                <ul style={{textAlign: 'right', width: '50%', listStyleType: 'none'}}>
+            <div className="OrderView">
+                <h1>Din ordre</h1>
+                <ul>
                     {items.map((item, index) => (
                     <li key={index} style={{marginTop: '15px'}}>
                         {item}
-                        <button style={{marginLeft: '5px', verticalAlign: 'right'}} onClick={() => handleRemove(index)}>X</button>
+                        <button className="listBtn" onClick={() => handleRemove(index)}>X</button>
                     </li>
                     ))}
                 </ul>

@@ -1,0 +1,67 @@
+.OrderForm {
+    /* min-width: '400px'; */
+    width: 80%; 
+    margin-bottom: 20px; 
+    margin-left: 10%;
+    margin-top: 25px; 
+    display: flex; 
+    flex-direction: row;
+}
+
+.OrderDetails {
+    float: left;
+    border-right: 1px solid black; 
+    padding-right: 10px;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.OrderForm .OrderDetails h1 {
+    margin-top: 15px;
+    color: #345900;
+}
+
+.OrderForm .OrderDetails textarea {
+    width: 90%;
+    height: 70px; 
+    resize: none; 
+    overflow-y: scroll; 
+    padding: 3px; 
+    font-family: 'sans-serif';
+    font-size: 14px;
+}
+
+.OrderForm .OrderDetails input {
+    background: white; 
+    border: thin solid black; 
+    width: 66%;
+
+}
+
+.OrderForm .OrderDetails p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+}
+
+.OrderView {
+    float: right;
+    margin-left: 20px;
+    width: 40%;
+}
+
+.OrderView h1 {
+    margin-top: 15px;
+    color: #345900;
+}
+
+.OrderView ul {
+    text-align: right; 
+    width: 50%; 
+    list-style-type: none;
+}
+
+.listBtn {
+    margin-left: 5px; 
+    vertical-align: right; 
+    cursor: pointer;
+}

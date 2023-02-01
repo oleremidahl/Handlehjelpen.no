@@ -17,9 +17,9 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 </Link>
                 <div>
                     {/* {pathName !== '/OneOrder' && pathName !== '/OrderConfirmation' && */}
-                    <Link to="/OneOrder">
+                    {/* <Link to="/OneOrder">
                         <p className="submitBtn">BESTILL LEVERING</p>
-                    </Link>
+                    </Link> */}
                     
                 </div>
                 {!isLoggedIn ?

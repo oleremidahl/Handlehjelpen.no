@@ -1,7 +1,7 @@
 .navbar {
     background-color: #f8f8f8;
     border-radius: 0 0 5px 5px;
-    box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 6px 6px 0 rgba(1, 53, 3, 0.2);
     width: 100vw;
     height: 80px;
   }

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../base";
-import "../css/navbar.css";
+import "../css//navbar.css";
+import { AuthContext } from '../context/AuthContext';
 
-const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+const Navbar = () => {
+
+    const user = useContext(AuthContext);
 
     const signOut = async () => {
         await auth.signOut();
@@ -15,14 +18,7 @@ const Navbar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
                 <Link to="/">
                     <div className="logo"></div>
                 </Link>
-                <div>
-                    {/* {pathName !== '/OneOrder' && pathName !== '/OrderConfirmation' && */}
-                    {/* <Link to="/OneOrder">
-                        <p className="submitBtn">BESTILL LEVERING</p>
-                    </Link> */}
-                    
-                </div>
-                {!isLoggedIn ?
+                {!user ?
                     <div>
                         <Link to="/login">
                             <button className="loginbutton">Logg inn</button>

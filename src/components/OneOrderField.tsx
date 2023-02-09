@@ -1,16 +1,17 @@
 import { onValue, ref, update } from "firebase/database";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../base";
 import "../css/product_card.css";
-import "../css/OrderField.css";
+import "../css/AI/AI_2.css";
 import GoogleMapComponent from "./GoogleMapComponent";
+import { AuthContext } from "../context/AuthContext";
 
-const OneOrderField = ({user} : {user: any | null}) => {
+const OneOrderField = () => {
     
+    const user = useContext(AuthContext);
     const [location, setLocation] = useState("");
-
     const [inpGoods, setInpGoods] = useState("");
 
     const [inpName, setInpName] = useState("");
@@ -47,10 +48,12 @@ const OneOrderField = ({user} : {user: any | null}) => {
     };
     
     const handleAdd = (good: string) => {
-        const newItems = [...items];
-        newItems.push(good);
-        setItems(newItems);
-        setInpGoods("");
+        if (good !== ""){
+            const newItems = [...items];
+            newItems.push(good);
+            setItems(newItems);
+            setInpGoods("");
+        }
     };
 
     const handleKeydown = (event:  {key: string;} ) =>  {
@@ -132,6 +135,17 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 </textarea>
                 <br/><br/>
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
+                <div className="OrderView">
+                <h3>Din ordre:</h3>
+                <ul>
+                    {items.map((item, index) => (
+                    <li key={index} style={{marginTop: '15px'}}>
+                        {item}
+                        <button className="listBtn" onClick={() => handleRemove(index)}>X</button>
+                    </li>
+                    ))}
+                </ul>
+            </div>
                 <hr/>
                 <h3>Levering</h3>
                 <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
@@ -151,17 +165,6 @@ const OneOrderField = ({user} : {user: any | null}) => {
                 value = {additionalInfo}
                 ></textarea><br/>
                 <button className="submitBtn" onClick={handleOrder}>Send inn bestilling</button>
-            </div>
-            <div className="OrderView">
-                <h1>Din ordre</h1>
-                <ul>
-                    {items.map((item, index) => (
-                    <li key={index} style={{marginTop: '15px'}}>
-                        {item}
-                        <button className="listBtn" onClick={() => handleRemove(index)}>X</button>
-                    </li>
-                    ))}
-                </ul>
             </div>
         </div>
     );

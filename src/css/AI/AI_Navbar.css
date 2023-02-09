@@ -1,0 +1,39 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4f8e4f;
+    height: 60px;
+    padding: 0 20px;
+}
+
+.logo {
+    background-color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    margin-right: 20px;
+    float: left;
+}
+  
+  .navInfo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .loginbutton {
+    background-color: #fff;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+  
+  .loginbutton:hover {
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+  }
+  

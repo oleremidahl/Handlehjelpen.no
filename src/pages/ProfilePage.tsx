@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { DataContext } from '../context/DataContext';
 
-const ProfilePage = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | null}) => {
-    const [isSubscribed, setIsSubscibed] = useState(false)
+const ProfilePage = () => {
+    const [isSubscribed, setIsSubscibed] = useState(false);
+    const data = useContext(DataContext);
 
     useEffect(() => {
         if (data){
@@ -18,22 +19,13 @@ const ProfilePage = ({isLoggedIn, data} : {isLoggedIn : boolean, data: any | nul
     return (
         <div className="userProfile">
             {data?
-                    <>
+                <>
                     <h1>Brukerinfo</h1>
                     <p><b>Navn:</b> {data.val().Navn}</p>
                     <p><b>E-mail:</b> {data.val().Email}</p>
                     <p><b>Bruker-ID:</b> {data.key}</p>
-                    {/* <p>{data.val().Navn}</p> */}
-                    {isSubscribed?
-                        
-                        <p>Abonnementet ditt utløper {
-                            // get(ref(database, 'brukere/' + auth.currentUser?.uid + '/abonnement'))
-                            data.val().abonnement.AbonnementSlutt
-                            }</p>
-                        :
-                        <p>Du har for øyeblikket ikke et aktivt abonnement.</p>
 
-                    }</>: <p>Logget ut</p>}
+                </> : <p>Logget ut</p>}
         </div>
     )
 }

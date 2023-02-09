@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ref, set } from "firebase/database";
 import { auth } from '../base';
-import "../css/login_form.css";
+import "../css/AI/Ai_login.css";
 import { database } from '../base';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginForm = () => {
 
     const [isActive, setIsActive] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useNavigate();  
+    const user = useContext(AuthContext);
+
 
     const handleClick = () => {
-      setIsActive(current => !current);
+      if(!user){
+        setIsActive(current => !current);
+      }
+      else {
+        alert('Du er allerede logget inn!');
+      }
     };
 
     const [credentials, setCredentials] = useState({
@@ -51,15 +59,20 @@ const LoginForm = () => {
       };
       
       const logIn = async () => {
-        try {
-          await auth.signInWithEmailAndPassword(
-            credentials.loginMail,
-            credentials.loginPsw
-          );
-          navigate("/");
-
-        } catch (error) {
-          console.error(error);
+        if(!user){
+          try {
+            await auth.signInWithEmailAndPassword(
+              credentials.loginMail,
+              credentials.loginPsw
+            );
+            navigate("/");
+  
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        else {
+          alert('Du er allerede logget inn!');
         }
       };
       
@@ -77,7 +90,15 @@ const LoginForm = () => {
     
             <div className="form-container sign-up-container">
                 <h1>Lag Bruker</h1>
-                <input type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
+                <input style={{
+                  backgroundColor: '#eee',
+                  border: 'none',
+                  borderRadius: '10px',
+                  padding: '12px 15px',
+                  margin: '8px 0',
+                  width: '80%',
+                  height: '15px'
+                  }} type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
                 <input type="phone" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
                 <input type="email" name="regMail" onChange={handleChange} placeholder="Email" id="regMail"/>
                 <input type="password" name="regPsw" onChange={handleChange} placeholder="Passord" id="regPassword"/>
@@ -88,7 +109,7 @@ const LoginForm = () => {
                 <div className="overlay">
                     <div className="overlay-panel overlay-left">
                         <h1>Velkommen Tilbake!</h1>
-                        <p>Logg inn for å se våre tilbud eller kjøpe et abonnement!</p>
+                        <p>Logg inn for å en enklere bestilling!</p>
                         <button className="loginformbutton ghost" onClick={handleClick}>Logg Inn</button>
                     </div>
                     <div className="overlay-panel overlay-right">

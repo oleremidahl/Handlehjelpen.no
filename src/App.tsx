@@ -14,40 +14,31 @@ import { DataContext } from './context/DataContext';
 import OneOrderField from './components/OneOrderField';
 import OneOrderConfirmation from './components/OneOrderConfirmation';
 import ProfilePage from './pages/ProfilePage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   var user = useContext(AuthContext);
   var data = useContext(DataContext);
-  var isLoggedIn : boolean;
-
-  if (user) isLoggedIn = true;
-  else isLoggedIn = false;
 
   useEffect(() => {
     document.body.classList.add('bodyDiv');
-  })
+  });
 
   return (
       <BrowserRouter>
-        <Navbar isLoggedIn = {isLoggedIn} />
+        <Navbar />
           <div className='main'>
               <Routes>
 
-                <Route path='/' element={<Home 
-                  isLoggedIn = {isLoggedIn}  
-                  data = {data}
-                  />}/>
+                <Route path='/' element={<Home/>}/>
 
-                <Route path='/login' element={<LoginForm/>}/>
+                <Route path='/login' element={<ProtectedRoute><LoginForm/></ProtectedRoute>}/>
 
-                <Route path='/OneOrder' element={<OneOrderField user = {user}/>}/>
+                <Route path='/OneOrder' element={<OneOrderField/>}/>
 
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 
-                <Route path='/profile' element={<ProfilePage
-                  isLoggedIn = {isLoggedIn}  
-                  data = {data}
-                  />}/>
+                <Route path='/profile' element={<ProfilePage/>}/>
 
               </Routes>
           </div>

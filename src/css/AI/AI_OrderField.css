@@ -1,0 +1,101 @@
+/* .OrderForm {
+    background-color: #e8f6e8;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .OrderDetails {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: green;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    resize: none;
+  }
+  
+  .submitBtn {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    float: right;
+    margin-top: 10px;
+  }
+  
+  .OrderView {
+    margin-top: 20px;
+    color: green;
+  }
+  
+  h3 {
+    margin-bottom: 20px;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    margin-bottom: 10px;
+    color: gray;
+  }
+  
+  .listBtn {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    float: right;
+    margin-left: 10px;
+  }
+  
+  hr {
+    border: 1px solid lightgray;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .additionalInfo {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    resize: none;
+  }
+   */

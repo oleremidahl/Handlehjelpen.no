@@ -13,6 +13,7 @@
   }
 
   .loginbutton {
+    background-color: rgb(181, 206, 181);
     margin-right: 25px; 
     margin-top: 10px; 
     border-radius: 30px; 
@@ -20,6 +21,7 @@
     width: 70px;
     cursor: pointer;
   }
+
   
   .loginbutton:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);

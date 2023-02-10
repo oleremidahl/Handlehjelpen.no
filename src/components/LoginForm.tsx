@@ -90,15 +90,7 @@ const LoginForm = () => {
     
             <div className="form-container sign-up-container">
                 <h1>Lag Bruker</h1>
-                <input style={{
-                  backgroundColor: '#eee',
-                  border: 'none',
-                  borderRadius: '10px',
-                  padding: '12px 15px',
-                  margin: '8px 0',
-                  width: '80%',
-                  height: '15px'
-                  }} type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
+                <input type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
                 <input type="phone" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
                 <input type="email" name="regMail" onChange={handleChange} placeholder="Email" id="regMail"/>
                 <input type="password" name="regPsw" onChange={handleChange} placeholder="Passord" id="regPassword"/>
@@ -109,7 +101,7 @@ const LoginForm = () => {
                 <div className="overlay">
                     <div className="overlay-panel overlay-left">
                         <h1>Velkommen Tilbake!</h1>
-                        <p>Logg inn for å en enklere bestilling!</p>
+                        <p style={{color: '#c6cd03'}}>Logg inn for å en enklere bestilling!</p>
                         <button className="loginformbutton ghost" onClick={handleClick}>Logg Inn</button>
                     </div>
                     <div className="overlay-panel overlay-right">

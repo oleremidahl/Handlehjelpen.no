@@ -1,101 +1,96 @@
-/* .OrderForm {
-    background-color: #e8f6e8;
-    padding: 20px;
-    border-radius: 10px;
+.OrderForm {
+    margin: 40px auto;
+    width: 80%;
+    max-width: 1000px;
+    padding: 40px 60px;
+    background-color: #fff;
+    border-radius: 5px;
   }
   
   .OrderDetails {
-    width: 50%;
-    margin: 0 auto;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
   }
   
   h1 {
-    color: green;
-    text-align: center;
+    font-size: 36px;
     margin-bottom: 20px;
-  }
-  
-  p {
-    color: gray;
-    font-size: 14px;
-    margin-bottom: 20px;
+    color: #1b5e20;
   }
   
   textarea {
     width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    font-size: 14px;
+    height: 200px;
     margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #1b5e20;
+    border-radius: 5px;
     resize: none;
+    font-size: 16px;
   }
   
   .submitBtn {
-    background-color: green;
-    color: white;
+    /* width: 100px;
+    height: 40px; */
+    background-color: #1b5e20;
+    color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .listBtn {
+    background-color: #1b5e20;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
     float: right;
-    margin-top: 10px;
   }
   
   .OrderView {
     margin-top: 20px;
-    color: green;
-  }
-  
-  h3 {
-    margin-bottom: 20px;
   }
   
   ul {
     list-style: none;
+    margin: 0;
     padding: 0;
   }
   
   li {
+    background-color: #c8e6c9;
+    padding: 10px;
     margin-bottom: 10px;
-    color: gray;
-  }
-  
-  .listBtn {
-    background-color: green;
-    color: white;
-    border: none;
     border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
   }
   
   hr {
-    border: 1px solid lightgray;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 40px;
+    border-color: #1b5e20;
   }
   
-  input {
+  .OrderView input[type="text"], input[type="tel"] {
     width: 100%;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    font-size: 14px;
+    height: 40px;
     margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #1b5e20;
+    border-radius: 5px;
+    font-size: 16px;
   }
   
   .additionalInfo {
     width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    font-size: 14px;
+    height: 200px;
     margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #1b5e20;
+    border-radius: 5px;
     resize: none;
-  }
-   */
+    font-size: 16px;
+  }  

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, database } from "../base";
 import "../css/product_card.css";
-import "../css/AI/AI_2.css";
+import "../css/AI/AI_OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
 import { AuthContext } from "../context/AuthContext";
 
@@ -86,21 +86,15 @@ const OneOrderField = () => {
         }
     }
 
-    // function isEmptyFields() {
-    //     if (inpName === "" || location === ""){
-    //         return true;
-    //     }
-    //     return false;
-    // }
     var selectedLocation: any = null;
     var selectedOption: string = '';
+    var formattedAdress: string = '';
     
-    const handleRetrievedVariables = (selectedL: any, selectedOp: string) => {
+    const handleRetrievedVariables = (selectedL: any, selectedOp: string, _formattedAdress: string) => {
         selectedLocation = selectedL;
         selectedOption = selectedOp;
+        formattedAdress = _formattedAdress;
     }
-
-    // const [isEmptyFields, setIsEmptyFields] = useState<boolean>(true);
 
     function isEmptyFields() {
         if(items.length === 0){
@@ -116,6 +110,10 @@ const OneOrderField = () => {
         else if(selectedLocation === null && additionalInfo.length === 0){
             alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
             return true;
+        }
+
+        else if(inpName === '') {
+            alert('Vennligst fyll in navnet ditt!');
         }
         return false;
     }
@@ -154,8 +152,8 @@ const OneOrderField = () => {
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
                 <hr/>
                 <h3>Kontakt informasjon</h3>
-                <input onChange={event => setInpName(event.target.value)} placeholder="Navn" value={inpName}></input>
-                <input onChange={event => setInpTlf(event.target.value)} placeholder="Tlf" value={inpTlf}></input>
+                <input onChange={event => setInpName(event.target.value)} type='text' placeholder="Navn" value={inpName}></input>
+                <input onChange={event => setInpTlf(event.target.value)} type='tel' placeholder="Tlf" value={inpTlf}></input>
                 <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
                 <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
                 </p>

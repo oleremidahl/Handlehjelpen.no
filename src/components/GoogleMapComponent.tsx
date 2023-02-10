@@ -27,7 +27,7 @@ function GoogleMapComponent(props: any) {
   const [selectedOption, setSelectedOption] = useState('Bil');
   const { onRetrievedVariables } = props;
 
-  onRetrievedVariables(selectedLocation, selectedOption);
+  onRetrievedVariables(selectedLocation, selectedOption, formattedAdress);
 
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyBaJL0qOKJmBO_DJeYZWa-WrrDfaAqv6xo",

@@ -28,7 +28,7 @@ const OneOrderConfirmation = () => {
                 <div>
                     <h3>Din bestilling</h3>
                     {/* <p style={{fontStyle: 'italic'}}>"{loc.state.varer}"</p>  */}
-                    <ol style={{width: '20%', marginLeft: 'auto', marginRight: 'auto'}}>
+                    <ol >
                         {loc.state.varer.map((item: string) => (
                             <li>{item}</li>
                         ))}

@@ -1,45 +1,93 @@
-import { onValue, ref, update } from "firebase/database";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, database } from "../base";
 import "../css/product_card.css";
 import "../css/AI/AI_OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
 import { AuthContext } from "../context/AuthContext";
+import { firestore } from "../base";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import Calendar from './Calendar';
 
 const OneOrderField = () => {
     
+    const navigate = useNavigate();
     const user = useContext(AuthContext);
-    const [location, setLocation] = useState("");
     const [inpGoods, setInpGoods] = useState("");
-
     const [inpName, setInpName] = useState("");
     const [inpTlf, setInpTlf] = useState("");
-    let namePath = ref(database, 'brukere/' + auth.currentUser?.uid + '/Navn');
-    let phonePath = ref(database, 'brukere/' + auth.currentUser?.uid + '/Tlf');
+    const [selectedLocation, setSelectedLocation] = useState<any>(null);
+    const [selectedMethod, setSelectedMethod] = useState<string>('');
+    const [formattedAdress, setFormattedAdress] = useState<string>('');
+    const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+    const [selectedTime, setSelectedTime] = useState<string>('');
+    const [selectedDate, setSelectedDate] = useState<string>('');
+    const [differentDateTime, setDifferentDateTime] = useState<string>('');
+    const [additionalInfo, setAdditionalInfo] = useState("");
+    const [items, setItems] = useState<string[]>([]);
+  
+    const userReference = collection(firestore, "users");
 
     useEffect(() => {
-        if (user){
-            onValue(namePath, (snapshot) => {
-                if (snapshot.exists()){
-                    setInpName(snapshot.val())
-                }
-                });
-            onValue(phonePath, (snapshot) => {
-                if (snapshot.exists()){
-                    setInpTlf(snapshot.val())
-                }
-                });
+    if (user) {
+        const getNameAndPhone = async () => {
+        const docRef = doc(userReference, user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            setInpName(data.navn);
+            setInpTlf(data.tlf);
+        } else {
+            console.log("No such document!");
         }
-    }, [])
+        };
+        getNameAndPhone();
+    }
+    }, [user]);
+
+    const [timeOfDay, setTimeOfDay] = useState(new Date().getHours());
+    const [options, setOptions] = useState([
+        { value: 'ASAP', label: 'Så fort som mulig (normalt innen 60 min)' },
+        { value: 'Før 09:00', label: 'Før 09:00' },
+        { value: '09:00-11:00', label: '09:00-11:00' },
+        { value: '11:00-13:00', label: '11:00-13:00' },
+        { value: '13:00-15:00', label: '13:00-15:00' },
+        { value: '15:00-17:00', label: '15:00-17:00' },
+        { value: '17:00-19:00', label: '17:00-19:00' },
+        { value: '19:00-21:00', label: '19:00-21:00' },
+        { value: '21:00-23:00', label: '21:00-23:00' },
+        { value: 'En annen dato', label: 'En annen dato' },
+    ]);
+    const [updatedOptions, setUpdatedOptions] = useState([ 
+        { value: 'ASAP', label: 'Så fort som mulig (normalt innen 60 min)' },
+        { value: 'Før 09:00', label: 'Før 09:00' },]);
+
+  useEffect(() => {
+    const updateOptions = options.filter(option => {
+      if (option.value === 'ASAP') {
+        return true;
+      }
+
+      if (option.value === 'Før 09:00') {
+        return timeOfDay < 8;
+      }
+
+      if (option.value.includes('-')) {
+        const startTime = parseInt(option.value.split('-')[0].split(':')[0]);
+        return startTime - 1> timeOfDay;
+      }
+
+      if (option.value === 'En annen dato') {
+        return true;
+      }
+
+      return false;
+    });
+
+    setUpdatedOptions(updateOptions);
+  }, [timeOfDay, options]);
 
 
-    const [additionalInfo, setAdditionalInfo] = useState("");
-
-    const navigate = useNavigate();
-
-    const [items, setItems] = useState<string[]>([]);
     
     const handleRemove = (index: number) => {
         const newItems = [...items];
@@ -62,60 +110,96 @@ const OneOrderField = () => {
         }
     }
 
-
     const handleOrder = () => {
         var today = new Date();
-        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        var dateTime = date + '-' + today.getHours() + ":" + today.getMinutes();
-        if (isEmptyFields()){
+        var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+        var dateTime = today.getHours() + ":" + today.getMinutes() + '-' + date;
+        let levering: number = 0;
+        if (deliveryPrice){
+            levering = deliveryPrice;
         }
-        else if (user){
-            update(ref(database, 'brukere/' + auth.currentUser?.uid + '/bestillinger/engangs/' + date), {
-                Varer: items,
-                Lokasjon: location,
-                Navn: inpName,
-            });
-            navigate("/OrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
-        }
-        else {
-            update(ref(database, 'ikkeLoggetInn/bestillinger/' + dateTime + "-" + inpName), {
-                Varer: items,
-                Lokasjon: location,
-            })
-            navigate("/OrderConfirmation", {state: {varer: items, lokasjon: location, navn: inpName, dato: today}});
+        if (!isEmptyFields()){
+            try {
+                addToFS({
+                    navn: inpName,
+                    tlf: inpTlf,
+                    varer: items,
+                    lokasjon: formattedAdress,
+                    leveringspris: levering,
+                    leveringstid: selectedTime,
+                    mottatt: dateTime,
+                    ekstraInfo: additionalInfo,
+                    annenDato: selectedDate,
+                    annenDatoTid: differentDateTime,
+                });
+                navigate("/OrderConfirmation", {state: {
+                    id: orderId, 
+                    dato: today,
+                    navn: inpName,
+                    varer: items,
+                    lokasjon: formattedAdress,
+                    leveringspris: levering,
+                    ekstraInfo: additionalInfo,
+                    annenDato: selectedDate,
+                    leveringstid: selectedTime,
+                    annenDatoTid: differentDateTime,
+                }});
+            }
+            catch (error){
+                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 41398911 eller ... ")
+            }
         }
     }
 
-    var selectedLocation: any = null;
-    var selectedOption: string = '';
-    var formattedAdress: string = '';
-    
-    const handleRetrievedVariables = (selectedL: any, selectedOp: string, _formattedAdress: string) => {
-        selectedLocation = selectedL;
-        selectedOption = selectedOp;
-        formattedAdress = _formattedAdress;
+    const handleRetrievedVariables = (selectedL: any, selectedOp: string, _formattedAdress: string, distancePrice: number) => {
+        setSelectedLocation(selectedL);
+        setSelectedMethod(selectedOp);
+        setFormattedAdress(_formattedAdress);
+        if (distancePrice !== undefined){
+            setDeliveryPrice(distancePrice);
+        }
     }
 
     function isEmptyFields() {
         if(items.length === 0){
-            alert('Bestillingen din er tom!');
+            alert('Legg til en bestilling!');
             return true;
         }
-        
-        else if (selectedOption === ''){
+        else if (selectedMethod === ''){
             alert('Velg en transportmetode!');
             return true;
         }
-
         else if(selectedLocation === null && additionalInfo.length === 0){
             alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
             return true;
         }
-
         else if(inpName === '') {
-            alert('Vennligst fyll in navnet ditt!');
+            alert('Vennligst fyll inn navnet ditt!');
+            return true;
+        }
+        else if(inpTlf === '') {
+            alert('Vennligst fyll inn telefonnummer!');
+            return true;
+        }
+        else if(selectedTime === 'En annen dato' && (selectedDate === '' || differentDateTime === '')){
+            alert('Ved levering på en annen dato må du velge både dato og tid.');
+            return true; 
         }
         return false;
+    }
+
+    // FIRESTORE
+    const orderReference = collection(firestore, "orders");
+    let orderId: string; 
+    const addToFS = async(orderData: Object) => {
+        const newOrder = await addDoc(orderReference, {...orderData});
+        orderId = newOrder.id;
+        console.log('Id in orderfield:   ', orderId);
+    }
+
+    // Date Picker
+    const handleRetrievedDate = (selectedDate: string) => {
+        setSelectedDate(selectedDate);
     }
 
     return (
@@ -150,6 +234,38 @@ const OneOrderField = () => {
                     <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
                 </p>
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
+                <p style={{marginBottom: '10px'}}>Leveringstid: </p>
+                <div className='select'>
+                    <select onChange={event => setSelectedTime(event.target.value)}>
+                        {updatedOptions.map(option => (
+                                <option key={option.value} value={option.value}>
+                                {option.label}
+                                </option>
+                            ))}
+                    </select>
+                    <div className="select__arrow"></div>
+                </div>
+                {selectedTime === "En annen dato" && (
+                    <>
+                        <br/><br/>
+                        <Calendar onRetrievedDate={handleRetrievedDate}/>
+                        <div className="select">
+                            <select onChange={event => setDifferentDateTime(event.target.value)}>
+                            {options.map(option => {
+                                if (option.value !== "En annen dato" && option.value !== "ASAP") {
+                                    return (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                    );
+                                }
+                                })}
+                            </select>
+                            <div className="select__arrow"></div>
+                        </div>
+                    </>
+                )}
+
                 <hr/>
                 <h3>Kontakt informasjon</h3>
                 <input onChange={event => setInpName(event.target.value)} type='text' placeholder="Navn" value={inpName}></input>

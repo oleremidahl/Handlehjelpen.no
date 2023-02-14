@@ -2,15 +2,16 @@
     position: relative;
     display: inline-block;
     margin-bottom: 15px;
-    width: 100%;
+    /* width: 100%; */
 }
   
 
   select {
       display: inline-block;
-      width: 150px;
+      width: fit-content;
+      min-width: 150px;
       cursor: pointer;
-      padding: 10px 15px;
+      padding: 10px 25px 10px 15px;
       outline: 0;
       border: 0;
       border-radius: 0;
@@ -41,10 +42,10 @@
       
 .select__arrow {
     position: absolute;
-    top: 13px;
-    left: 130px;
-    width: 0;
-    height: 0;
+    right: 10px;
+    top: 20px;
+    /* top: 50%; */
+    margin-top: -8px; /* half of the border-width */
     pointer-events: none;
     border-style: solid;
     border-width: 8px 5px 0 5px;

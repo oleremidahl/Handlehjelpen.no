@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ref, set } from "firebase/database";
-import { auth } from '../base';
+import { auth, firestore } from '../base';
 import "../css/AI/Ai_login.css";
-import { database } from '../base';
 import { AuthContext } from '../context/AuthContext';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const LoginForm = () => {
 
@@ -39,26 +38,35 @@ const LoginForm = () => {
         });
       }
     
-      const createAccount = async () => {
+      const createAccount = async (event: any) => {
+        event.preventDefault()
         try {
           await auth.createUserWithEmailAndPassword(
             credentials.regMail,
             credentials.regPsw
-          );
-          set(ref(database, 'brukere/' + auth.currentUser?.uid), {
-            Navn: credentials.regName, 
-            Email: credentials.regMail,
-            Tlf: credentials.tlf,
-          }
-          
-          )
+          ).then((user) => {
+            if (user.user){
+              addToDatabase({
+                uid: user.user.uid,
+                navn: credentials.regName, 
+                email: credentials.regMail,
+                tlf: credentials.tlf,
+              })
+            }
+          });
           navigate("/");
-        } catch (error) {
-          console.error(error);
+        } catch (error: any) {
+          if (error.code === 'auth/weak-password') {
+            alert('Passordet må være minst 6 tegn!');
+          }
+          else {
+            alert("Det oppstod et problem med å opprette bruker.");
+          }
         }
       };
       
-      const logIn = async () => {
+      const logIn = async (event: any) => {
+        event.preventDefault();
         if(!user){
           try {
             await auth.signInWithEmailAndPassword(
@@ -67,35 +75,52 @@ const LoginForm = () => {
             );
             navigate("/");
   
-          } catch (error) {
-            console.error(error);
+          } catch (error: any) {
+              if (error.code === 'auth/wrong-password') {
+                alert('Feil passord.');
+              }
+              if (error.code === 'auth/invalid-email') {
+                alert('Feil email!');
+              }
+              else {
+                alert("Det oppstod et problem med å logge inn.");
+              }
+            }
           }
-        }
-        else {
-          alert('Du er allerede logget inn!');
-        }
-      };
-      
+          else {
+            alert('Du er allerede logget inn!');
+          }
+    };
+    
+    //FIRESTORE
+    let userReference = collection(firestore,'users');
+    const addToDatabase = async(userData: any) => {
+      await setDoc(doc(userReference, userData.uid), {
+        navn: userData.navn,
+        email: userData.email,
+        tlf: userData.tlf,
+      });
+    }
 
 
     return (
         <div className={isActive ? 'container right-panel-active' : 'container'} >
-            <div className="form-container sign-in-container">
+            <form onSubmit={logIn} className="form-container sign-in-container">
                 <h1>Logg Inn</h1>
-                <input type="email" name="loginMail" onChange={handleChange} placeholder="Email" id="loginMail"/>
-                <input type="password" name="loginPsw" onChange={handleChange} placeholder="Passord" id="loginPassword"/>
+                <input type="email" name="loginMail" onChange={handleChange} required placeholder="Email" id="loginMail"/>
+                <input type="password" name="loginPsw" onChange={handleChange} required placeholder="Passord" id="loginPassword"/>
                 {/* <a>Glemt passord?</a>  */}
-                <button className="loginformbutton" id="logIn" onClick={logIn}>Logg Inn</button>
-    ¨       </div>
+                <button className="loginformbutton" id="logIn" type='submit' >Logg Inn</button>
+    ¨       </form>
     
-            <div className="form-container sign-up-container">
+            <form onSubmit={createAccount} className="form-container sign-up-container">
                 <h1>Lag Bruker</h1>
-                <input type="text" name="regName" onChange={handleChange} placeholder="Navn" id="regName"/>
+                <input type="text" name="regName" onChange={handleChange} required placeholder="Navn" id="regName"/>
                 <input type="phone" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
-                <input type="email" name="regMail" onChange={handleChange} placeholder="Email" id="regMail"/>
-                <input type="password" name="regPsw" onChange={handleChange} placeholder="Passord" id="regPassword"/>
-                <button className="loginformbutton" id="register" onClick={createAccount}>Registrer Deg</button>
-            </div>
+                <input type="email" name="regMail" onChange={handleChange} required placeholder="Email" id="regMail"/>
+                <input type="password" name="regPsw" onChange={handleChange} required placeholder="Passord" id="regPassword"/>
+                <button className="loginformbutton" id="register" type='submit'>Registrer Deg</button>
+            </form>
 
             <div className="overlay-container">
                 <div className="overlay">

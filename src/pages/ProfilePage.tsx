@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import { DataContext } from '../context/DataContext';
 
 const ProfilePage = () => {
     const [isSubscribed, setIsSubscibed] = useState(false);
     const data = useContext(DataContext);
+    const user = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (data){
@@ -18,14 +22,25 @@ const ProfilePage = () => {
 
     return (
         <div className="userProfile">
-            {data?
+            {(data && user)?
                 <>
                     <h1>Brukerinfo</h1>
                     <p><b>Navn:</b> {data.val().Navn}</p>
                     <p><b>E-mail:</b> {data.val().Email}</p>
                     <p><b>Bruker-ID:</b> {data.key}</p>
+                    <Link to="/">
+                        <button className="submitBtn">Tilbake til hjemmesiden</button>      
+                    </Link>
 
-                </> : <p>Logget ut</p>}
+                </> 
+                : 
+                <>
+                    <h1>Logget ut </h1>
+                    <Link to="/">
+                        <button className="submitBtn">Tilbake til hjemmesiden</button>      
+                    </Link>
+                </>
+            }
         </div>
     )
 }

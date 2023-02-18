@@ -10,7 +10,6 @@ const Calendar = (props: any) => {
   }
   const { onRetrievedDate } = props;
   onRetrievedDate(formattedDate);
-
   return (
     <DatePicker
       selected={selectedDate}

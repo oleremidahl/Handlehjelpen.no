@@ -20,14 +20,14 @@ function GoogleMapComponent(props: any) {
   const [location, setLocation] = useState(center);
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
   const [map, setMap] = useState<any>(null);
-  const [formattedAdress, setFormattedAdress] = useState(null);
+  const [formattedAdress, setFormattedAdress] = useState<string>('');
   const [searchInput, setSearchInput] = useState('');
   const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
   const [distancePrice, setDistancePrice] = useState<number>();
   const [selectedOption, setSelectedOption] = useState('Bil');
   const { onRetrievedVariables } = props;
 
-  onRetrievedVariables(selectedLocation, selectedOption, formattedAdress);
+  onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
 
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyBaJL0qOKJmBO_DJeYZWa-WrrDfaAqv6xo",
@@ -268,7 +268,7 @@ const { isLoaded, loadError } = useLoadScript({
         </GoogleMap><br/>
         <button className="submitBtn" onClick={() => findPos()}>Klikk for å finne min posisjon</button>
         {selectedLocation && <p>{formattedAdress}</p>}
-        <p>Destinasjonen kan nås med: <br/>
+        <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: <br/>
         <div className='select'>
           <select onChange={handleSelectChange}>
             <option value="Bil">Bil</option>

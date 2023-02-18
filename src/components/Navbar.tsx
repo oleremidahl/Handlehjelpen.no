@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { auth } from "../base";
 import "../css//navbar.css";
 import { AuthContext } from '../context/AuthContext';
+import simpleLogo from '../images/simple logo.png';
 
 const Navbar = () => {
 
@@ -16,7 +17,7 @@ const Navbar = () => {
         <div className="navbar">
             <div className="navInfo">
                 <Link to="/">
-                    <div className="logo"></div>
+                    <img src={simpleLogo} alt="Logo" style={{width: '80px'}}/>
                 </Link>
                 {!user ?
                     <div>

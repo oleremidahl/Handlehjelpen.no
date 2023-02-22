@@ -20,10 +20,10 @@ const OneOrderField = () => {
     const [selectedMethod, setSelectedMethod] = useState<string>('');
     const [formattedAdress, setFormattedAdress] = useState<string>('');
     const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
-    const [selectedTime, setSelectedTime] = useState<string>('');
+    const [selectedTime, setSelectedTime] = useState<string>('ASAP');
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
-    const [additionalInfo, setAdditionalInfo] = useState("");
+    const [additionalInfo, setAdditionalInfo] = useState<string>('');
     const [items, setItems] = useState<string[]>([]);
   
     const userReference = collection(firestore, "users");
@@ -110,7 +110,8 @@ const OneOrderField = () => {
         }
     }
 
-    const handleOrder = () => {
+    const handleOrder = (event: any) => {
+        event.preventDefault();
         var today = new Date();
         var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
         var dateTime = today.getHours() + ":" + today.getMinutes() + '-' + date;
@@ -158,6 +159,10 @@ const OneOrderField = () => {
         if (distancePrice !== undefined){
             setDeliveryPrice(distancePrice);
         }
+        console.log('Location lat lng: ', selectedLocation);
+        console.log('Method', selectedMethod);
+        console.log('address: ', formattedAdress);
+        console.log('price: ', deliveryPrice);
     }
 
     function isEmptyFields() {
@@ -252,7 +257,9 @@ const OneOrderField = () => {
                         <div className="select">
                             <select onChange={event => setDifferentDateTime(event.target.value)}>
                             {options.map(option => {
-                                if (option.value !== "En annen dato" && option.value !== "ASAP") {
+                                if (option.value !== "En annen dato" && option.value !== "ASAP" 
+                                    && option.value !== "21:00-23:00" && option.value !== "19:00-21:00" &&
+                                    option.value !== "17:00-19:00") {
                                     return (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -268,17 +275,19 @@ const OneOrderField = () => {
 
                 <hr/>
                 <h3>Kontakt informasjon</h3>
-                <input onChange={event => setInpName(event.target.value)} type='text' placeholder="Navn" value={inpName}></input>
-                <input onChange={event => setInpTlf(event.target.value)} type='tel' placeholder="Tlf" value={inpTlf}></input>
-                <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
-                <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
-                </p>
-                <textarea 
-                className="additionalInfo"
-                onChange={event => setAdditionalInfo(event.target.value)}
-                value = {additionalInfo}
-                ></textarea><br/>
-                <button className="submitBtn" onClick={handleOrder}>Send inn bestilling</button>
+                <form onSubmit={handleOrder}>
+                    <input onChange={event => setInpName(event.target.value)} type='text' placeholder="Navn" required value={inpName}></input>
+                    <input onChange={event => setInpTlf(event.target.value)} type='tel' pattern="^(\+\d{2})?\d{8}$" placeholder="Tlf" required value={inpTlf}></input>
+                    <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
+                    <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
+                    </p>
+                    <textarea 
+                    className="additionalInfo"
+                    onChange={event => setAdditionalInfo(event.target.value)}
+                    value = {additionalInfo}
+                    ></textarea><br/>
+                    <button className="submitBtn" type="submit">Send inn bestilling</button>
+                </form>
             </div>
         </div>
     );

@@ -25,10 +25,18 @@ function GoogleMapComponent(props: any) {
   const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
   const [distancePrice, setDistancePrice] = useState<number>();
   const [selectedOption, setSelectedOption] = useState('Bil');
-  const { onRetrievedVariables } = props;
 
-  onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
+  useEffect(() => {
+    if(selectedLocation){
+      props.onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
 
+    }
+  }, [selectedLocation, selectedOption, formattedAdress, distancePrice]);
+  
+  useEffect(() => {
+    props.onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
+  }, []);
+  
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyBaJL0qOKJmBO_DJeYZWa-WrrDfaAqv6xo",
   });
@@ -48,11 +56,11 @@ const { isLoaded, loadError } = useLoadScript({
     }
   }, [selectedLocation]);
 
-  useEffect(() => {
-    if(selectedOption && selectedLocation) {
-      calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption);
-    }
-  })
+  // useEffect(() => {
+  //   if(selectedOption && selectedLocation) {
+  //     calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption);
+  //   }
+  // })
 
   // let autocomplete: google.maps.places.Autocomplete;
   // useEffect(() => {
@@ -90,8 +98,12 @@ const { isLoaded, loadError } = useLoadScript({
           setSelectedLocation({ lat: latitude, lng: longitude });
           geocodeLatLng(selectedLocation.lat, selectedLocation.lng);
         }
+        else {
+          alert("Du befinner deg utenfor vårt leveringsområde.")
+        }
       },
       (error) => {
+        alert("Det ser ut til at du har deaktivert stedstjenester. Du kan enten aktivere dette eller finne din lokasjon manuelt.")
         console.error(error);
       }
       );
@@ -107,10 +119,10 @@ const { isLoaded, loadError } = useLoadScript({
             // map.setZoom(13);
             setFormattedAdress(response.results[0].formatted_address);
           } else {
-            window.alert("No results found");
+            alert("No results found");
           }
         })
-        .catch((e: string) => window.alert("Geocoder failed due to: " + e));
+        .catch((e: string) => alert("Geocoder failed due to: " + e));
     }
   }
 
@@ -268,7 +280,7 @@ const { isLoaded, loadError } = useLoadScript({
         </GoogleMap><br/>
         <button className="submitBtn" onClick={() => findPos()}>Klikk for å finne min posisjon</button>
         {selectedLocation && <p>{formattedAdress}</p>}
-        <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: <br/>
+        <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: </p>
         <div className='select'>
           <select onChange={handleSelectChange}>
             <option value="Bil">Bil</option>
@@ -276,7 +288,7 @@ const { isLoaded, loadError } = useLoadScript({
           </select>
           <div className="select__arrow"></div>
         </div>
-        </p>
+        
         {distancePrice && <p>Pris for levering: {distancePrice} kr</p>}
       </div>
     }</>

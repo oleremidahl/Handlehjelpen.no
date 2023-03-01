@@ -19,7 +19,7 @@ const OneOrderField = () => {
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
     const [selectedMethod, setSelectedMethod] = useState<string>('');
     const [formattedAdress, setFormattedAdress] = useState<string>('');
-    const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+    const [deliveryPrice, setDeliveryPrice] = useState<number>();
     const [selectedTime, setSelectedTime] = useState<string>('ASAP');
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
@@ -27,6 +27,14 @@ const OneOrderField = () => {
     const [items, setItems] = useState<string[]>([]);
   
     const userReference = collection(firestore, "users");
+
+    const baseMessage: string = "NY ORDRE! \n" +  "Navn: " + inpName + "\nTlf: " + inpTlf;
+    const dateMessage: string = `\nDato: ${selectedDate !== '' ? selectedDate + "\nTid: " + differentDateTime : "Idag" + "\nTid: " + selectedTime}`;
+    const addressMessage: string = `\nLeveres til: ${formattedAdress !== '' ? formattedAdress + "\nTilleggsinfo: " + additionalInfo : additionalInfo}`;
+    const priceMessage: string = `\nLeveringspris: ${deliveryPrice ? deliveryPrice + " kr" : "Ikke estimert, må regnes ut manuelt."}`
+    const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
+    const phoneNumbers: string[] = ['+4741398911', '+4741289478']
+
 
     useEffect(() => {
     if (user) {
@@ -60,7 +68,7 @@ const OneOrderField = () => {
     ]);
     const [updatedOptions, setUpdatedOptions] = useState([ 
         { value: 'ASAP', label: 'Så fort som mulig (normalt innen 60 min)' },
-        { value: 'Før 09:00', label: 'Før 09:00' },]);
+        { value: 'Før 09:00', label: 'Før 09:00' }]);
 
   useEffect(() => {
     const updateOptions = options.filter(option => {
@@ -113,12 +121,13 @@ const OneOrderField = () => {
     const handleOrder = (event: any) => {
         event.preventDefault();
         var today = new Date();
-        var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-        var dateTime = today.getHours() + ":" + today.getMinutes() + '-' + date;
+        var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+        var dateTime =   date + '-' + today.getHours() + ":" + today.getMinutes().toString().padStart(2, '0');
         let levering: number = 0;
         if (deliveryPrice){
             levering = deliveryPrice;
         }
+        const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage;
         if (!isEmptyFields()){
             try {
                 addToFS({
@@ -132,6 +141,8 @@ const OneOrderField = () => {
                     ekstraInfo: additionalInfo,
                     annenDato: selectedDate,
                     annenDatoTid: differentDateTime,
+                    to: phoneNumbers,
+                    body: fullMessage
                 });
                 navigate("/OrderConfirmation", {state: {
                     id: orderId, 
@@ -170,26 +181,22 @@ const OneOrderField = () => {
             alert('Legg til en bestilling!');
             return true;
         }
-        else if (selectedMethod === ''){
-            alert('Velg en transportmetode!');
-            return true;
-        }
-        else if(selectedLocation === null && additionalInfo.length === 0){
-            alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
-            return true;
-        }
-        else if(inpName === '') {
-            alert('Vennligst fyll inn navnet ditt!');
-            return true;
-        }
-        else if(inpTlf === '') {
-            alert('Vennligst fyll inn telefonnummer!');
-            return true;
-        }
-        else if(selectedTime === 'En annen dato' && (selectedDate === '' || differentDateTime === '')){
-            alert('Ved levering på en annen dato må du velge både dato og tid.');
-            return true; 
-        }
+        // else if(selectedLocation === null && additionalInfo.length === 0){
+        //     alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
+        //     return true;
+        // }
+        // else if(inpName === '') {
+        //     alert('Vennligst fyll inn navnet ditt!');
+        //     return true;
+        // }
+        // else if(inpTlf === '') {
+        //     alert('Vennligst fyll inn telefonnummer!');
+        //     return true;
+        // }
+        // else if(selectedTime === 'En annen dato' && (selectedDate === '' || differentDateTime === '')){
+        //     alert('Ved levering på en annen dato må du velge både dato og tid.');
+        //     return true; 
+        // }
         return false;
     }
 
@@ -206,6 +213,12 @@ const OneOrderField = () => {
     const handleRetrievedDate = (selectedDate: string) => {
         setSelectedDate(selectedDate);
     }
+
+    // // Inputs
+    // const handleNameChange = (event: any) => {
+    //     setInpName(event.target.value)
+    //     runRetrieved = true
+    // }
 
     return (
         <div className="OrderForm">
@@ -239,6 +252,7 @@ const OneOrderField = () => {
                     <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
                 </p>
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
+                {deliveryPrice && <p>Pris for levering: {deliveryPrice} kr</p>}
                 <p style={{marginBottom: '10px'}}>Leveringstid: </p>
                 <div className='select'>
                     <select onChange={event => setSelectedTime(event.target.value)}>
@@ -276,7 +290,7 @@ const OneOrderField = () => {
                 <hr/>
                 <h3>Kontakt informasjon</h3>
                 <form onSubmit={handleOrder}>
-                    <input onChange={event => setInpName(event.target.value)} type='text' placeholder="Navn" required value={inpName}></input>
+                    <input onChange={event => {setInpName(event.target.value)}} type='text' placeholder="Navn" required value={inpName}></input>
                     <input onChange={event => setInpTlf(event.target.value)} type='tel' pattern="^(\+\d{2})?\d{8}$" placeholder="Tlf" required value={inpTlf}></input>
                     <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
                     <br/>Du kan også bruke dette feltet om kartet ikke fungerer.

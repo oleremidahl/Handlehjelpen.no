@@ -13,6 +13,7 @@ const Calendar = (props: any) => {
   return (
     <DatePicker
       selected={selectedDate}
+      dateFormat="dd/MM/yyyy"
       placeholderText='Klikk her for å velge dato'
       onChange={date => setSelectedDate(date)}
       minDate={new Date(Date.now() + 86400000)} // tomorrow

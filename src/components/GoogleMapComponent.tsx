@@ -5,6 +5,13 @@ import '../css/GMapStyles.css';
 
 declare const google: any;
 
+interface relInf {
+  selectedLocation: any | null;
+  formattedAdress: string;
+  distancePrice: number | undefined;
+  selectedOption: string;
+}
+
 function GoogleMapComponent(props: any) {
   
   const containerStyle = {
@@ -18,24 +25,27 @@ function GoogleMapComponent(props: any) {
     lng: 7.44919
   };
   const [location, setLocation] = useState(center);
-  const [selectedLocation, setSelectedLocation] = useState<any>(null);
+  // const [selectedLocation, setSelectedLocation] = useState<any>(null);
   const [map, setMap] = useState<any>(null);
-  const [formattedAdress, setFormattedAdress] = useState<string>('');
+  // const [formattedAdress, setFormattedAdress] = useState<string>('');
   const [searchInput, setSearchInput] = useState('');
-  const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
-  const [distancePrice, setDistancePrice] = useState<number>();
-  const [selectedOption, setSelectedOption] = useState('Bil');
+  // const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
+  // const [distancePrice, setDistancePrice] = useState<number>();
+  // const [selectedOption, setSelectedOption] = useState('Bil');
+  const [relevantInfo, setRelevantInfo] = useState<relInf>({
+    selectedLocation: null,
+    formattedAdress: '',
+    distancePrice: undefined,
+    selectedOption: 'Bil'
+  })
 
   useEffect(() => {
-    if(selectedLocation){
-      props.onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
+    if(relevantInfo.selectedLocation){
+      props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.selectedOption, relevantInfo.formattedAdress, relevantInfo.distancePrice);
 
     }
-  }, [selectedLocation, selectedOption, formattedAdress, distancePrice]);
-  
-  useEffect(() => {
-    props.onRetrievedVariables(selectedLocation, selectedOption, formattedAdress, distancePrice);
-  }, []);
+  }, [relevantInfo]);
+
   
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: "AIzaSyBaJL0qOKJmBO_DJeYZWa-WrrDfaAqv6xo",
@@ -50,11 +60,11 @@ const { isLoaded, loadError } = useLoadScript({
   };
   
   useEffect(() => {
-    if(selectedLocation) {
-      geocodeLatLng(selectedLocation.lat, selectedLocation.lng);
-      if(selectedOption) calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption);
+    if(relevantInfo.selectedLocation) {
+      geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
+      if(relevantInfo.selectedOption) calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng, relevantInfo.selectedOption);
     }
-  }, [selectedLocation]);
+  }, [relevantInfo.selectedLocation]);
 
   // useEffect(() => {
   //   if(selectedOption && selectedLocation) {
@@ -95,8 +105,10 @@ const { isLoaded, loadError } = useLoadScript({
       (position) => {
         const { latitude, longitude } = position.coords;
         if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(latitude, longitude), bermudaTriangle)){
-          setSelectedLocation({ lat: latitude, lng: longitude });
-          geocodeLatLng(selectedLocation.lat, selectedLocation.lng);
+          const newRelInf = {...relevantInfo, selectedLocation: { lat: latitude, lng: longitude }}
+          // setSelectedLocation();
+          setRelevantInfo(newRelInf);
+          geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
         }
         else {
           alert("Du befinner deg utenfor vårt leveringsområde.")
@@ -117,7 +129,9 @@ const { isLoaded, loadError } = useLoadScript({
         .then((response: { results: any[]; }) => {
           if (response.results[0]) {
             // map.setZoom(13);
-            setFormattedAdress(response.results[0].formatted_address);
+            const newRelInf = {...relevantInfo, formattedAdress: response.results[0].formatted_address }
+            setRelevantInfo(newRelInf);
+            // setFormattedAdress(response.results[0].formatted_address);
           } else {
             alert("No results found");
           }
@@ -137,25 +151,28 @@ const { isLoaded, loadError } = useLoadScript({
       )
     );
   
-    setDistanceInKilometres(distanceInRadians * 6371);
-    console.log('Avstaaaaand',distanceInKilometers);
+    var km = (distanceInRadians * 6371);
+    console.log('Avstaaaaand',km);
     var mult = 3;
     if (car === 'Bil') mult = 2;
 
-    if (distanceInKilometers){
-      var drivingTime = mult * distanceInKilometers;
+    if (km){
+      var drivingTime = mult * km;
       if (drivingTime > 25) drivingTime = drivingTime * 2;
       else if (drivingTime > 20) drivingTime = drivingTime * 1.75;
       else if (drivingTime > 15) drivingTime = drivingTime * 1.5;
-      
-      setDistancePrice(Math.round(250 + (((drivingTime * 2)/60)*500)))
+      const newRelInf = {...relevantInfo, distancePrice: Math.round(250 + (((drivingTime * 2)/60)*500)) }
+      setRelevantInfo(newRelInf);
+      // setDistancePrice(Math.round(250 + (((drivingTime * 2)/60)*500)))
     }
   }
 
   const handleSelectChange = (event: any) => {
-    setSelectedOption(event.target.value);
-    if(selectedLocation){
-      calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption)
+    const newRelInf = {...relevantInfo, selectedOption: event.target.value }
+    setRelevantInfo(newRelInf);
+    // setSelectedOption(event.target.value);
+    if(relevantInfo.selectedLocation){
+      calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng, relevantInfo.selectedOption)
     }
   }
 
@@ -181,10 +198,9 @@ const { isLoaded, loadError } = useLoadScript({
   bermudaTriangle.setMap(map);
   bermudaTriangle.addListener('click', (event: google.maps.MapMouseEvent) => {
     if (event.latLng && event.latLng && google.maps.geometry.poly.containsLocation(event.latLng, bermudaTriangle)) {
-        setSelectedLocation({
-            lat: event.latLng.lat(),
-            lng: event.latLng.lng()
-          });
+      const newRelInf = {...relevantInfo, selectedLocation: { lat: event.latLng.lat(), lng: event.latLng.lng() }}
+      // setSelectedLocation();
+      setRelevantInfo(newRelInf);
         // if(selectedOption) calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption);
     } 
 });
@@ -272,14 +288,14 @@ const { isLoaded, loadError } = useLoadScript({
           onLoad={onMapLoad}
           onClick={onMapClick}
         >
-          {selectedLocation && (
+          {relevantInfo.selectedLocation && (
             <MarkerF
-              position={selectedLocation}
+              position={relevantInfo.selectedLocation}
             />
           )}
         </GoogleMap><br/>
         <button className="submitBtn" onClick={() => findPos()}>Klikk for å finne min posisjon</button>
-        {selectedLocation && <p>{formattedAdress}</p>}
+        {relevantInfo.selectedLocation && <p>{relevantInfo.formattedAdress}</p>}
         <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: </p>
         <div className='select'>
           <select onChange={handleSelectChange}>
@@ -289,7 +305,7 @@ const { isLoaded, loadError } = useLoadScript({
           <div className="select__arrow"></div>
         </div>
         
-        {distancePrice && <p>Pris for levering: {distancePrice} kr</p>}
+        {/* {relevantInfo.distancePrice && <p>Pris for levering: {relevantInfo.distancePrice} kr</p>} */}
       </div>
     }</>
   );

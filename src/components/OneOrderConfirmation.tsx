@@ -18,7 +18,7 @@ const OneOrderConfirmation = () => {
     const month = months[today.getMonth()];
     const date = today.getDate();
     const hours = today.getHours();
-    const minutes = today.getMinutes();
+    const minutes = today.getMinutes().toString().padStart(2, '0');
 
     // const [order, setOrder] = useState<DocumentData>();
     

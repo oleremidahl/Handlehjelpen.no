@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../base";
-import "../css//navbar.css";
+import "../css/navbar.css";
 import { AuthContext } from '../context/AuthContext';
-import simpleLogo from '../images/simple logo.png';
+import simpleLogo from '../images/simple_logo.png';
 
 const Navbar = () => {
 
@@ -22,19 +22,15 @@ const Navbar = () => {
                 {!user ?
                     <div>
                         <Link to="/login">
-                            <button className="loginbutton">Logg inn</button>
-                        </Link>
-
-                        <Link to="/login">
-                            <button className="loginbutton">Registrer</button>
+                            <button className="loginbutton">Logg inn / Registrer</button>
                         </Link>
                     </div>
                     :
                     <div>
                         <Link to="/profile">
-                            <button className="loginbutton">Profil</button>
+                            <button className="loginbutton2">Profil</button>
                         </Link>
-                        <button className="loginbutton" onClick={signOut}>Logg ut</button>
+                        <button className="loginbutton2" onClick={signOut}>Logg ut</button>
                     </div>
                 }
 

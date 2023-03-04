@@ -1,5 +1,5 @@
 .summary {
-    min-width: 400px;
+    min-width: 280px;
     width: 40%;
     text-align: center;
     margin: auto;
@@ -8,12 +8,3 @@
     background-color: white;
     border-radius: 10px;
 }
-
-/* .details {
-    height: 80%;
-    margin-top: auto;
-    width: 50%;
-    float: left;
-}
-
-. */

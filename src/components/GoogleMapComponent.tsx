@@ -15,7 +15,7 @@ interface relInf {
 function GoogleMapComponent(props: any) {
   
   const containerStyle = {
-    width: '400px',
+    maxWidth: '400px',
     height: '400px',
     border: 'thin solid black'
   };
@@ -25,13 +25,8 @@ function GoogleMapComponent(props: any) {
     lng: 7.44919
   };
   const [location, setLocation] = useState(center);
-  // const [selectedLocation, setSelectedLocation] = useState<any>(null);
   const [map, setMap] = useState<any>(null);
-  // const [formattedAdress, setFormattedAdress] = useState<string>('');
   const [searchInput, setSearchInput] = useState('');
-  // const [distanceInKilometers, setDistanceInKilometres] = useState<number>();
-  // const [distancePrice, setDistancePrice] = useState<number>();
-  // const [selectedOption, setSelectedOption] = useState('Bil');
   const [relevantInfo, setRelevantInfo] = useState<relInf>({
     selectedLocation: null,
     formattedAdress: '',

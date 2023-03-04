@@ -13,7 +13,7 @@
     line-height: 1.5;
   }
   
-  h1 {
+  .OrderDetails h1 {
     font-size: 36px;
     margin-bottom: 20px;
     color: #1b5e20;
@@ -94,3 +94,49 @@
     resize: none;
     font-size: 16px;
   }  
+
+  /* For screens with a maximum width of 600px */
+@media only screen and (max-width: 600px) {
+  .OrderForm {
+    margin: 20px auto;
+    width: 90%;
+    padding: 20px;
+  }
+  
+  .OrderDetails h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  textarea {
+    height: 120px;
+    font-size: 14px;
+    width: 90%;
+  }
+  
+  .submitBtn {
+    font-size: 14px;
+  }
+  
+  .listBtn {
+    font-size: 14px;
+    float: none;
+    display: block;
+    margin: 10px auto;
+  }
+  
+  li {
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+  
+  hr {
+    margin-top: 20px;
+  }
+  
+  .additionalInfo {
+    height: 120px;
+    font-size: 14px;
+    width: 90%;
+  }
+}

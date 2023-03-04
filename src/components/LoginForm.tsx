@@ -59,8 +59,14 @@ const LoginForm = () => {
           if (error.code === 'auth/weak-password') {
             alert('Passordet må være minst 6 tegn!');
           }
+          else if (error.code === 'auth/email-already-in-use') {
+            alert('Denne emailen er allerede i bruk.');
+          }
+          else if (error.code === 'auth/network-request-failed') {
+            alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
+          }
           else {
-            alert("Det oppstod et problem med å opprette bruker.");
+            alert("Det oppstod et problem med opprettelsen av en ny bruker.");
           }
         }
       };
@@ -76,25 +82,32 @@ const LoginForm = () => {
             navigate("/");
   
           } catch (error: any) {
-              if (error.code === 'auth/wrong-password') {
+              if (error.code === 'auth/user-not-found') {
+                alert('Denne kombinasjonen er ikke assosiert med en bruker.');
+              }
+              else if (error.code === 'auth/wrong-password') {
                 alert('Feil passord.');
               }
-              if (error.code === 'auth/invalid-email') {
-                alert('Feil email!');
+              else if (error.code === 'auth/invalid-email') {
+                alert('Feil email.');
+              }
+              else if (error.code === 'auth/network-request-failed') {
+                alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
               }
               else {
-                alert("Det oppstod et problem med å logge inn.");
+                alert("Det oppstod et problem med å logge inn. Vennligst prøv på nytt!");
               }
             }
           }
           else {
             alert('Du er allerede logget inn!');
+            navigate("/");
           }
     };
     
     //FIRESTORE
-    let userReference = collection(firestore,'users');
     const addToDatabase = async(userData: any) => {
+      let userReference = collection(firestore,'users');
       await setDoc(doc(userReference, userData.uid), {
         navn: userData.navn,
         email: userData.email,
@@ -105,7 +118,7 @@ const LoginForm = () => {
 
     return (
         <div className={isActive ? 'container right-panel-active' : 'container'} >
-            <form onSubmit={logIn} className="form-container sign-in-container">
+            <form onSubmit={logIn} className="form_container sign-in-container">
                 <h1>Logg Inn</h1>
                 <input type="email" name="loginMail" onChange={handleChange} required placeholder="Email" id="loginMail"/>
                 <input type="password" name="loginPsw" onChange={handleChange} required placeholder="Passord" id="loginPassword"/>
@@ -116,7 +129,7 @@ const LoginForm = () => {
             <form onSubmit={createAccount} className="form-container sign-up-container">
                 <h1>Lag Bruker</h1>
                 <input type="text" name="regName" onChange={handleChange} required placeholder="Navn" id="regName"/>
-                <input type="phone" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
+                <input type="tel" name="tlf" onChange={handleChange} placeholder="Tlf" id="tlf"/>
                 <input type="email" name="regMail" onChange={handleChange} required placeholder="Email" id="regMail"/>
                 <input type="password" name="regPsw" onChange={handleChange} required placeholder="Passord" id="regPassword"/>
                 <button className="loginformbutton" id="register" type='submit'>Registrer Deg</button>

@@ -1,4 +1,4 @@
-
+/* 
 h1 {
 	font-weight: bold;
 	margin: 0;
@@ -57,9 +57,9 @@ input {
 	padding: 12px 15px;
 	margin: 8px 0;
 	/* margin-right: 30px; */
-	width: 80%;
-}
-
+	/* width: 80%;
+} */
+/* 
 .container {
 	background-color: #fff;
 	border-radius: 10px;
@@ -91,8 +91,8 @@ input {
 	justify-content: center;
 	/* animation: show 0.1s; */
 	
-}
-
+/* } */
+/* 
 .container.right-panel-active .sign-in-container {
 	transform: translateX(100%);
 	transition: none 0.6s ease-out;
@@ -195,4 +195,4 @@ input {
 
 .container.right-panel-active .overlay-right {
 	transform: translateX(20%);
-}
+}  */

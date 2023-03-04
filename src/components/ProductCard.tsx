@@ -9,13 +9,6 @@ const ProductCard = () => {
             <div className="product-details">
                 <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg</h1>
                 <br/>
-                {/* <span className="hint-star star">
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                </span> */}
                     <p className="information"> 
                     Vår leveringstjeneste tilbyr bekvemmeligheten ved å få dine favorittmatvarer fra 
                     lokale restauranter og den billigste matvarekjeden Rema 1000, levert rett hjem til deg! <br/>

@@ -1,7 +1,7 @@
 .navbar {
     background-color: #f8f8f8;
     border-radius: 0 0 5px 5px;
-    box-shadow: 0 6px 6px 0 rgba(1, 53, 3, 0.2);
+    box-shadow: 0 6px 6px 0 rgba(12, 48, 23, 0.384);
     width: 100vw;
     height: 80px;
   }
@@ -13,7 +13,7 @@
   }
 
   .loginbutton, .loginbutton2 {
-    background-color: rgb(181, 206, 181);
+    background-color: rgb(139, 182, 139);
     margin-right: 25px; 
     margin-top: 10px; 
     border-radius: 30px; 

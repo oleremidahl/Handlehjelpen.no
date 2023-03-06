@@ -20,7 +20,7 @@ const OneOrderField = () => {
     const [selectedMethod, setSelectedMethod] = useState<string>('');
     const [formattedAdress, setFormattedAdress] = useState<string>('');
     const [deliveryPrice, setDeliveryPrice] = useState<number>();
-    const [selectedTime, setSelectedTime] = useState<string>('ASAP');
+    const [selectedTime, setSelectedTime] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
     const [additionalInfo, setAdditionalInfo] = useState<string>('');
@@ -72,7 +72,7 @@ const OneOrderField = () => {
 
   useEffect(() => {
     const updateOptions = options.filter(option => {
-      if (option.value === 'ASAP') {
+      if (option.value === 'ASAP' && timeOfDay < 22 && timeOfDay > 6) {
         return true;
       }
 
@@ -93,6 +93,9 @@ const OneOrderField = () => {
     });
 
     setUpdatedOptions(updateOptions);
+    if (!selectedTime && updateOptions.length > 0) {
+        setSelectedTime(updateOptions[0].value);
+      }
   }, [timeOfDay, options]);
 
 
@@ -255,7 +258,7 @@ const OneOrderField = () => {
                 {deliveryPrice && <p>Pris for levering: {deliveryPrice} kr</p>}
                 <p style={{marginBottom: '10px'}}>Leveringstid: </p>
                 <div className='select'>
-                    <select onChange={event => setSelectedTime(event.target.value)}>
+                    <select onChange={event => setSelectedTime(event.target.value) }value = {selectedTime}>
                         {updatedOptions.map(option => (
                                 <option key={option.value} value={option.value}>
                                 {option.label}

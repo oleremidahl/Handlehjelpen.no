@@ -1,7 +1,5 @@
-import { collection, doc, DocumentData, getDoc, QueryDocumentSnapshot } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { firestore } from "../base";
 import "../css/OrderConfirmation.css";
 
 const OneOrderConfirmation = () => {

@@ -6,7 +6,7 @@ import "../css/AI/AI_OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
 import { AuthContext } from "../context/AuthContext";
 import { firestore } from "../base";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, DocumentReference, getDoc } from "firebase/firestore";
 import Calendar from './Calendar';
 
 const OneOrderField = () => {
@@ -26,25 +26,25 @@ const OneOrderField = () => {
     const [additionalInfo, setAdditionalInfo] = useState<string>('');
     const [items, setItems] = useState<string[]>([]);
   
-    const userReference = collection(firestore, "users");
-
+    
     const baseMessage: string = "NY ORDRE! \n" +  "Navn: " + inpName + "\nTlf: " + inpTlf;
     const dateMessage: string = `\nDato: ${selectedDate !== '' ? selectedDate + "\nTid: " + differentDateTime : "Idag" + "\nTid: " + selectedTime}`;
     const addressMessage: string = `\nLeveres til: ${formattedAdress !== '' ? formattedAdress + "\nTilleggsinfo: " + additionalInfo : additionalInfo}`;
     const priceMessage: string = `\nLeveringspris: ${deliveryPrice ? deliveryPrice + " kr" : "Ikke estimert, må regnes ut manuelt."}`
     const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
     const phoneNumbers: string[] = ['+4741398911', '+4741289478']
-
-
+    
+    
     useEffect(() => {
-    if (user) {
-        const getNameAndPhone = async () => {
-        const docRef = doc(userReference, user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            setInpName(data.navn);
-            setInpTlf(data.tlf);
+        if (user) {
+            const userReference = collection(firestore, "users");
+            const getNameAndPhone = async () => {
+            const docRef = doc(userReference, user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                setInpName(data.navn);
+                setInpTlf(data.tlf);
         } else {
             console.log("No such document!");
         }
@@ -72,7 +72,7 @@ const OneOrderField = () => {
 
   useEffect(() => {
     const updateOptions = options.filter(option => {
-      if (option.value === 'ASAP' && timeOfDay < 22 && timeOfDay > 6) {
+      if (option.value === 'ASAP' && timeOfDay < 22 && timeOfDay > 7) {
         return true;
       }
 
@@ -132,21 +132,21 @@ const OneOrderField = () => {
         }
         const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage;
         if (!isEmptyFields()){
-            try {
-                addToFS({
-                    navn: inpName,
-                    tlf: inpTlf,
-                    varer: items,
-                    lokasjon: formattedAdress,
-                    leveringspris: levering,
-                    leveringstid: selectedTime,
-                    mottatt: dateTime,
-                    ekstraInfo: additionalInfo,
-                    annenDato: selectedDate,
-                    annenDatoTid: differentDateTime,
-                    to: phoneNumbers,
-                    body: fullMessage
-                });
+            addToFS({
+                navn: inpName,
+                tlf: inpTlf,
+                varer: items,
+                lokasjon: formattedAdress,
+                leveringspris: levering,
+                leveringstid: selectedTime,
+                mottatt: dateTime,
+                ekstraInfo: additionalInfo,
+                annenDato: selectedDate,
+                annenDatoTid: differentDateTime,
+                to: phoneNumbers,
+                body: fullMessage
+            });
+            if (newOrder){
                 navigate("/OrderConfirmation", {state: {
                     id: orderId, 
                     dato: today,
@@ -160,8 +160,9 @@ const OneOrderField = () => {
                     annenDatoTid: differentDateTime,
                 }});
             }
-            catch (error){
-                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 41398911 eller ... ")
+            else {
+                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 413 98 911 eller 412 89 478 ")
+
             }
         }
     }
@@ -204,13 +205,17 @@ const OneOrderField = () => {
     }
 
     // FIRESTORE
-    const orderReference = collection(firestore, "orders");
     let orderId: string; 
+    let newOrder: DocumentReference | undefined;
     const addToFS = async(orderData: Object) => {
-        const newOrder = await addDoc(orderReference, {...orderData});
+        
+        const orderReference = collection(firestore, "orders");
+        newOrder = await addDoc(orderReference, {...orderData});
         orderId = newOrder.id;
         console.log('Id in orderfield:   ', orderId);
-    }
+        
+        }
+    
 
     // Date Picker
     const handleRetrievedDate = (selectedDate: string) => {
@@ -295,7 +300,7 @@ const OneOrderField = () => {
                 <form onSubmit={handleOrder}>
                     <input onChange={event => {setInpName(event.target.value)}} type='text' placeholder="Navn" required value={inpName}></input>
                     <input onChange={event => setInpTlf(event.target.value)} type='tel' pattern="^(\+\d{2})?\d{8}$" placeholder="Tlf" required value={inpTlf}></input>
-                    <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hytta eller båten. 
+                    <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hus eller hytte. 
                     <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
                     </p>
                     <textarea 

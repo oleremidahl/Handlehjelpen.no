@@ -7,7 +7,7 @@ const Home = () => {
       return (
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
           <ProductCard/>
-          <img src={FPImg} alt="" style={{float: 'right'}}/>
+          {/* <img src={FPImg} alt="" style={{float: 'right'}}/> */}
         </div>
 
         )

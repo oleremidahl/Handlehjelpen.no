@@ -20,6 +20,7 @@
     "firebase": "^9.15.0",
     "firebase-tools": "^11.24.0",
     "firestore": "^1.1.6",
+    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.7.3",
     "react": "^18.2.0",

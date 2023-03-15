@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/leveringsBiz/static/css/main.f88c59e6.css",
+    "main.js": "/leveringsBiz/static/js/main.b338966f.js",
+    "static/js/787.120382a6.chunk.js": "/leveringsBiz/static/js/787.120382a6.chunk.js",
+    "index.html": "/leveringsBiz/index.html",
+    "main.f88c59e6.css.map": "/leveringsBiz/static/css/main.f88c59e6.css.map",
+    "main.b338966f.js.map": "/leveringsBiz/static/js/main.b338966f.js.map",
+    "787.120382a6.chunk.js.map": "/leveringsBiz/static/js/787.120382a6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f88c59e6.css",
+    "static/js/main.b338966f.js"
+  ]
+}

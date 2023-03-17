@@ -9,7 +9,6 @@ interface relInf {
   selectedLocation: any | null;
   formattedAdress: string;
   distancePrice: number | undefined;
-  selectedOption: string;
 }
 
 function GoogleMapComponent(props: any) {
@@ -21,8 +20,8 @@ function GoogleMapComponent(props: any) {
   };
   
   const center = {
-    lat: 58.0243,
-    lng: 7.44919
+    lat: 58.029106355706546, 
+    lng: 7.447113548546337
   };
   const [location, setLocation] = useState(center);
   const [map, setMap] = useState<any>(null);
@@ -30,13 +29,12 @@ function GoogleMapComponent(props: any) {
   const [relevantInfo, setRelevantInfo] = useState<relInf>({
     selectedLocation: null,
     formattedAdress: '',
-    distancePrice: undefined,
-    selectedOption: 'Bil'
+    distancePrice: undefined
   })
 
   useEffect(() => {
     if(relevantInfo.selectedLocation){
-      props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.selectedOption, relevantInfo.formattedAdress, relevantInfo.distancePrice);
+      props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.formattedAdress, relevantInfo.distancePrice);
 
     }
   }, [relevantInfo]);
@@ -57,7 +55,7 @@ const { isLoaded, loadError } = useLoadScript({
   useEffect(() => {
     if(relevantInfo.selectedLocation) {
       geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
-      if(relevantInfo.selectedOption) calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng, relevantInfo.selectedOption);
+      calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
     }
   }, [relevantInfo.selectedLocation]);
 
@@ -135,7 +133,7 @@ const { isLoaded, loadError } = useLoadScript({
     }
   }
 
-  function calculateDistanceAndPrice(lat: number, lng: number, car: string) {
+  function calculateDistanceAndPrice(lat: number, lng: number) {
     const referencePoint = { lat: 58.021697654760224 * (Math.PI/180), lng: 7.455554489881608 * (Math.PI/180)};
     
     const distanceInRadians = (
@@ -147,18 +145,15 @@ const { isLoaded, loadError } = useLoadScript({
     );
   
     var km = (distanceInRadians * 6371);
-    console.log('Avstaaaaand',km);
-    var mult = 3;
-    if (car === 'Bil') mult = 2;
 
     if (km){
-      var drivingTime = mult * km;
-      if (drivingTime > 25) drivingTime = drivingTime * 2;
-      else if (drivingTime > 20) drivingTime = drivingTime * 1.75;
-      else if (drivingTime > 15) drivingTime = drivingTime * 1.5;
-      const newRelInf = {...relevantInfo, distancePrice: Math.round(250 + (((drivingTime * 2)/60)*500)) }
+      var pris = 0
+      if (km <= 4) pris = 119;
+      else {
+        pris = 119 + (20 * (km - 4));
+      }
+      const newRelInf = {...relevantInfo, distancePrice: Math.round(pris) }
       setRelevantInfo(newRelInf);
-      // setDistancePrice(Math.round(250 + (((drivingTime * 2)/60)*500)))
     }
   }
 
@@ -167,22 +162,27 @@ const { isLoaded, loadError } = useLoadScript({
     setRelevantInfo(newRelInf);
     // setSelectedOption(event.target.value);
     if(relevantInfo.selectedLocation){
-      calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng, relevantInfo.selectedOption)
+      calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
     }
   }
 
 // PERIMETER ---------------------------
-  const latLngPaths = [
-    { lat: 58.013895, lng: 7.668140 },
-    { lat: 58.051737, lng: 7.706315 },
-    { lat: 58.127733, lng: 7.536405 },
-    { lat: 58.048022, lng: 7.196158},
-    { lat: 57.988490, lng: 7.341362},
-    { lat: 57.965142, lng: 7.493917}
-  ]
+var polyCenter = {lat: 58.029106355706546, lng: 7.447113548546337};
+var radiusInMeters = 10000;
+
+// generate points for circle
+var points = [];
+for (var i = 0; i < 36; i++) {
+  var angle = i * 10;
+  var offsetX = radiusInMeters * Math.cos(angle * Math.PI / 180);
+  var offsetY = radiusInMeters * Math.sin(angle * Math.PI / 180);
+  var newLat = polyCenter.lat + (offsetY / 111111);
+  var newLng = polyCenter.lng + (offsetX / (111111 * Math.cos(center.lat * Math.PI / 180)));
+  points.push({lat: newLat, lng: newLng});
+}
 
   const bermudaTriangle = new google.maps.Polygon({
-    paths: latLngPaths,
+    paths: points,
     strokeColor: 'black',
     strokeOpacity: 1,
     strokeWeight: 3,
@@ -291,14 +291,14 @@ const { isLoaded, loadError } = useLoadScript({
         </GoogleMap><br/>
         <button className="submitBtn" onClick={() => findPos()}>Klikk for å finne min posisjon</button>
         {relevantInfo.selectedLocation && <p>{relevantInfo.formattedAdress}</p>}
-        <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: </p>
-        <div className='select'>
+        {/* <p style={{marginBottom: '10px'}}>Destinasjonen kan nås med: </p> */}
+        {/* <div className='select'>
           <select onChange={handleSelectChange}>
             <option value="Bil">Bil</option>
             <option value="Båt">Båt</option>
           </select>
           <div className="select__arrow"></div>
-        </div>
+        </div> */}
         
         {/* {relevantInfo.distancePrice && <p>Pris for levering: {relevantInfo.distancePrice} kr</p>} */}
       </div>

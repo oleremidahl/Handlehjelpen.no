@@ -145,39 +145,32 @@ const OneOrderField = () => {
                 annenDatoTid: differentDateTime,
                 to: phoneNumbers,
                 body: fullMessage
-            });
-            if (newOrder){
+            }).then((newOrder: any) => {
+                console.log("Order added to Firestore:", newOrder);
                 navigate("/OrderConfirmation", {state: {
-                    id: orderId, 
-                    dato: today,
-                    navn: inpName,
-                    varer: items,
-                    lokasjon: formattedAdress,
-                    leveringspris: levering,
-                    ekstraInfo: additionalInfo,
-                    annenDato: selectedDate,
-                    leveringstid: selectedTime,
-                    annenDatoTid: differentDateTime,
+                  id: newOrder.id, 
+                  dato: today,
+                  navn: inpName,
+                  varer: items,
+                  lokasjon: formattedAdress,
+                  leveringspris: levering,
+                  ekstraInfo: additionalInfo,
+                  annenDato: selectedDate,
+                  leveringstid: selectedTime,
+                  annenDatoTid: differentDateTime,
                 }});
-            }
-            else {
-                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 413 98 911 eller 412 89 478 ")
-
-            }
-        }
+              }).catch((error: any) => {
+                console.error(error);
+                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203 ")
+            })}
     }
 
-    const handleRetrievedVariables = (selectedL: any, selectedOp: string, _formattedAdress: string, distancePrice: number) => {
+    const handleRetrievedVariables = (selectedL: any, _formattedAdress: string, distancePrice: number) => {
         setSelectedLocation(selectedL);
-        setSelectedMethod(selectedOp);
         setFormattedAdress(_formattedAdress);
         if (distancePrice !== undefined){
             setDeliveryPrice(distancePrice);
         }
-        console.log('Location lat lng: ', selectedLocation);
-        console.log('Method', selectedMethod);
-        console.log('address: ', formattedAdress);
-        console.log('price: ', deliveryPrice);
     }
 
     function isEmptyFields() {
@@ -185,36 +178,26 @@ const OneOrderField = () => {
             alert('Legg til en bestilling!');
             return true;
         }
-        // else if(selectedLocation === null && additionalInfo.length === 0){
-        //     alert('Du må enten finne lokasjonen din på kartet eller skrive den inn i det nederste feltet.');
-        //     return true;
-        // }
-        // else if(inpName === '') {
-        //     alert('Vennligst fyll inn navnet ditt!');
-        //     return true;
-        // }
-        // else if(inpTlf === '') {
-        //     alert('Vennligst fyll inn telefonnummer!');
-        //     return true;
-        // }
-        // else if(selectedTime === 'En annen dato' && (selectedDate === '' || differentDateTime === '')){
-        //     alert('Ved levering på en annen dato må du velge både dato og tid.');
-        //     return true; 
-        // }
         return false;
     }
 
     // FIRESTORE
     let orderId: string; 
     let newOrder: DocumentReference | undefined;
-    const addToFS = async(orderData: Object) => {
-        
-        const orderReference = collection(firestore, "orders");
-        newOrder = await addDoc(orderReference, {...orderData});
-        orderId = newOrder.id;
-        console.log('Id in orderfield:   ', orderId);
-        
-        }
+    const addToFS = (orderData: Object) => {
+        return new Promise((resolve, reject) => {
+          const orderReference = collection(firestore, "orders");
+          addDoc(orderReference, {...orderData})
+            .then((newOrder: any) => {
+              console.log("Data added to Firestore:", newOrder);
+              resolve(newOrder);
+            })
+            .catch((error: any) => {
+              console.error("Error adding data to Firestore:", error);
+              reject(error);
+            });
+        });
+      };
     
 
     // Date Picker
@@ -231,11 +214,11 @@ const OneOrderField = () => {
     return (
         <div className="OrderForm">
             <div className="OrderDetails">
-                <h1>Legg inn din ordre her</h1>
+                <h1>Ny bestilling</h1>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <textarea 
                 name="varer"
-                placeholder="Her kan du legge inn hva du vil ha, det kan for eksempel være dagligvarer eller noe fra en av våre andre samarbeidspartnere"
+                placeholder="Her kan du legge inn det du vil ha, det kan for eksempel være dagligvarer eller noe fra en av byens restauranter."
                 onChange={event => setInpGoods(event.target.value)} 
                 value = {inpGoods}
                 onKeyDown = {handleKeydown}

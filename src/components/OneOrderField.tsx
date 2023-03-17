@@ -280,8 +280,8 @@ const OneOrderField = () => {
 
                 <hr/>
                 <h3>Kontakt informasjon</h3>
-                <form onSubmit={handleOrder}>
-                    <input onChange={event => {setInpName(event.target.value)}} type='text' placeholder="Navn" required value={inpName}></input>
+                <form onSubmit={handleOrder} className="OrderView">
+                    <input onChange={event => {setInpName(event.target.value)}} type='text' placeholder="Navn" required value={inpName}></input> <br/>
                     <input onChange={event => setInpTlf(event.target.value)} type='tel' pattern="^(\+\d{2})?\d{8}$" placeholder="Tlf" required value={inpTlf}></input>
                     <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hus eller hytte. 
                     <br/>Du kan også bruke dette feltet om kartet ikke fungerer.

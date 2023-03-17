@@ -74,15 +74,15 @@
     border-color: #1b5e20;
   }
   
-  /* .OrderView input[type="text"], input[type="tel"] {
-    width: 100%;
-    height: 40px;
+  .OrderView input[type="text"], input[type="tel"] {
+    width: 150px;
+    height: 15px;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #1b5e20;
     border-radius: 5px;
     font-size: 16px;
-  } */
+  }
   
   .additionalInfo {
     width: 100%;

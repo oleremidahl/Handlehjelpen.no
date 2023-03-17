@@ -39,7 +39,7 @@ function App() {
   };
 
   return (
-      <BrowserRouter>
+      <BrowserRouter basename='/'>
         <Navbar />
           <div className='main'>
               <Routes>

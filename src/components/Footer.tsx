@@ -5,13 +5,13 @@ const Footer = () => {
     return(
         <div className="footer">
             <div style={{marginLeft:'20px'}}>
-                <h2>ET GROVT FIRMANAVN</h2>
-                <p>©kultnavn - Alle rettigheter reservert</p>
+                <h2>HANDLEHJELPEN</h2>
+                {/* <p>©kultnavn - Alle rettigheter reservert</p> */}
             </div>
             <div className="footInfo">
                 <div>
                     <h3>Kontakt Oss</h3>
-                    <p>mail@kultnavn.no</p>
+                    <p>mail@handlehjelpen.no</p>
                 </div>
                 <div>
                     <h3>Følg Oss</h3>

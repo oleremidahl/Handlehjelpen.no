@@ -50,7 +50,7 @@ function App() {
                   path='/login'
                   element={
                     <ProtectedRoute>
-                      {isSmallScreen ? <SmallLogin /> : <LoginForm />}
+                      <SmallLogin />
                     </ProtectedRoute>
                   }
                 />

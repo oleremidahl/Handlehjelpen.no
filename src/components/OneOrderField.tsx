@@ -25,6 +25,7 @@ const OneOrderField = () => {
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
     const [additionalInfo, setAdditionalInfo] = useState<string>('');
     const [items, setItems] = useState<string[]>([]);
+    const [isTomorrow, setIsTomorrow] = useState<boolean>();
   
     
     const baseMessage: string = "NY ORDRE! \n" +  "Navn: " + inpName + "\nTlf: " + inpTlf;
@@ -53,6 +54,15 @@ const OneOrderField = () => {
     }
     }, [user]);
 
+    // useEffect(() => {
+    //     var today = new Date();
+    //     var temp_tomorrow = new Date(today);
+    //     temp_tomorrow.setDate(temp_tomorrow.getDate() + 1);
+    //     var stringTom = temp_tomorrow.getDate() + '/' + (temp_tomorrow.getMonth() + 1) + '/' + temp_tomorrow.getFullYear()
+    //     console.log('Temptomor: ',stringTom)
+    //     setTomorrow(stringTom); 
+    // }, [])
+
     const [timeOfDay, setTimeOfDay] = useState(new Date().getHours());
     const [options, setOptions] = useState([
         { value: 'ASAP', label: 'Så fort som mulig (normalt innen 60 min)' },
@@ -63,7 +73,6 @@ const OneOrderField = () => {
         { value: '15:00-17:00', label: '15:00-17:00' },
         { value: '17:00-19:00', label: '17:00-19:00' },
         { value: '19:00-21:00', label: '19:00-21:00' },
-        { value: '21:00-23:00', label: '21:00-23:00' },
         { value: 'En annen dato', label: 'En annen dato' },
     ]);
     const [updatedOptions, setUpdatedOptions] = useState([ 
@@ -72,15 +81,11 @@ const OneOrderField = () => {
 
   useEffect(() => {
     const updateOptions = options.filter(option => {
-      if (option.value === 'ASAP' && timeOfDay < 22 && timeOfDay > 7) {
+      if (option.value === 'ASAP' && timeOfDay < 20 && timeOfDay > 12) {
         return true;
       }
 
-      if (option.value === 'Før 09:00') {
-        return timeOfDay < 8;
-      }
-
-      if (option.value.includes('-')) {
+      if (option.value.includes('-') ) {
         const startTime = parseInt(option.value.split('-')[0].split(':')[0]);
         return startTime - 1> timeOfDay;
       }
@@ -99,7 +104,6 @@ const OneOrderField = () => {
   }, [timeOfDay, options]);
 
 
-    
     const handleRemove = (index: number) => {
         const newItems = [...items];
         newItems.splice(index, 1);
@@ -124,8 +128,11 @@ const OneOrderField = () => {
     const handleOrder = (event: any) => {
         event.preventDefault();
         var today = new Date();
-        var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
-        var dateTime =   date + '-' + today.getHours() + ":" + today.getMinutes().toString().padStart(2, '0');
+        var year = today.getFullYear();
+        var month = (today.getMonth() + 1).toString().padStart(2, '0');
+        var day = today.getDate().toString().padStart(2, '0');
+        var date = year + '/' + month + '/' + day;
+        var dateTime =   date + '-' + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
         let levering: number = 0;
         if (deliveryPrice){
             levering = deliveryPrice;
@@ -201,8 +208,9 @@ const OneOrderField = () => {
     
 
     // Date Picker
-    const handleRetrievedDate = (selectedDate: string) => {
+    const handleRetrievedDate = (selectedDate: string, isTomorrow: boolean) => {
         setSelectedDate(selectedDate);
+        setIsTomorrow(isTomorrow);
     }
 
     // // Inputs
@@ -262,15 +270,34 @@ const OneOrderField = () => {
                         <div className="select">
                             <select onChange={event => setDifferentDateTime(event.target.value)}>
                             {options.map(option => {
-                                if (option.value !== "En annen dato" && option.value !== "ASAP" 
-                                    && option.value !== "21:00-23:00" && option.value !== "19:00-21:00" &&
-                                    option.value !== "17:00-19:00") {
-                                    return (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                    );
+                                console.log('Tomm',isTomorrow)
+                                if (timeOfDay > 18 && isTomorrow){
+                                    if (option.value !== "En annen dato" && option.value !== "ASAP" 
+                                        && option.value !== "21:00-23:00" && option.value !== "Før 09:00"
+                                        && option.value !== "09:00-11:00" && option.value !== "11:00-13:00"
+                                        )
+                                        // && option.value !== "19:00-21:00" && option.value !== "17:00-19:00")
+                                        {
+                                        return (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                        );
+                                    }
                                 }
+                                else {
+                                    if (option.value !== "En annen dato" && option.value !== "ASAP" 
+                                        && option.value !== "21:00-23:00")
+                                        // && option.value !== "19:00-21:00" && option.value !== "17:00-19:00")
+                                        {
+                                        return (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                        );
+                                    }
+                                }
+                                 
                                 })}
                             </select>
                             <div className="select__arrow"></div>

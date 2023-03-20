@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter as BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './css/App.css';
 
@@ -17,6 +17,7 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import SmallLogin from './components/SmallLogin';
 import SmallRegistration from './components/SmallRegistration';
+import TermsAndConditions from './pages/T&C';
 
 function App() {
   var user = useContext(AuthContext);
@@ -62,6 +63,8 @@ function App() {
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 
                 <Route path='/profile' element={<ProfilePage/>}/>
+
+                <Route path='/terms-and-conditions' element={<TermsAndConditions/>}/>
 
               </Routes>
           </div>

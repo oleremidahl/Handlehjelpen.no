@@ -19,7 +19,7 @@
     color: #1b5e20;
   }
   
-  textarea {
+  .OrderDetails textarea {
     width: 100%;
     height: 200px;
     margin-bottom: 20px;
@@ -56,13 +56,13 @@
     margin-top: 20px;
   }
   
-  ul {
+  .OrderDetails ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
   
-  li {
+  .OrderDetails li {
     background-color: #c8e6c9;
     padding: 10px;
     margin-bottom: 10px;

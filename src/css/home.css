@@ -15,3 +15,13 @@
 .userProfile h1 {
     text-align: center;
 }
+
+/* Default style for the background image */
+.home-container {
+    background-image: url("../images/pexels-ella-olsson-1640777(1).jpg");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* background-position-y: -100px; */
+  }
+  

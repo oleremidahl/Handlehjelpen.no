@@ -1,6 +1,6 @@
 import { margin } from "@mui/system";
 import React from "react";
-import bckgrnd from "../images/pexels-anna-guerrero-1956974(2).jpg";
+import bckgrnd from "../images/vilkarsavtale.jpg";
 
 const TermsAndConditions = () => {
   return (
@@ -145,7 +145,7 @@ const TermsAndConditions = () => {
           <strong>Hele avtalen</strong>
         </p>
         <p>
-        Kontaktinformasjon
+        Kontaktinformasjon;
             Hvis du har spørsmål eller bekymringer angående denne avtalen eller tjenestene som tilbys av Handlehjelpen, 
             vennligst kontakt oss på kontakt@handlehjelpen.no.
             <br/>

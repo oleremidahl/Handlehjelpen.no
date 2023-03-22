@@ -4,7 +4,7 @@
 
 .product_card{
 	/* box-shadow: 0 15px 30px 1px rgba(128, 128, 128, 0.31); */
-	background: #f8f8f8;
+	background: rgba(248, 248, 248, 0.9);
 	text-align: left;
 	border-radius: 5px;
 	padding: 30px;

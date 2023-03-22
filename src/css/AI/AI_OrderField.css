@@ -108,10 +108,10 @@
     margin-bottom: 10px;
   }
   
-  textarea {
+  .OrderView textarea {
     height: 120px;
     font-size: 14px;
-    width: 90%;
+    width: 80%;
   }
   
   .submitBtn {
@@ -138,5 +138,70 @@
     height: 120px;
     font-size: 14px;
     width: 90%;
+  }
+}
+
+/* For screens with a maximum width of 260px */
+@media only screen and (max-width: 260px) {
+  .OrderForm {
+    margin: 10px auto;
+    width: 90%;
+    padding: 10px;
+  }
+
+  .OrderDetails h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .OrderView textarea {
+    height: 80px;
+    font-size: 12px;
+    width: 80%;
+  }
+
+  .submitBtn {
+    font-size: 12px;
+  }
+
+  .listBtn {
+    font-size: 12px;
+    float: none;
+    display: block;
+    margin: 5px auto;
+  }
+
+  li {
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 12px;
+  }
+
+  hr {
+    margin-top: 10px;
+  }
+
+  .OrderView input[type="text"], input[type="tel"] {
+    width: 100px;
+    height: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .additionalInfo {
+    height: 80px;
+    font-size: 12px;
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 460px) {
+  .OrderDetails textarea {
+    width: 80%;
+  }
+  
+  .additionalInfo {
+    width: 80%;
   }
 }

@@ -189,8 +189,6 @@ const OneOrderField = () => {
     }
 
     // FIRESTORE
-    let orderId: string; 
-    let newOrder: DocumentReference | undefined;
     const addToFS = (orderData: Object) => {
         return new Promise((resolve, reject) => {
           const orderReference = collection(firestore, "orders");
@@ -208,16 +206,12 @@ const OneOrderField = () => {
     
 
     // Date Picker
-    const handleRetrievedDate = (selectedDate: string, isTomorrow: boolean) => {
-        setSelectedDate(selectedDate);
-        setIsTomorrow(isTomorrow);
+    const handleRetrievedDate = (selectedDate: Date) => {
+        setSelectedDate(selectedDate?.getDate() + '/' + selectedDate?.getMonth() + 1 + '/' + selectedDate?.getFullYear());
+        const today = new Date();
+        if (selectedDate?.getDate() === today.getDate() + 1) setIsTomorrow(true);
+        else setIsTomorrow(false);
     }
-
-    // // Inputs
-    // const handleNameChange = (event: any) => {
-    //     setInpName(event.target.value)
-    //     runRetrieved = true
-    // }
 
     return (
         <div className="OrderForm">
@@ -235,16 +229,16 @@ const OneOrderField = () => {
                 <br/><br/>
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
                 <div className="OrderView">
-                <h3>Din ordre:</h3>
-                <ul>
-                    {items.map((item, index) => (
-                    <li key={index} style={{marginTop: '15px'}}>
-                        {item}
-                        <button className="listBtn" onClick={() => handleRemove(index)}>X</button>
-                    </li>
-                    ))}
-                </ul>
-            </div>
+                    <h3>Din ordre:</h3>
+                    <ul>
+                        {items.map((item, index) => (
+                        <li key={index} style={{marginTop: '15px'}}>
+                            {item}
+                            <button className="listBtn" onClick={() => handleRemove(index)}>X</button>
+                        </li>
+                        ))}
+                    </ul>
+                </div>
                 <hr/>
                 <h3>Levering</h3>
                 <p>Marker på kartet hvor du ønsker leveringen, du kan også bruke knappen under til å finne din nåværende posisjon. 
@@ -266,11 +260,11 @@ const OneOrderField = () => {
                 {selectedTime === "En annen dato" && (
                     <>
                         <br/><br/>
-                        <Calendar onRetrievedDate={handleRetrievedDate}/>
+                        <Calendar onRetrievedDate={handleRetrievedDate}/><br/>
                         <div className="select">
                             <select onChange={event => setDifferentDateTime(event.target.value)}>
                             {options.map(option => {
-                                console.log('Tomm',isTomorrow)
+                                // console.log('Tomm',isTomorrow)
                                 if (timeOfDay > 18 && isTomorrow){
                                     if (option.value !== "En annen dato" && option.value !== "ASAP" 
                                         && option.value !== "21:00-23:00" && option.value !== "Før 09:00"
@@ -297,7 +291,6 @@ const OneOrderField = () => {
                                         );
                                     }
                                 }
-                                 
                                 })}
                             </select>
                             <div className="select__arrow"></div>

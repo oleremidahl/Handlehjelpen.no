@@ -1,0 +1,27 @@
+/* styles for the input field */
+.react-datepicker-wrapper input {
+    width: 650px;
+    height: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #1b5e20;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* styles for the calendar pop-up */
+  .datepicker-popper {
+    z-index: 1;
+  }
+  
+  /* styles for the selected date */
+  .react-datepicker__day--selected {
+    background-color: #098838;
+    color: #ffffff;
+  }
+  
+  /* styles for the hovered date */
+  .react-datepicker__day--hovered {
+    background-color: #56f091;
+  }
+  

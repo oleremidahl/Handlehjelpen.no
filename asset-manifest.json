@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.5793914a.css",
-    "main.js": "/static/js/main.b1c2ee1d.js",
+    "main.css": "/static/css/main.b87ff98d.css",
+    "main.js": "/static/js/main.e91b2740.js",
     "static/js/787.120382a6.chunk.js": "/static/js/787.120382a6.chunk.js",
-    "static/media/pexels-anna-guerrero-1956974(2).jpg": "/static/media/pexels-anna-guerrero-1956974(2).8fc7208fb78192cd69e2.jpg",
+    "static/media/pexels-ella-olsson-1640777(1).jpg": "/static/media/pexels-ella-olsson-1640777(1).ded7e579ff9c3eefbaec.jpg",
+    "static/media/vilkarsavtale.jpg": "/static/media/vilkarsavtale.e57c0f188b68e2bcf00f.jpg",
     "index.html": "/index.html",
-    "main.5793914a.css.map": "/static/css/main.5793914a.css.map",
-    "main.b1c2ee1d.js.map": "/static/js/main.b1c2ee1d.js.map",
+    "main.b87ff98d.css.map": "/static/css/main.b87ff98d.css.map",
+    "main.e91b2740.js.map": "/static/js/main.e91b2740.js.map",
     "787.120382a6.chunk.js.map": "/static/js/787.120382a6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5793914a.css",
-    "static/js/main.b1c2ee1d.js"
+    "static/css/main.b87ff98d.css",
+    "static/js/main.e91b2740.js"
   ]
 }

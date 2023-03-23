@@ -4,6 +4,9 @@ import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
 import { collection, doc, setDoc } from 'firebase/firestore';
+import { Checkbox } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const RegistrationForm = () => {
   const [name, setName] = useState('');
@@ -12,38 +15,52 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState('');
   var user = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = (event: any) => {
+    setIsChecked(event.target.checked);
+  };
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-        await auth.createUserWithEmailAndPassword(
-          email,
-          password
-        ).then((user) => {
-          if (user.user){
-            addToDatabase({
-              uid: user.user.uid,
-              navn: name, 
-              email: email,
-              tlf: phone,
-            })
+    if (isChecked){
+      try {
+          await auth.createUserWithEmailAndPassword(
+            email,
+            password
+          ).then((user) => {
+            if (user.user){
+              addToDatabase({
+                uid: user.user.uid,
+                navn: name, 
+                email: email,
+                tlf: phone,
+              })
+            }
+          });
+          navigate("/");
+        } catch (error: any) {
+          if (error.code === 'auth/weak-password') {
+            alert('Passordet må være minst 6 tegn.');
           }
-        });
-        navigate("/");
-      } catch (error: any) {
-        if (error.code === 'auth/weak-password') {
-          alert('Passordet må være minst 6 tegn!');
+          else if (error.code === 'auth/email-already-in-use') {
+            alert('Denne emailen er allerede i bruk.');
+          }
+          else if (error.code === 'auth/invalid-email') {
+            alert('Denne emailen er ikke gyldig.');
+          }
+          else if (error.code === 'auth/network-request-failed') {
+            alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
+          }
+          else {
+            alert("Det oppstod et problem med opprettelsen av en ny bruker.");
+            console.log(error);
+          }
         }
-        else if (error.code === 'auth/email-already-in-use') {
-          alert('Denne emailen er allerede i bruk.');
-        }
-        else if (error.code === 'auth/network-request-failed') {
-          alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
-        }
-        else {
-          alert("Det oppstod et problem med opprettelsen av en ny bruker.");
-        }
-      }
+    }
+    else {
+      alert("Du må bekrefte at du har lest og forstått Vilkårsavtalen.")
+    }
   };
 
     //FIRESTORE
@@ -92,8 +109,25 @@ const RegistrationForm = () => {
           onChange={(event) => setPassword(event.target.value)}
           required
         />
-        <button type="submit">Registrer bruker</button>
-        <p>Har du allerede bruker? <Link to="/login">Klikk her!</Link></p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Checkbox 
+            color='success'
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          /> 
+          <p style={{ marginLeft: '10px' }}>
+            Ved å huke av bekrefter du å ha lest og forstått&nbsp;
+            <Link to="/terms-and-conditions"><strong style={{ fontStyle: 'italic' }}>
+               Vilkårsavtalen</strong>
+            </Link>
+          </p>
+        </div>
+
+          <button type="submit">Registrer bruker</button>
+         
+
+        <p>Har du allerede bruker? <Link to="/login"><strong style={{ fontStyle: 'italic' }}>
+              Klikk her!</strong></Link></p>
       </form>
     </div>
   );

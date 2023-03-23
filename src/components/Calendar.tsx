@@ -5,7 +5,13 @@ import "../css/CalendarStyles.css";
 
 const Calendar = (props: any) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const { onRetrievedDate } = props;
+  const { onRetrievedDate, passedDate } = props;
+
+  // useEffect(() => {
+  //   if (!selectedDate && passedDate){
+  //     setSelectedDate(passedDate);
+  //   }
+  // })
   
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -16,7 +22,7 @@ const Calendar = (props: any) => {
 
   return (
     <DatePicker
-      selected={selectedDate}
+      selected={selectedDate || passedDate}
       dateFormat="dd/MM/yyyy"
       placeholderText='Klikk for å velge dato'
       onChange={handleDateChange}

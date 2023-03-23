@@ -65,7 +65,9 @@ const LoginForm = () => {
           required
         />
         <button type="submit">Logg inn</button>
-        <p>Har du ikke bruker? <Link to="/register">Klikk her!</Link></p>
+        <p>Har du ikke bruker? <Link to="/register">
+          <strong style={{ fontStyle: 'italic' }}>
+              Klikk her!</strong></Link></p>
       </form>
     </div>
   );

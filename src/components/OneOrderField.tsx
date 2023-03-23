@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/product_card.css";
 import "../css/AI/AI_OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
@@ -8,14 +8,15 @@ import { AuthContext } from "../context/AuthContext";
 import { firestore } from "../base";
 import { addDoc, collection, doc, DocumentReference, getDoc } from "firebase/firestore";
 import Calendar from './Calendar';
+import { Checkbox } from "@mui/material";
 
 const OneOrderField = () => {
     
     const navigate = useNavigate();
     const user = useContext(AuthContext);
     const [inpGoods, setInpGoods] = useState("");
-    const [inpName, setInpName] = useState("");
-    const [inpTlf, setInpTlf] = useState("");
+    const [inpName, setInpName] = useState(localStorage.getItem('inpName') || '');
+    const [inpTlf, setInpTlf] = useState(localStorage.getItem('inpTlf') || '');
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
     const [selectedMethod, setSelectedMethod] = useState<string>('');
     const [formattedAdress, setFormattedAdress] = useState<string>('');
@@ -23,8 +24,19 @@ const OneOrderField = () => {
     const [selectedTime, setSelectedTime] = useState<string>('');
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
-    const [additionalInfo, setAdditionalInfo] = useState<string>('');
-    const [items, setItems] = useState<string[]>([]);
+    const [additionalInfo, setAdditionalInfo] = useState(localStorage.getItem('additionalInfo') || '');
+    const [items, setItems] = useState<string[]>(JSON.parse(localStorage.getItem('items') || '[]'));
+  
+    useEffect(() => {
+      localStorage.setItem('inpName', inpName);
+      localStorage.setItem('inpTlf', inpTlf);
+      localStorage.setItem('selectedTime', selectedTime);
+    //   localStorage.setItem('selectedDate', selectedDate);
+      localStorage.setItem('differentDateTime', differentDateTime);
+      localStorage.setItem('additionalInfo', additionalInfo);
+      localStorage.setItem('items', JSON.stringify(items));
+    }, [inpName, inpTlf, formattedAdress, deliveryPrice, selectedTime, selectedDate, differentDateTime, additionalInfo, items]);
+  
     const [isTomorrow, setIsTomorrow] = useState<boolean>();
   
     
@@ -34,7 +46,14 @@ const OneOrderField = () => {
     const priceMessage: string = `\nLeveringspris: ${deliveryPrice ? deliveryPrice + " kr" : "Ikke estimert, må regnes ut manuelt."}`
     const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
     const phoneNumbers: string[] = ['+4741398911', '+4741289478']
-    
+
+    // const [savedDate, setSavedDate] = useState<Date | null>(null)
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = (event: any) => {
+        setIsChecked(event.target.checked);
+    };
+        
     
     useEffect(() => {
         if (user) {
@@ -53,6 +72,13 @@ const OneOrderField = () => {
         getNameAndPhone();
     }
     }, [user]);
+
+    // useEffect(() => {
+    //     if(selectedDate !== ''){
+    //         const [day, month, year] = selectedDate.split('/').map(Number);
+    //         setSavedDate(new Date(year, month - 1, day));
+    //     }
+    // }, [])
 
     // useEffect(() => {
     //     var today = new Date();
@@ -127,49 +153,54 @@ const OneOrderField = () => {
 
     const handleOrder = (event: any) => {
         event.preventDefault();
-        var today = new Date();
-        var year = today.getFullYear();
-        var month = (today.getMonth() + 1).toString().padStart(2, '0');
-        var day = today.getDate().toString().padStart(2, '0');
-        var date = year + '/' + month + '/' + day;
-        var dateTime =   date + '-' + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
-        let levering: number = 0;
-        if (deliveryPrice){
-            levering = deliveryPrice;
+        if (isChecked){
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = (today.getMonth() + 1).toString().padStart(2, '0');
+            var day = today.getDate().toString().padStart(2, '0');
+            var date = year + '/' + month + '/' + day;
+            var dateTime =   date + '-' + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
+            let levering: number = 0;
+            if (deliveryPrice){
+                levering = deliveryPrice;
+            }
+            const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage;
+            if (!isEmptyFields()){
+                addToFS({
+                    navn: inpName,
+                    tlf: inpTlf,
+                    varer: items,
+                    lokasjon: formattedAdress,
+                    leveringspris: levering,
+                    leveringstid: selectedTime,
+                    mottatt: dateTime,
+                    ekstraInfo: additionalInfo,
+                    annenDato: selectedDate,
+                    annenDatoTid: differentDateTime,
+                    to: phoneNumbers,
+                    body: fullMessage
+                }).then((newOrder: any) => {
+                    console.log("Order added to Firestore:", newOrder);
+                    navigate("/OrderConfirmation", {state: {
+                      id: newOrder.id, 
+                      dato: today,
+                      navn: inpName,
+                      varer: items,
+                      lokasjon: formattedAdress,
+                      leveringspris: levering,
+                      ekstraInfo: additionalInfo,
+                      annenDato: selectedDate,
+                      leveringstid: selectedTime,
+                      annenDatoTid: differentDateTime,
+                    }});
+                  }).catch((error: any) => {
+                    console.error(error);
+                    alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203 ")
+                })}
         }
-        const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage;
-        if (!isEmptyFields()){
-            addToFS({
-                navn: inpName,
-                tlf: inpTlf,
-                varer: items,
-                lokasjon: formattedAdress,
-                leveringspris: levering,
-                leveringstid: selectedTime,
-                mottatt: dateTime,
-                ekstraInfo: additionalInfo,
-                annenDato: selectedDate,
-                annenDatoTid: differentDateTime,
-                to: phoneNumbers,
-                body: fullMessage
-            }).then((newOrder: any) => {
-                console.log("Order added to Firestore:", newOrder);
-                navigate("/OrderConfirmation", {state: {
-                  id: newOrder.id, 
-                  dato: today,
-                  navn: inpName,
-                  varer: items,
-                  lokasjon: formattedAdress,
-                  leveringspris: levering,
-                  ekstraInfo: additionalInfo,
-                  annenDato: selectedDate,
-                  leveringstid: selectedTime,
-                  annenDatoTid: differentDateTime,
-                }});
-              }).catch((error: any) => {
-                console.error(error);
-                alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203 ")
-            })}
+        else {
+            alert("Du må bekrefte at du har lest og forstått Vilkårsavtalen.")
+        }
     }
 
     const handleRetrievedVariables = (selectedL: any, _formattedAdress: string, distancePrice: number) => {
@@ -311,6 +342,20 @@ const OneOrderField = () => {
                     onChange={event => setAdditionalInfo(event.target.value)}
                     value = {additionalInfo}
                     ></textarea><br/>
+                    {!user && 
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Checkbox 
+                                color='success'
+                                checked={isChecked}
+                                onChange={handleCheckboxChange}
+                            /> 
+                            <p style={{ marginLeft: '10px' }}>
+                                Ved å huke av bekrefter du å ha lest og forstått&nbsp;
+                                <Link to="/terms-and-conditions"><strong style={{ fontStyle: 'italic', color: '#333333'}}>
+                                Vilkårsavtalen</strong>
+                                </Link>
+                            </p>
+                        </div>}
                     <button className="submitBtn" type="submit">Send inn bestilling</button>
                 </form>
             </div>

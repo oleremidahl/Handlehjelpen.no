@@ -33,11 +33,9 @@ function GoogleMapComponent(props: any) {
   })
 
   useEffect(() => {
-    if(relevantInfo.selectedLocation){
-      props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.formattedAdress, relevantInfo.distancePrice);
-
-    }
-  }, [relevantInfo]);
+    console.log('Pris ', relevantInfo.distancePrice);
+    props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.formattedAdress, relevantInfo.distancePrice);
+  }, [relevantInfo.distancePrice]);
 
   
 const { isLoaded, loadError } = useLoadScript({
@@ -54,10 +52,16 @@ const { isLoaded, loadError } = useLoadScript({
   
   useEffect(() => {
     if(relevantInfo.selectedLocation) {
-      geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
-      calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
+      geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng)
+        .then(() => {
+          calculateDistanceAndPrice(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
+        })
+        .catch((e: string) => console.log("Error: " + e));
     }
   }, [relevantInfo.selectedLocation]);
+  
+  
+  
 
   // useEffect(() => {
   //   if(selectedOption && selectedLocation) {
@@ -101,7 +105,7 @@ const { isLoaded, loadError } = useLoadScript({
           const newRelInf = {...relevantInfo, selectedLocation: { lat: latitude, lng: longitude }}
           // setSelectedLocation();
           setRelevantInfo(newRelInf);
-          geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
+          // geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
         }
         else {
           alert("Du befinner deg utenfor vårt leveringsområde.")
@@ -115,23 +119,27 @@ const { isLoaded, loadError } = useLoadScript({
   };
       
   const geocoder = new google.maps.Geocoder();
-  function geocodeLatLng(lat: number, lng: number) {
-    if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(lat, lng), bermudaTriangle)){
-      geocoder
-        .geocode({ location: {lat: lat, lng: lng } })
-        .then((response: { results: any[]; }) => {
-          if (response.results[0]) {
-            // map.setZoom(13);
-            const newRelInf = {...relevantInfo, formattedAdress: response.results[0].formatted_address }
-            setRelevantInfo(newRelInf);
-            // setFormattedAdress(response.results[0].formatted_address);
-          } else {
-            alert("No results found");
-          }
-        })
-        .catch((e: string) => alert("Geocoder failed due to: " + e));
-    }
+  function geocodeLatLng(lat: number, lng: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(lat, lng), bermudaTriangle)){
+        geocoder
+          .geocode({ location: {lat: lat, lng: lng } })
+          .then((response: { results: any[]; }) => {
+            if (response.results[0]) {
+              const newRelInf = {...relevantInfo, formattedAdress: response.results[0].formatted_address }
+              setRelevantInfo(newRelInf);
+              resolve(); // Resolve the promise
+            } else {
+              reject("No results found"); // Reject the promise with an error message
+            }
+          })
+          .catch((e: string) => reject("Geocoder failed due to: " + e)); // Reject the promise with an error message
+      } else {
+        reject(""); // Reject the promise with an error message
+      }
+    });
   }
+  
 
   function calculateDistanceAndPrice(lat: number, lng: number) {
     const referencePoint = { lat: 58.021697654760224 * (Math.PI/180), lng: 7.455554489881608 * (Math.PI/180)};
@@ -152,6 +160,7 @@ const { isLoaded, loadError } = useLoadScript({
       else {
         pris = 119 + (20 * (km - 4));
       }
+      console.log('Pris i kalkulasjon: ',pris);
       const newRelInf = {...relevantInfo, distancePrice: Math.round(pris) }
       setRelevantInfo(newRelInf);
     }
@@ -196,7 +205,7 @@ for (var i = 0; i < 36; i++) {
       const newRelInf = {...relevantInfo, selectedLocation: { lat: event.latLng.lat(), lng: event.latLng.lng() }}
       // setSelectedLocation();
       setRelevantInfo(newRelInf);
-        // if(selectedOption) calculateDistanceAndPrice(selectedLocation.lat, selectedLocation.lng, selectedOption);
+      // calculateDistanceAndPrice( event.latLng.lat(), event.latLng.lng());
     } 
 });
 

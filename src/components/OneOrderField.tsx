@@ -153,7 +153,7 @@ const OneOrderField = () => {
 
     const handleOrder = (event: any) => {
         event.preventDefault();
-        if (isChecked){
+        if (isChecked || user){
             var today = new Date();
             var year = today.getFullYear();
             var month = (today.getMonth() + 1).toString().padStart(2, '0');
@@ -178,7 +178,8 @@ const OneOrderField = () => {
                     annenDato: selectedDate,
                     annenDatoTid: differentDateTime,
                     to: phoneNumbers,
-                    body: fullMessage
+                    body: fullMessage,
+                    ownerId: user?.uid
                 }).then((newOrder: any) => {
                     console.log("Order added to Firestore:", newOrder);
                     navigate("/OrderConfirmation", {state: {
@@ -209,6 +210,7 @@ const OneOrderField = () => {
         if (distancePrice !== undefined){
             setDeliveryPrice(distancePrice);
         }
+        console.log('Distance price: '+distancePrice);
     }
 
     function isEmptyFields() {

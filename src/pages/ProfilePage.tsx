@@ -1,4 +1,4 @@
-import { doc, DocumentData, DocumentSnapshot, getDoc } from "firebase/firestore";
+import { collection, doc, DocumentData, DocumentSnapshot, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -9,6 +9,15 @@ const ProfilePage = () => {
     const [data, setData] = useState<DocumentData>();
     const user = useContext(AuthContext);
     const navigate = useNavigate();
+    const [prevOrders, setPrevOrders] = useState<any>(null);
+    
+    async function getOrdersByOwner() {
+        const ordersRef = collection(firestore, 'orders');
+        const q = query(ordersRef, orderBy("mottatt", "desc"), where('ownerId', '==', user?.uid));
+        const data = await getDocs(q);
+        console.log(data.docs);
+        return data;
+      }
 
     useEffect(() => {
         if (user){
@@ -16,14 +25,12 @@ const ProfilePage = () => {
             const getUser = async() => {
                 const retrievedData = await getDoc(userReference);
                 setData(retrievedData.data())
-                // if(retrievedData){
-                //     console.log(retrievedData.data().navn)
-
-                // }
             }
             getUser();
+            setPrevOrders(getOrdersByOwner());
         }
-    })
+    }, [])
+
 
     return (
         <div className="userProfile">
@@ -34,6 +41,7 @@ const ProfilePage = () => {
                     <p><b>Tlf:</b> {data?.tlf}</p>
                     <p><b>E-mail:</b> {data?.email}</p>
                     <p><b>Bruker-ID:</b> {user.uid}</p>
+                    {/* <p>{prevOrders}</p> */}
                     <Link to="/">
                         <button className="submitBtn">Tilbake til hjemmesiden</button>      
                     </Link>

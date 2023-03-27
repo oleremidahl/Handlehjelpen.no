@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.b87ff98d.css",
-    "main.js": "/static/js/main.bd159dc8.js",
+    "main.js": "/static/js/main.68c80e2b.js",
     "static/js/787.120382a6.chunk.js": "/static/js/787.120382a6.chunk.js",
     "static/media/pexels-ella-olsson-1640777(1).jpg": "/static/media/pexels-ella-olsson-1640777(1).ded7e579ff9c3eefbaec.jpg",
     "static/media/vilkarsavtale.jpg": "/static/media/vilkarsavtale.e57c0f188b68e2bcf00f.jpg",
     "index.html": "/index.html",
     "main.b87ff98d.css.map": "/static/css/main.b87ff98d.css.map",
-    "main.bd159dc8.js.map": "/static/js/main.bd159dc8.js.map",
+    "main.68c80e2b.js.map": "/static/js/main.68c80e2b.js.map",
     "787.120382a6.chunk.js.map": "/static/js/787.120382a6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b87ff98d.css",
-    "static/js/main.bd159dc8.js"
+    "static/js/main.68c80e2b.js"
   ]
 }

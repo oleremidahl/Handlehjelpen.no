@@ -16,6 +16,7 @@ const Footer = () => {
                 <div className="contact">
                     <h3>Kontakt Oss</h3>
                     <p>kontakt@handlehjelpen.no</p>
+                    <p>Tlf: 489 12 203</p>
                 </div>
                 <div>
                     <h3>Følg Oss</h3>

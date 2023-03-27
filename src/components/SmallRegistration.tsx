@@ -75,6 +75,7 @@ const RegistrationForm = () => {
           navn: userData.navn,
           email: userData.email,
           tlf: userData.tlf,
+          mottaMail: userData.mottaMail
         });
       }
 

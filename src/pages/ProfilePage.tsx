@@ -16,7 +16,7 @@ const ProfilePage = () => {
         const q = query(ordersRef, orderBy("mottatt", "desc"), where('ownerId', '==', user?.uid));
         const data = await getDocs(q);
         console.log(data.docs);
-        return data;
+        return data.docs;
       }
 
     useEffect(() => {
@@ -27,7 +27,8 @@ const ProfilePage = () => {
                 setData(retrievedData.data())
             }
             getUser();
-            setPrevOrders(getOrdersByOwner());
+            const prev = getOrdersByOwner();
+            setPrevOrders(prev);
         }
     }, [])
 
@@ -45,7 +46,31 @@ const ProfilePage = () => {
                     <Link to="/">
                         <button className="submitBtn">Tilbake til hjemmesiden</button>      
                     </Link>
-
+                    {prevOrders &&
+                    <>
+                    <h1>Dine bestillinger</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>Bestillingsdato</th>
+                            <th>Leveringsdato</th>
+                            <th>Leveringspris</th>
+                            <th>Varer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {prevOrders.map((order: any) => (
+                            <tr key={order.id}>
+                                <td>{order.data().mottatt}</td>
+                                <td>{order.data().leveringstid === 'En annen dato' ? order.data().annenDato : order.data().leveringstid}</td>
+                                <td>{order.data().leveringspris} kr</td>
+                                <td>{order.data().varer.join(", ")}</td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    </>
+                    }
                 </> 
                 : 
                 <>

@@ -244,8 +244,10 @@ const OneOrderField = () => {
 
     // Date Picker
     const handleRetrievedDate = (selectedDate: Date) => {
-        setSelectedDate(selectedDate?.getDate() + '/' + selectedDate?.getMonth() + 1 + '/' + selectedDate?.getFullYear());
+        const datestring = selectedDate?.getDate() + '/' + (selectedDate?.getMonth() + 1) + '/' + selectedDate?.getFullYear();
+        setSelectedDate(datestring);
         const today = new Date();
+        
         if (selectedDate?.getDate() === today.getDate() + 1) setIsTomorrow(true);
         else setIsTomorrow(false);
     }

@@ -5,13 +5,13 @@ import "../css/CalendarStyles.css";
 
 const Calendar = (props: any) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [maxDate, setMaxDate] = useState<Date | null>(null);
   const { onRetrievedDate, passedDate } = props;
 
-  // useEffect(() => {
-  //   if (!selectedDate && passedDate){
-  //     setSelectedDate(passedDate);
-  //   }
-  // })
+  useEffect(() => {
+    const today = new Date(); // get today's date
+    setMaxDate(new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()));
+  }, [])
   
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -20,17 +20,48 @@ const Calendar = (props: any) => {
     }
   };
 
+  const filterDate = (date: any) => {
+    // Disable dates before 3rd of April
+    // if (date < new Date("2023-04-02")) return false;
+
+    // Enable dates between 3rd of April and 10th of April
+    if (date >= new Date("2023-04-02") && date <= new Date("2023-04-10")){
+      
+      return true;
+    }
+
+    // Enable every Tuesday after 10th of April up until 17th of June
+    if (
+      date >= new Date("2023-04-10") &&
+      date <= new Date("2023-06-17") &&
+      date.getDay() === 2
+    ){
+      return true;
+    }
+
+    // Enable every date after 17th of June up until 17th of August
+    if (
+      date >= new Date("2023-06-17") &&
+      date <= new Date("2023-08-17")
+    )
+      return true;
+
+    // Disable all other dates
+    return false;
+  };
+
   return (
     <DatePicker
       selected={selectedDate || passedDate}
       dateFormat="dd/MM/yyyy"
       placeholderText='Klikk for å velge dato'
       onChange={handleDateChange}
-      minDate={new Date(Date.now() + 86400000)} // tomorrow
-      // minDate={new Date(2023,3,4)}
-      maxDate={new Date(2023,3,10)}
+      // minDate={new Date(Date.now() + 86400000)} // tomorrow
+      minDate={new Date(2023,3,3)}
+      maxDate={maxDate}
       wrapperClassName="react-datepicker-wrapper"
       withPortal
+      filterDate={filterDate}
     />
   );
 };

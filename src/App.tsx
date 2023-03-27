@@ -18,6 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import SmallLogin from './components/SmallLogin';
 import SmallRegistration from './components/SmallRegistration';
 import TermsAndConditions from './pages/T&C';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   var user = useContext(AuthContext);
@@ -41,6 +42,7 @@ function App() {
 
   return (
       <BrowserRouter basename='/'>
+        <ScrollToTop/>
         <Navbar />
           <div className='main'>
               <Routes>

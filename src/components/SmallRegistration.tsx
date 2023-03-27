@@ -16,9 +16,13 @@ const RegistrationForm = () => {
   var user = useContext(AuthContext);
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(true);
 
   const handleCheckboxChange = (event: any) => {
     setIsChecked(event.target.checked);
+  };
+  const handleEmailCheckboxChange = (event: any) => {
+    setIsEmailChecked(event.target.checked);
   };
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +39,7 @@ const RegistrationForm = () => {
                 navn: name, 
                 email: email,
                 tlf: phone,
+                mottaMail: isEmailChecked
               })
             }
           });
@@ -120,6 +125,16 @@ const RegistrationForm = () => {
             <Link to="/terms-and-conditions"><strong style={{ fontStyle: 'italic' }}>
                Vilkårsavtalen</strong>
             </Link>
+          </p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Checkbox 
+            color='success'
+            checked={isEmailChecked}
+            onChange={handleEmailCheckboxChange}
+          /> 
+          <p style={{ marginLeft: '10px' }}>
+            Jeg ønsker å motta nyhetsbrev og annen markedsføring via e-post fra Handlehjelpen. 
           </p>
         </div>
 

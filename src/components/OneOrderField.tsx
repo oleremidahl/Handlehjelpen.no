@@ -153,6 +153,10 @@ const OneOrderField = () => {
 
     const handleOrder = (event: any) => {
         event.preventDefault();
+        var uid = "";
+        if (user){
+            uid = user.uid
+        }
         if (isChecked || user){
             var today = new Date();
             var year = today.getFullYear();
@@ -179,7 +183,7 @@ const OneOrderField = () => {
                     annenDatoTid: differentDateTime,
                     to: phoneNumbers,
                     body: fullMessage,
-                    ownerId: user?.uid
+                    ownerId: uid
                 }).then((newOrder: any) => {
                     console.log("Order added to Firestore:", newOrder);
                     navigate("/OrderConfirmation", {state: {

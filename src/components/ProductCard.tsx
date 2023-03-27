@@ -41,7 +41,7 @@ const ProductCard = () => {
     return (
         <div className="product_card" >	
             <div className="product-details">
-                <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg</h1>
+                <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg - Mandal</h1>
                 <br/>
                     <p className="information"> 
                     Vår leveringstjeneste tilbyr bekvemmeligheten ved å få dine favorittmatvarer fra 

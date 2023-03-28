@@ -4,9 +4,9 @@
     flex-direction: row;
     justify-content: space-between;
     /* padding-left: 20px; */
-    background-color: rgb(233, 230, 231);
     width: 100%;
     height: fit-content;
+    border-top: 3px solid black;
   }
 
 .footInfo {
@@ -22,6 +22,14 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.footer-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 
 /* For screens with a maximum width of 600px */
 @media only screen and (max-width: 600px) {

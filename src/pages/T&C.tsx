@@ -57,8 +57,7 @@ const TermsAndConditions = () => {
           <strong>Avbestillings- og refusjonspolicy</strong>
         </p>
         <p>
-        Bestillinger kan kanselleres inntil en time før planlagt leveringstid. Hvis du kansellerer din 
-        bestilling innen en times tidsperiode, vil du bli belastet et avbestillingsgebyr på kr 50,00. 
+        Bestillinger kan kanselleres inntil en time før planlagt leveringstid.
         Hvis du kansellerer bestillingen din etter at vinduet på én time har gått, vil du bli belastet for hele bestillingen.
         <br/>
         Refusjoner vil bli gitt i tilfelle varene eller tjenestene levert til deg er defekte eller ikke som beskrevet. 

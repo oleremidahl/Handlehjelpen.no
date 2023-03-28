@@ -3,6 +3,7 @@ import "../css/product_card.css";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { AuthContext } from '../context/AuthContext';
+import { Button } from "@mui/material";
 
 
 const ProductCard = () => {
@@ -49,10 +50,10 @@ const ProductCard = () => {
                     Bestill nå og opplev den enkle og behagelige opplevelsen med å få måltidene dine levert til deg. </p>
                 <div className="control">
                     {/* <Link to="/OneOrder"> */}
-                        <button onClick={handleModalOpen} className="buy_btn">
+                        <Button onClick={handleModalOpen} className="buy_btn" variant="contained" color="success">
                             <span className="shopping-cart"><i className="fa fa-shopping-cart" aria-hidden="true"></i></span>
                             <span className="buy">Bestill nå</span>
-                        </button>
+                        </Button>
                     {/* </Link> */}
                 </div>		
                 <Modal className="modal" isOpen={isModalOpen} onRequestClose={handleModalClose}>

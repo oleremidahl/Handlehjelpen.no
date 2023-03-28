@@ -9,7 +9,6 @@ const ProfilePage = () => {
     const [data, setData] = useState<DocumentData>();
     const user = useContext(AuthContext);
     const navigate = useNavigate();
-    const [prevOrders, setPrevOrders] = useState<any>(null);
     
     async function getOrdersByOwner() {
         const ordersRef = collection(firestore, 'orders');
@@ -19,18 +18,24 @@ const ProfilePage = () => {
         return data.docs;
       }
 
-    useEffect(() => {
-        if (user){
-            const userReference = doc(firestore, "users", user?.uid);
-            const getUser = async() => {
-                const retrievedData = await getDoc(userReference);
-                setData(retrievedData.data())
-            }
-            getUser();
-            const prev = getOrdersByOwner();
-            setPrevOrders(prev);
+      const [prevOrders, setPrevOrders] = useState<any>([]);
+
+      useEffect(() => {
+        if (user) {
+          const userReference = doc(firestore, "users", user?.uid);
+          const getUser = async () => {
+            const retrievedData = await getDoc(userReference);
+            setData(retrievedData.data());
+          };
+          getUser();
+          const getPrevOrders = async () => {
+            const orders = await getOrdersByOwner();
+            setPrevOrders(orders);
+          };
+          getPrevOrders();
         }
-    }, [])
+      }, [user]);
+      
 
 
     return (
@@ -47,29 +52,29 @@ const ProfilePage = () => {
                         <button className="submitBtn">Tilbake til hjemmesiden</button>      
                     </Link>
                     {prevOrders &&
-                    <>
-                    <h1>Dine bestillinger</h1>
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Bestillingsdato</th>
-                            <th>Leveringsdato</th>
-                            <th>Leveringspris</th>
-                            <th>Varer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {prevOrders.map((order: any) => (
-                            <tr key={order.id}>
-                                <td>{order.data().mottatt}</td>
-                                <td>{order.data().leveringstid === 'En annen dato' ? order.data().annenDato : order.data().leveringstid}</td>
-                                <td>{order.data().leveringspris} kr</td>
-                                <td>{order.data().varer.join(", ")}</td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    </>
+                    <div className="prevContainer">
+                        <h1>Dine bestillinger</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                <th>Bestillingsdato</th>
+                                <th>Leveringsdato</th>
+                                <th>Leveringspris</th>
+                                <th>Varer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {prevOrders.map((order: any) => (
+                                <tr key={order.id}>
+                                    <td>{order.data().mottatt}</td>
+                                    <td>{order.data().leveringstid === 'En annen dato' ? order.data().annenDato : order.data().leveringstid}</td>
+                                    <td>{order.data().leveringspris} kr</td>
+                                    <td>{order.data().varer.join(", ")}</td>
+                                </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     }
                 </> 
                 : 

@@ -6,14 +6,40 @@
 	border-radius: 5px;
 	overflow: hidden;
     margin: auto;
-	height: 400px;
-	max-width: 350px;
+	height: fit-content;
+	max-width: 550px;
     margin-top: 2em;
     padding: 25px;
 }
 
 .userProfile h1 {
     text-align: center;
+}
+
+
+.prevContainer h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.prevContainer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.prevContainer th, .prevContainer td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.prevContainer th {
+    background-color: #f2f2f2;
+}
+
+.prevContainer tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 /* Default style for the background image */

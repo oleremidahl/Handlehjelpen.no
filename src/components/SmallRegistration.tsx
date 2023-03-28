@@ -4,7 +4,7 @@ import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { Checkbox } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -139,7 +139,7 @@ const RegistrationForm = () => {
           </p>
         </div>
 
-          <button type="submit">Registrer bruker</button>
+          <Button type="submit" variant="contained" color='success' style={{maxWidth: '300px'}}>Registrer bruker</Button>
          
 
         <p>Har du allerede bruker? <Link to="/login"><strong style={{ fontStyle: 'italic' }}>

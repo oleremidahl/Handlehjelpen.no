@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
+import { Button } from '@mui/material';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -64,7 +65,7 @@ const LoginForm = () => {
           onChange={(event) => setPassword(event.target.value)}
           required
         />
-        <button type="submit">Logg inn</button>
+       <Button type="submit" variant="contained" color='success' style={{maxWidth: '300px'}}>Logg Inn</Button>
         <p>Har du ikke bruker? <Link to="/register">
           <strong style={{ fontStyle: 'italic' }}>
               Klikk her!</strong></Link></p>

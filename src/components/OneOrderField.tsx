@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import { firestore } from "../base";
 import { addDoc, collection, doc, DocumentReference, getDoc } from "firebase/firestore";
 import Calendar from './Calendar';
-import { Checkbox } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 
 const OneOrderField = () => {
     
@@ -26,7 +26,12 @@ const OneOrderField = () => {
     const [differentDateTime, setDifferentDateTime] = useState<string>('');
     const [additionalInfo, setAdditionalInfo] = useState(localStorage.getItem('additionalInfo') || '');
     const [items, setItems] = useState<string[]>(JSON.parse(localStorage.getItem('items') || '[]'));
+    const [isExtraChecked, setIsExtraChecked] = useState(true);
   
+    const handleExtraCheckboxChange = (event: any) => {
+        setIsExtraChecked(event.target.checked);
+    }
+
     useEffect(() => {
       localStorage.setItem('inpName', inpName);
       localStorage.setItem('inpTlf', inpTlf);
@@ -45,7 +50,8 @@ const OneOrderField = () => {
     const addressMessage: string = `\nLeveres til: ${formattedAdress !== '' ? formattedAdress + "\nTilleggsinfo: " + additionalInfo : additionalInfo}`;
     const priceMessage: string = `\nLeveringspris: ${deliveryPrice ? deliveryPrice + " kr" : "Ikke estimert, må regnes ut manuelt."}`
     const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
-    const phoneNumbers: string[] = ['+4741398911', '+4741289478']
+    const phoneNumbers: string[] = ['+4741398911', '+4748912203'];
+    const misingItemsOrder: string = `\n${isExtraChecked ? "Kunden ønsker å få levering selv om noen varer mangler" : "Kunden ønsker IKKE levering om det mangler en vare. "}`
 
     // const [savedDate, setSavedDate] = useState<Date | null>(null)
     const [isChecked, setIsChecked] = useState(false);
@@ -145,6 +151,10 @@ const OneOrderField = () => {
         }
     };
 
+    const removeAll = () => {
+        setItems([]);
+    }
+
     const handleKeydown = (event:  {key: string;} ) =>  {
         if (event.key === 'Enter'){
             handleAdd(inpGoods)
@@ -168,7 +178,7 @@ const OneOrderField = () => {
             if (deliveryPrice){
                 levering = deliveryPrice;
             }
-            const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage;
+            const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage + misingItemsOrder;
             if (!isEmptyFields()){
                 addToFS({
                     navn: inpName,
@@ -183,7 +193,8 @@ const OneOrderField = () => {
                     annenDatoTid: differentDateTime,
                     to: phoneNumbers,
                     body: fullMessage,
-                    ownerId: uid
+                    ownerId: uid,
+                    onskerOrdreMedMangler: isExtraChecked
                 }).then((newOrder: any) => {
                     console.log("Order added to Firestore:", newOrder);
                     navigate("/OrderConfirmation", {state: {
@@ -269,6 +280,10 @@ const OneOrderField = () => {
                 <button className="submitBtn" onClick={() => handleAdd(inpGoods)}>Legg til</button> <br/>
                 <div className="OrderView">
                     <h3>Din ordre:</h3>
+                    {items.length !== 0 &&
+                    <>
+                    <button className="submitBtn" style={{float: 'right'}} onClick={removeAll}>Fjern alle</button>
+                    <br/><br/>
                     <ul>
                         {items.map((item, index) => (
                         <li key={index} style={{marginTop: '15px'}}>
@@ -277,6 +292,8 @@ const OneOrderField = () => {
                         </li>
                         ))}
                     </ul>
+                    </>
+                    }
                 </div>
                 <hr/>
                 <h3>Levering</h3>
@@ -364,7 +381,17 @@ const OneOrderField = () => {
                                 </Link>
                             </p>
                         </div>}
-                    <button className="submitBtn" type="submit">Send inn bestilling</button>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Checkbox 
+                        color='success'
+                        checked={isExtraChecked}
+                        onChange={handleExtraCheckboxChange}
+                    /> 
+                    <p style={{ marginLeft: '10px' }}>
+                        Hvis en eller flere matvarer er utsolgt eller ikke tilgjengelig ønsker jeg fortsatt resten av min bestilling. 
+                    </p>
+                    </div>
+                    <Button type="submit" variant="contained" color='success' style={{maxWidth: '300px'}}>Send inn bestilling</Button>
                 </form>
             </div>
         </div>

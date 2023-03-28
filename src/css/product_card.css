@@ -60,7 +60,7 @@
 	color: #eee;
 	padding: 0;
 	/* margin: 0; */
-	width: 140px;
+	width: 160px;
 	
 }
 
@@ -89,11 +89,12 @@
 /* the Icon */
 .buy_btn .shopping-cart {
 	transform: translateX(-100%);
-  position: absolute;
+  	position: absolute;
 	background: #333;
 	z-index: 1;
-  left: 0;
-  top: 0;
+  	left: 0;
+  	top: 0;
+	height: 40px;
 }
 
 /* buy */

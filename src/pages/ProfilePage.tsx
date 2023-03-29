@@ -4,8 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { DataContext } from '../context/DataContext';
 import {firestore} from '../base';
+import AdminPage from "../components/AdminPage";
 
-const ProfilePage = () => {
+const ProfilePage = ({ isAdmin }: { isAdmin: boolean }) => {
     const [data, setData] = useState<DocumentData>();
     const user = useContext(AuthContext);
     const navigate = useNavigate();
@@ -51,7 +52,7 @@ const ProfilePage = () => {
                     <Link to="/">
                         <button className="submitBtn">Tilbake til hjemmesiden</button>      
                     </Link>
-                    {prevOrders &&
+                    {prevOrders.length !== 0 &&
                     <div className="prevContainer">
                         <h1>Dine bestillinger</h1>
                         <table>
@@ -84,6 +85,9 @@ const ProfilePage = () => {
                         <button className="submitBtn">Tilbake til hjemmesiden</button>      
                     </Link>
                 </>
+            }
+            {isAdmin &&
+                <AdminPage/>
             }
         </div>
     )

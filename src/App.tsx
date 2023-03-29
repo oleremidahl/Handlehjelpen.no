@@ -19,26 +19,35 @@ import SmallLogin from './components/SmallLogin';
 import SmallRegistration from './components/SmallRegistration';
 import TermsAndConditions from './pages/T&C';
 import ScrollToTop from './components/ScrollToTop';
+import { firestore } from './base';
+import { doc, getDoc } from 'firebase/firestore';
 
 function App() {
-  var user = useContext(AuthContext);
-  var data = useContext(DataContext);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const user = useContext(AuthContext);
 
   useEffect(() => {
     document.body.classList.add('bodyDiv');
-
-    // Add an event listener to detect screen width changes
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Call the function on first load
-
-    // Remove the event listener on cleanup
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleResize = () => {
-    setIsSmallScreen(window.innerWidth <= 768); // Set breakpoint as desired
-  };
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (user){
+      const userReference = doc(firestore, "users",user.uid);
+      const getUser = async() => {
+        const data = await getDoc(userReference);
+        if (data.exists()){
+          if (data.data().hasOwnProperty("admin")){
+            if(data.data().admin === true){
+              setIsAdmin(true);
+              console.log("User is admin");
+            }
+          }
+        }
+      }
+      getUser();
+    }
+  }, [user])
 
   return (
       <BrowserRouter basename='/'>
@@ -64,7 +73,7 @@ function App() {
 
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 
-                <Route path='/profile' element={<ProfilePage/>}/>
+                <Route path='/profile' element={<ProfilePage isAdmin = {isAdmin}/>}/>
 
                 <Route path='/terms-and-conditions' element={<TermsAndConditions/>}/>
 

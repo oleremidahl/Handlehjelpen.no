@@ -43,6 +43,7 @@ const OneOrderField = () => {
     }, [inpName, inpTlf, formattedAdress, deliveryPrice, selectedTime, selectedDate, differentDateTime, additionalInfo, items]);
   
     const [isTomorrow, setIsTomorrow] = useState<boolean>();
+    const [isOffSeason, setIsOffSeason] = useState<boolean>();
   
     
     const baseMessage: string = "NY ORDRE! \n" +  "Navn: " + inpName + "\nTlf: " + inpTlf;
@@ -261,6 +262,15 @@ const OneOrderField = () => {
         
         if (selectedDate?.getDate() === today.getDate() + 1) setIsTomorrow(true);
         else setIsTomorrow(false);
+
+        const isAfterApril10 = selectedDate >= new Date(selectedDate.getFullYear(), 3, 11);
+        const isBeforeJune18 = selectedDate < new Date(selectedDate.getFullYear(), 5, 18);
+
+        if (isAfterApril10 && isBeforeJune18) {
+            setIsOffSeason(true);
+        } else {
+            setIsOffSeason(false);
+        }
     }
 
     return (
@@ -321,12 +331,26 @@ const OneOrderField = () => {
                             <select onChange={event => setDifferentDateTime(event.target.value)}>
                             {options.map(option => {
                                 // console.log('Tomm',isTomorrow)
-                                if (timeOfDay > 18 && isTomorrow){
+                                if (isOffSeason){
+                                    if (option.value !== "En annen dato" && option.value !== "ASAP" 
+                                        && option.value !== "21:00-23:00" && option.value !== "19:00-21:00"
+                                        && option.value !== "17:00-19:00" && option.value !== "15:00-17:00"
+                                        && option.value !== "13:00-15:00"
+                                        )
+                                        {
+                                        return (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                        );
+                                    }
+                                }
+                                else if (timeOfDay > 18 && isTomorrow){
+
                                     if (option.value !== "En annen dato" && option.value !== "ASAP" 
                                         && option.value !== "21:00-23:00" && option.value !== "Før 09:00"
                                         && option.value !== "09:00-11:00" && option.value !== "11:00-13:00"
                                         )
-                                        // && option.value !== "19:00-21:00" && option.value !== "17:00-19:00")
                                         {
                                         return (
                                         <option key={option.value} value={option.value}>
@@ -359,7 +383,7 @@ const OneOrderField = () => {
                 <form onSubmit={handleOrder} className="OrderView">
                     <input onChange={event => {setInpName(event.target.value)}} type='text' placeholder="Navn" required value={inpName}></input> <br/>
                     <input onChange={event => setInpTlf(event.target.value)} type='tel' pattern="^(\+\d{2})?\d{8}$" placeholder="Tlf" required value={inpTlf}></input>
-                    <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Nyttig info som kan hjelpe oss med leveringen, f.eks kjennetegn som farge på hus eller hytte. 
+                    <p><span style={{fontWeight: 'bold'}}>Valgfritt:</span> Tilleggsinformasjon som kan være nyttig for oss, f.eks allergier eller utdypende veibeskrivelse.  
                     <br/>Du kan også bruke dette feltet om kartet ikke fungerer.
                     </p>
                     <textarea 

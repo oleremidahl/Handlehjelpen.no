@@ -18,23 +18,6 @@ const OneOrderConfirmation = () => {
     const hours = today.getHours();
     const minutes = today.getMinutes().toString().padStart(2, '0');
 
-    // const [order, setOrder] = useState<DocumentData>();
-    
-    // useEffect(() => {
-    //     const orderReference = doc(firestore, 'orders/' + loc.state.id);
-    //     const getOrders = async() => {
-    //         const retrievedOrder = await getDoc(orderReference).then(function(doc) {
-    //             if (doc.exists()){
-    //             setOrder(doc.data());
-    //         }
-    //         });
-    //         console.log("Id:     ",loc.state.id)
-            
-    //     }
-    //     getOrders();
-    //     console.log("ORDER:      ",order);
-    // }, []);
-
     return (
         <>
             <div className="summary">
@@ -45,7 +28,6 @@ const OneOrderConfirmation = () => {
                 </p>
                 <div>
                     <h3>Din bestilling</h3>
-                    {/* <p style={{fontStyle: 'italic'}}>"{loc.state.varer}"</p>  */}
                     <ol >
                         {loc.state.varer.map((item: string) => (
                             <li key={item}>{item}</li>
@@ -60,9 +42,6 @@ const OneOrderConfirmation = () => {
                     <p>Pris levering: {loc.state.leveringspris !== 0 ? loc.state.leveringspris + " kr" : "Ikke tilgjengelig"}</p>
                     <p>Merk, prisen på varer kommer i tillegg. </p>
                     <button className="submitBtn" onClick={() => {navigate("/")}}>Tilbake til hjemmesiden</button>
-                    {/* 
-                        Bruksvilkår og sånn legal shit
-                    */}
                 </div>
             </div>
         </>

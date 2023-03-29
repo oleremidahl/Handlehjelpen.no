@@ -5,8 +5,6 @@ import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { Button, Checkbox } from '@mui/material';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
 const RegistrationForm = () => {
   const [name, setName] = useState('');
@@ -41,6 +39,7 @@ const RegistrationForm = () => {
                 tlf: phone,
                 mottaMail: isEmailChecked
               })
+              
             }
           });
           navigate("/");

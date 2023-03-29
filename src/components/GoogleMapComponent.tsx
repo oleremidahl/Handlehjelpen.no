@@ -79,19 +79,6 @@ const { isLoaded, loadError } = useLoadScript({
   //   autocomplete.addListener('place_changed', onPlaceChanged);
   //   }
   // }, []);
-  
-  
-  
-  const onMapClick = (event: google.maps.MapMouseEvent) => {
-    // if (event.latLng && event.latLng && google.maps.geometry.poly.containsLocation(event.latLng, bermudaTriangle)){
-      //       setSelectedLocation({
-        //         lat: event.latLng.lat(),
-        //         lng: event.latLng.lng()
-        //       });
-        //       console.log('Eveeeeent',event.latLng.lat())
-        //     } 
-        // else(console.log("Falseeeee"))
-      };
 
 //GEOCODING -----------------------
   const findPos = () => {
@@ -100,9 +87,8 @@ const { isLoaded, loadError } = useLoadScript({
         const { latitude, longitude } = position.coords;
         if (google.maps.geometry.poly.containsLocation(new google.maps.LatLng(latitude, longitude), bermudaTriangle)){
           const newRelInf = {...relevantInfo, selectedLocation: { lat: latitude, lng: longitude }}
-          // setSelectedLocation();
           calculateDistanceAndPrice(newRelInf);
-          // geocodeLatLng(relevantInfo.selectedLocation.lat, relevantInfo.selectedLocation.lng);
+          setLocation( { lat: latitude, lng: longitude })
         }
         else {
           alert("Du befinner deg utenfor vårt leveringsområde.")
@@ -184,7 +170,7 @@ const { isLoaded, loadError } = useLoadScript({
 
 // PERIMETER ---------------------------
 var polyCenter = {lat: 58.029106355706546, lng: 7.447113548546337};
-var radiusInMeters = 10000;
+var radiusInMeters = 11000;
 
 // generate points for circle
 var points = [];
@@ -297,7 +283,6 @@ for (var i = 0; i < 36; i++) {
           zoom={8}
           options={{ streetViewControl: false }}
           onLoad={onMapLoad}
-          onClick={onMapClick}
         >
           {relevantInfo.selectedLocation && (
             <MarkerF

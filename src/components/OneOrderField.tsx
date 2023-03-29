@@ -118,9 +118,13 @@ const OneOrderField = () => {
         return true;
       }
 
-      if (option.value.includes('-') ) {
+      else if (option.value === '09:00-11:00' || option.value === '11:00-13:00' ){
+        return false;
+      }
+
+      else if (option.value.includes('-') ) {
         const startTime = parseInt(option.value.split('-')[0].split(':')[0]);
-        return startTime - 1> timeOfDay;
+        return startTime - 1 > timeOfDay;
       }
 
       if (option.value === 'En annen dato') {

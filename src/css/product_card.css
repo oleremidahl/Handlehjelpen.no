@@ -61,6 +61,7 @@
 	padding: 0;
 	/* margin: 0; */
 	width: 160px;
+	height: 40px;
 	
 }
 
@@ -98,7 +99,7 @@
 }
 
 /* buy */
-.buy_btn .buy {z-index: 3; font-weight: bolder;}
+.buy_btn .buy {z-index: 3; font-weight: bolder; font-size: smaller;}
 
 .buy_btn:hover .price {transform: translateX(-110%);}
 

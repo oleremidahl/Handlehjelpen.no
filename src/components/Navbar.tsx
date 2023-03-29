@@ -4,7 +4,9 @@ import { auth } from "../base";
 import "../css/navbar.css";
 import { AuthContext } from '../context/AuthContext';
 import simpleLogo from '../images/simple_logo.png';
-import { Button } from '@mui/material';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Navbar = () => {
 
@@ -24,16 +26,16 @@ const Navbar = () => {
                 </Link>
                 {!user ?
                     <div>
-                        <Link to="/login">
-                            <button className="loginbutton">Logg inn / Registrer</button>
+                        <Link to="/login" >
+                            <button className="loginbutton" style={{display: 'flex', alignItems: 'center'}}><LoginIcon sx={{marginRight: '10px', marginBottom: '-6px'}}/><span>Logg inn / Registrer</span> </button>
                         </Link>
                     </div>
                     :
                     <div>
                         <Link to="/profile">
-                            <button className="loginbutton2">Profil</button>
+                            <button className="loginbutton2"><AccountBoxIcon sx={{marginRight: '10px', marginBottom: '-6px'}}/>Profil</button>
                         </Link>
-                        <button className="loginbutton2" onClick={signOut}>Logg ut</button>
+                        <button className="loginbutton2" onClick={signOut}><LogoutIcon sx={{marginRight: '10px', marginBottom: '-6px'}}/>Logg ut</button>
                     </div>
                 }
 

@@ -113,25 +113,35 @@ const OneOrderField = () => {
         { value: 'Før 09:00', label: 'Før 09:00' }]);
 
   useEffect(() => {
+    const today = new Date();
     const updateOptions = options.filter(option => {
-      if (option.value === 'ASAP' && timeOfDay < 20 && timeOfDay > 12) {
-        return true;
-      }
+        if(today < new Date(2023,3, 3)){
+            if (option.value === 'En annen dato'){
+                return true;
+            }
+            else return false;
+        }
+        else {
 
-      else if (option.value === '09:00-11:00' || option.value === '11:00-13:00' ){
-        return false;
-      }
-
-      else if (option.value.includes('-') ) {
-        const startTime = parseInt(option.value.split('-')[0].split(':')[0]);
-        return startTime - 1 > timeOfDay;
-      }
-
-      if (option.value === 'En annen dato') {
-        return true;
-      }
-
-      return false;
+            if (option.value === 'ASAP' && timeOfDay < 20 && timeOfDay > 12 ) {
+                return true;
+            }
+            
+            else if (option.value === '09:00-11:00' || option.value === '11:00-13:00' ){
+                return false;
+            }
+            
+            else if (option.value.includes('-') ) {
+                const startTime = parseInt(option.value.split('-')[0].split(':')[0]);
+                return startTime - 1 > timeOfDay;
+            }
+            
+            if (option.value === 'En annen dato') {
+                return true;
+            }
+            
+            return false;
+        }
     });
 
     setUpdatedOptions(updateOptions);
@@ -236,6 +246,14 @@ const OneOrderField = () => {
     function isEmptyFields() {
         if(items.length === 0){
             alert('Legg til en bestilling!');
+            return true;
+        }
+        if (selectedLocation === null && additionalInfo === ''){
+            alert('Finn en posisjon på kartet eller skriv adressen din i det nederste feltet. ')
+            return true;
+        }
+        if (selectedTime === "En annen dato" && selectedDate === ''){
+            alert('Du må velge en leveringsdato.');
             return true;
         }
         return false;

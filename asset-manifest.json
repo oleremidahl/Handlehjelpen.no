@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.7e9615a3.css",
-    "main.js": "/static/js/main.1d09223d.js",
+    "main.js": "/static/js/main.7c112372.js",
     "static/js/787.120382a6.chunk.js": "/static/js/787.120382a6.chunk.js",
     "static/media/pexels-yaroslava-bondareva-10162244.jpg": "/static/media/pexels-yaroslava-bondareva-10162244.c92a62687c6ef880e9ff.jpg",
     "static/media/pexels-julie-aagaard-1368520.jpg": "/static/media/pexels-julie-aagaard-1368520.517335ee100a1b3fc749.jpg",
@@ -9,11 +9,11 @@
     "static/media/vilkarsavtale.jpg": "/static/media/vilkarsavtale.e57c0f188b68e2bcf00f.jpg",
     "index.html": "/index.html",
     "main.7e9615a3.css.map": "/static/css/main.7e9615a3.css.map",
-    "main.1d09223d.js.map": "/static/js/main.1d09223d.js.map",
+    "main.7c112372.js.map": "/static/js/main.7c112372.js.map",
     "787.120382a6.chunk.js.map": "/static/js/787.120382a6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7e9615a3.css",
-    "static/js/main.1d09223d.js"
+    "static/js/main.7c112372.js"
   ]
 }

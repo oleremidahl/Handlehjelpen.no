@@ -51,7 +51,7 @@ const OrderField = () => {
     const addressMessage: string = `\nLeveres til: ${formattedAdress !== '' ? formattedAdress + "\nTilleggsinfo: " + additionalInfo : additionalInfo}`;
     const priceMessage: string = `\nLeveringspris: ${deliveryPrice ? deliveryPrice + " kr" : "Ikke estimert, må regnes ut manuelt."}`
     const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
-    const phoneNumbers: string[] = ['+4741398911', '+4748912203'];
+    const phoneNumbers: string[] = ['+4748912203'];
     const misingItemsOrder: string = `\n${isExtraChecked ? "Kunden ønsker å få levering selv om noen varer mangler" : "Kunden ønsker IKKE levering om det mangler en vare. "}`
     
     // const [savedDate, setSavedDate] = useState<Date | null>(null)

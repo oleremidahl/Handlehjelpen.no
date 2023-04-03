@@ -100,6 +100,7 @@ const { isLoaded, loadError } = useLoadScript({
         else {
           setAlertDescription('Du befinner deg utenfor vårt leveringsområde.');
           setIsAlertActive(true);
+          setIsBackdropActive(false);
         }
       },
       (error) => {
@@ -107,9 +108,9 @@ const { isLoaded, loadError } = useLoadScript({
         setIsAlertActive(true);
         // alert("Det ser ut til at du har deaktivert stedstjenester. Du kan enten aktivere dette eller finne din lokasjon manuelt.")
         console.error(error);
+        setIsBackdropActive(false);
       }
       );
-      setIsBackdropActive(false);
     }, 1000);
   };
       

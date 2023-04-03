@@ -59,24 +59,10 @@ const OrderField = () => {
 
     const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
     const [alertDescription, setAlertDescription] = useState<string>('');
-    const [halfPriceOrdersLeft, setHalfPriceOrdersLeft] = useState<number>(0);
 
     const handleCheckboxChange = (event: any) => {
         setIsChecked(event.target.checked);
     };
-
-    async function getOrderCount() {
-        const orderRef = collection(firestore, "orders");
-        const orderSnapshot = await getDocs(orderRef);
-        const orderC = orderSnapshot.size;
-        return orderC;
-      }
-    
-    useEffect(() => {
-        getOrderCount().then((orderCount) => {
-            setHalfPriceOrdersLeft(21 - orderCount);
-        });
-    }, []);
     
     useEffect(() => {
         if (user) {
@@ -192,9 +178,6 @@ const OrderField = () => {
             let levering: number = 0;
             if (deliveryPrice){
                 levering = deliveryPrice;
-                if (halfPriceOrdersLeft > 0){
-                    levering = deliveryPrice / 2;
-                }
             }
             const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage + misingItemsOrder;
             if (!isEmptyFields()){
@@ -365,17 +348,7 @@ const OrderField = () => {
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
                 {deliveryPrice && (
                     <p>
-                        Pris for levering:{" "}
-                        {halfPriceOrdersLeft > 0 ? (
-                        <>
-                            <span style={{ textDecoration: "line-through" }}>
-                            {deliveryPrice} kr
-                            </span>{" "}
-                            {deliveryPrice / 2} kr
-                        </>
-                        ) : (
-                        `${deliveryPrice} kr`
-                        )}
+                        Pris for levering: {deliveryPrice} kr
                     </p>
                 )}
 

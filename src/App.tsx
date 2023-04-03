@@ -4,14 +4,12 @@ import { HashRouter as BrowserRouter, Route, Routes } from 'react-router-dom';
 import './css/App.css';
 
 import Navbar from './components/Navbar';
-import LoginForm from './components/LoginForm';
 import Footer from './components/Footer';
 
 import Home from './pages/Home';
 
 import { AuthContext } from './context/AuthContext';
-import { DataContext } from './context/DataContext';
-import OneOrderField from './components/OneOrderField';
+import OrderField from './components/OrderField';
 import OneOrderConfirmation from './components/OneOrderConfirmation';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -30,7 +28,7 @@ function App() {
   }, []);
 
   const [isAdmin, setIsAdmin] = useState(false);
-
+  
   useEffect(() => {
     if (user){
       const userReference = doc(firestore, "users",user.uid);
@@ -48,7 +46,7 @@ function App() {
       getUser();
     }
   }, [user])
-
+  
   return (
       <BrowserRouter basename='/'>
         <ScrollToTop/>
@@ -56,7 +54,7 @@ function App() {
           <div className='main'>
               <Routes>
 
-                <Route path='/' element={<Home/>}/>
+                <Route path='/' element={<Home />}/>
 
                 <Route
                   path='/login'
@@ -69,7 +67,7 @@ function App() {
 
                 <Route path='/register' element={<ProtectedRoute><SmallRegistration/></ProtectedRoute>}/>
 
-                <Route path='/OneOrder' element={<OneOrderField/>}/>
+                <Route path='/Order' element={<OrderField/>}/>
 
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 

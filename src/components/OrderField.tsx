@@ -6,11 +6,11 @@ import "../css/AI/AI_OrderField.css";
 import GoogleMapComponent from "./GoogleMapComponent";
 import { AuthContext } from "../context/AuthContext";
 import { firestore } from "../base";
-import { addDoc, collection, doc, DocumentReference, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Calendar from './Calendar';
-import { Button, Checkbox } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
-const OneOrderField = () => {
+const OrderField = () => {
     
     const navigate = useNavigate();
     const user = useContext(AuthContext);
@@ -53,14 +53,30 @@ const OneOrderField = () => {
     const itemsMessage: string = `\nBestilling:\n${items.join('\n')}`;
     const phoneNumbers: string[] = ['+4741398911', '+4748912203'];
     const misingItemsOrder: string = `\n${isExtraChecked ? "Kunden ønsker å få levering selv om noen varer mangler" : "Kunden ønsker IKKE levering om det mangler en vare. "}`
-
+    
     // const [savedDate, setSavedDate] = useState<Date | null>(null)
     const [isChecked, setIsChecked] = useState(false);
+
+    const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
+    const [alertDescription, setAlertDescription] = useState<string>('');
+    const [halfPriceOrdersLeft, setHalfPriceOrdersLeft] = useState<number>(0);
 
     const handleCheckboxChange = (event: any) => {
         setIsChecked(event.target.checked);
     };
-        
+
+    async function getOrderCount() {
+        const orderRef = collection(firestore, "orders");
+        const orderSnapshot = await getDocs(orderRef);
+        const orderC = orderSnapshot.size;
+        return orderC;
+      }
+    
+    useEffect(() => {
+        getOrderCount().then((orderCount) => {
+            setHalfPriceOrdersLeft(21 - orderCount);
+        });
+    }, []);
     
     useEffect(() => {
         if (user) {
@@ -79,22 +95,6 @@ const OneOrderField = () => {
         getNameAndPhone();
     }
     }, [user]);
-
-    // useEffect(() => {
-    //     if(selectedDate !== ''){
-    //         const [day, month, year] = selectedDate.split('/').map(Number);
-    //         setSavedDate(new Date(year, month - 1, day));
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     var today = new Date();
-    //     var temp_tomorrow = new Date(today);
-    //     temp_tomorrow.setDate(temp_tomorrow.getDate() + 1);
-    //     var stringTom = temp_tomorrow.getDate() + '/' + (temp_tomorrow.getMonth() + 1) + '/' + temp_tomorrow.getFullYear()
-    //     console.log('Temptomor: ',stringTom)
-    //     setTomorrow(stringTom); 
-    // }, [])
 
     const [timeOfDay, setTimeOfDay] = useState(new Date().getHours());
     const [options, setOptions] = useState([
@@ -192,6 +192,9 @@ const OneOrderField = () => {
             let levering: number = 0;
             if (deliveryPrice){
                 levering = deliveryPrice;
+                if (halfPriceOrdersLeft > 0){
+                    levering = deliveryPrice / 2;
+                }
             }
             const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage + misingItemsOrder;
             if (!isEmptyFields()){
@@ -211,7 +214,7 @@ const OneOrderField = () => {
                     ownerId: uid,
                     onskerOrdreMedMangler: isExtraChecked
                 }).then((newOrder: any) => {
-                    console.log("Order added to Firestore:", newOrder);
+                    // console.log("Order added to Firestore:", newOrder);
                     navigate("/OrderConfirmation", {state: {
                       id: newOrder.id, 
                       dato: today,
@@ -226,11 +229,15 @@ const OneOrderField = () => {
                     }});
                   }).catch((error: any) => {
                     console.error(error);
-                    alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203 ")
+                    setAlertDescription('Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203');
+                    setIsAlertActive(true);
+                    // alert("Det oppstod en feil innsending av bestillingen. Prøv gjerne å sende inn på nytt! Om problemet vedvarer kan du bestille ved å ringe eller sende melding til oss på tlf: 489 12 203 ")
                 })}
         }
         else {
-            alert("Du må bekrefte at du har lest og forstått Vilkårsavtalen.")
+            setAlertDescription('Du må bekrefte at du har lest og forstått Vilkårsavtalen.');
+            setIsAlertActive(true);
+            // alert("Du må bekrefte at du har lest og forstått Vilkårsavtalen.")
         }
     }
 
@@ -240,20 +247,27 @@ const OneOrderField = () => {
         if (distancePrice !== undefined){
             setDeliveryPrice(distancePrice);
         }
-        console.log('Distance price: '+distancePrice);
+        // console.log('Distance price: '+distancePrice);
     }
+   
 
     function isEmptyFields() {
         if(items.length === 0){
-            alert('Legg til en bestilling!');
+            setAlertDescription('Legg til en bestilling!');
+            setIsAlertActive(true);
+            // alert('Legg til en bestilling!');
             return true;
         }
         if (selectedLocation === null && additionalInfo === ''){
-            alert('Finn en posisjon på kartet eller skriv adressen din i det nederste feltet. ')
+            setAlertDescription('Finn en posisjon på kartet eller skriv adressen din i det nederste feltet. ');
+            setIsAlertActive(true);
+            // alert('Finn en posisjon på kartet eller skriv adressen din i det nederste feltet. ')
             return true;
         }
         if (selectedTime === "En annen dato" && selectedDate === ''){
-            alert('Du må velge en leveringsdato.');
+            setAlertDescription('Du må velge en leveringsdato.');
+            setIsAlertActive(true);
+            // alert('Du må velge en leveringsdato.');
             return true;
         }
         return false;
@@ -265,7 +279,7 @@ const OneOrderField = () => {
           const orderReference = collection(firestore, "orders");
           addDoc(orderReference, {...orderData})
             .then((newOrder: any) => {
-              console.log("Data added to Firestore:", newOrder);
+            //   console.log("Data added to Firestore:", newOrder);
               resolve(newOrder);
             })
             .catch((error: any) => {
@@ -297,6 +311,22 @@ const OneOrderField = () => {
 
     return (
         <div className="OrderForm">
+            {isAlertActive &&
+            <Dialog open={isAlertActive} 
+                    onClose={() => setIsAlertActive(false)} 
+                    // PaperProps={{ style: { backgroundColor: 'darkgreen' } }}
+                    >
+            <DialogTitle>Ouups! Her mangler det noe. </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {alertDescription}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setIsAlertActive(false)}>OK</Button>
+            </DialogActions>
+          </Dialog>
+            }
             <div className="OrderDetails">
                 <h1>Ny bestilling</h1>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
@@ -333,7 +363,22 @@ const OneOrderField = () => {
                     <br/>(Merk at den ikke vil finne din posisjon om du befinner deg utenfor vårt leveringsområde.) Om kartet ikke fungerer kan du bruke feltet under. 
                 </p>
                 <GoogleMapComponent onRetrievedVariables={handleRetrievedVariables}></GoogleMapComponent>
-                {deliveryPrice && <p>Pris for levering: {deliveryPrice} kr</p>}
+                {deliveryPrice && (
+                    <p>
+                        Pris for levering:{" "}
+                        {halfPriceOrdersLeft > 0 ? (
+                        <>
+                            <span style={{ textDecoration: "line-through" }}>
+                            {deliveryPrice} kr
+                            </span>{" "}
+                            {deliveryPrice / 2} kr
+                        </>
+                        ) : (
+                        `${deliveryPrice} kr`
+                        )}
+                    </p>
+                )}
+
                 <p style={{marginBottom: '10px'}}>Leveringstid: </p>
                 <div className='select'>
                     <select onChange={event => setSelectedTime(event.target.value) }value = {selectedTime}>
@@ -444,4 +489,4 @@ const OneOrderField = () => {
     );
 };
 
-export default OneOrderField;
+export default OrderField;

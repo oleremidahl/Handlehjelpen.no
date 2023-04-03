@@ -4,7 +4,7 @@ import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
 import { collection, doc, setDoc } from 'firebase/firestore';
-import { Button, Checkbox } from '@mui/material';
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const RegistrationForm = () => {
   const [name, setName] = useState('');
@@ -15,6 +15,8 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [isEmailChecked, setIsEmailChecked] = useState(true);
+  const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
+  const [alertDescription, setAlertDescription] = useState<string>('');
 
   const handleCheckboxChange = (event: any) => {
     setIsChecked(event.target.checked);
@@ -44,27 +46,33 @@ const RegistrationForm = () => {
           });
           navigate("/");
         } catch (error: any) {
-          if (error.code === 'auth/weak-password') {
-            alert('Passordet må være minst 6 tegn.');
+            if (error.code === 'auth/weak-password') {
+              setAlertDescription('Passordet må være minst 6 tegn.');
+              setIsAlertActive(true);
+            }
+            else if (error.code === 'auth/email-already-in-use') {
+              setAlertDescription('Denne emailen er allerede i bruk.');
+              setIsAlertActive(true);
+            }
+            else if (error.code === 'auth/invalid-email') {
+              setAlertDescription('Denne emailen er ikke gyldig.');
+              setIsAlertActive(true);
+            }
+            else if (error.code === 'auth/network-request-failed') {
+              setAlertDescription('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
+              setIsAlertActive(true);
+            }
+            else {
+              setAlertDescription('Det oppstod et problem med opprettelsen av en ny bruker.');
+              setIsAlertActive(true);
+              console.log(error);
+            }
           }
-          else if (error.code === 'auth/email-already-in-use') {
-            alert('Denne emailen er allerede i bruk.');
-          }
-          else if (error.code === 'auth/invalid-email') {
-            alert('Denne emailen er ikke gyldig.');
-          }
-          else if (error.code === 'auth/network-request-failed') {
-            alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
-          }
-          else {
-            alert("Det oppstod et problem med opprettelsen av en ny bruker.");
-            console.log(error);
-          }
-        }
-    }
-    else {
-      alert("Du må bekrefte at du har lest og forstått Vilkårsavtalen.")
-    }
+      }
+      else {
+        setAlertDescription('Du må bekrefte at du har lest og forstått Vilkårsavtalen.');
+        setIsAlertActive(true);
+      }
   };
 
     //FIRESTORE
@@ -80,6 +88,22 @@ const RegistrationForm = () => {
 
   return (
     <div className="form-container">
+       {isAlertActive &&
+            <Dialog open={isAlertActive} 
+                    onClose={() => setIsAlertActive(false)} 
+                    // PaperProps={{ style: { backgroundColor: 'darkgreen' } }}
+                    >
+            <DialogTitle>Ouups! Her mangler det noe. </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {alertDescription}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setIsAlertActive(false)}>OK</Button>
+            </DialogActions>
+          </Dialog>
+            }
       <form onSubmit={handleSubmit}>
         <h2>Registrer deg</h2>
         <label htmlFor="name">Navn:</label>

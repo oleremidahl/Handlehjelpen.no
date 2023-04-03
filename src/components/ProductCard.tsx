@@ -16,7 +16,7 @@ const ProductCard = () => {
             setIsModalOpen(true);
         }
         else {
-            navigate("/OneOrder");
+            navigate("/Order");
         }
       };
       
@@ -33,7 +33,7 @@ const ProductCard = () => {
     };
 
     const handleContinueClick = () => {
-        navigate('/OneOrder');
+        navigate('/Order');
     };
 
     Modal.setAppElement('#root');

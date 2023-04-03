@@ -3,7 +3,8 @@ import ProductCard from "../components/ProductCard";
 import "../css/home.css";
 
 const Home = () => {
-    const faqs = [
+    
+  const faqs = [
       { question: 'Hva er deres leveringsområde?', answer: 'Vi leverer i en radius på 10 km fra Rema 1000 vestnes. Ved ønsker om levering utenfor dette ber vi deg kontakte oss på mail: kontakt@handlehjelpen.no så finner vi en ordning. ' },
       { question: 'Hvilke betalingsmåter aksepterer dere?', answer: 'Vi aksepterer kortbetaling og betaling ved vipps. Om du ønsker å betale kontant må du ha det nøyaktige beløpet da våre sjåfører sannsynligvis ikke har vekslepenger.' },
       { question: 'Når er deres leveringstider i påsken?', answer: 'Vi leverer hver dag i påsken og har leveringsalternativer som strekker seg fra "Før 09:00" til "19:00-21:00"' },
@@ -24,7 +25,7 @@ const Home = () => {
                     height: '100vh',
                     borderBottom: '3px solid black'
                   }}>
-          <ProductCard/>
+          <ProductCard />
         </div>
         <InfoComp
           faqs={faqs}

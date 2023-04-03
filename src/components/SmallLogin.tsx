@@ -3,13 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
 import { auth, firestore } from '../base';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   var user = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
+  const [alertDescription, setAlertDescription] = useState<string>('');
 
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
@@ -24,29 +27,57 @@ const LoginForm = () => {
   
         } catch (error: any) {
             if (error.code === 'auth/user-not-found') {
-              alert('Denne kombinasjonen er ikke assosiert med en bruker.');
-            }
+              setAlertDescription('Denne kombinasjonen er ikke assosiert med en bruker.');
+              setIsAlertActive(true);
+              // alert('Denne kombinasjonen er ikke assosiert med en bruker.');
+            } 
             else if (error.code === 'auth/wrong-password') {
-              alert('Feil passord.');
-            }
+              setAlertDescription('Feil passord.');
+              setIsAlertActive(true);
+              // alert('Feil passord.');
+            } 
             else if (error.code === 'auth/invalid-email') {
-              alert('Feil email.');
-            }
+              setAlertDescription('Feil email.');
+              setIsAlertActive(true);
+              // alert('Feil email.');
+            } 
             else if (error.code === 'auth/network-request-failed') {
-              alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
-            }
+              setAlertDescription('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen.');
+              setIsAlertActive(true);
+              // alert('En nettverksfeil oppstod. Sjekk tilkoblingen din og prøv igjen. ');
+            } 
             else {
-              alert("Det oppstod et problem med å logge inn. Vennligst prøv på nytt!");
+              setAlertDescription('Det oppstod et problem med å logge inn. Vennligst prøv på nytt!');
+              setIsAlertActive(true);
+              // alert("Det oppstod et problem med å logge inn. Vennligst prøv på nytt!");
             }
           }
         }
         else {
-          alert('Du er allerede logget inn!');
+          setAlertDescription('Du er allerede logget inn!');
+          setIsAlertActive(true);
+          // alert('Du er allerede logget inn!');
           navigate("/");
         }  };
 
   return (
     <div className="form-container">
+      {isAlertActive &&
+            <Dialog open={isAlertActive} 
+                    onClose={() => setIsAlertActive(false)} 
+                    // PaperProps={{ style: { backgroundColor: 'darkgreen' } }}
+                    >
+            <DialogTitle>Ouups! Her mangler det noe. </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {alertDescription}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setIsAlertActive(false)}>OK</Button>
+            </DialogActions>
+          </Dialog>
+            }
       <form onSubmit={handleSubmit}>
         <h2>Logg inn</h2>
         <label htmlFor="email">Email:</label>

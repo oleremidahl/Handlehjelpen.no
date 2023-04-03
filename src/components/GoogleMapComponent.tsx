@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import PlacesAutocomplete from 'react-places-autocomplete';
+import { Backdrop, Button, Checkbox, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import '../css/GMapStyles.css';
 
 declare const google: any;
@@ -31,10 +31,12 @@ function GoogleMapComponent(props: any) {
     formattedAdress: '',
     distancePrice: undefined
   });
+  const [isAlertActive, setIsAlertActive] = useState<boolean>(false);
+  const [alertDescription, setAlertDescription] = useState<string>('');
 
   useEffect(() => {
-    console.log('Pris ', relevantInfo.distancePrice);
-    console.log("Sted: ", relevantInfo.formattedAdress);
+    // console.log('Pris ', relevantInfo.distancePrice);
+    // console.log("Sted: ", relevantInfo.formattedAdress);
     props.onRetrievedVariables(relevantInfo.selectedLocation, relevantInfo.formattedAdress, relevantInfo.distancePrice);
   }, [relevantInfo.formattedAdress]);
 
@@ -81,7 +83,11 @@ const { isLoaded, loadError } = useLoadScript({
   // }, []);
 
 //GEOCODING -----------------------
+  const [isBackdropActive, setIsBackdropActive] = useState<boolean>(false);
   const findPos = () => {
+    setIsBackdropActive(true);
+    // wait for 5 seconds 
+    setTimeout(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -89,16 +95,22 @@ const { isLoaded, loadError } = useLoadScript({
           const newRelInf = {...relevantInfo, selectedLocation: { lat: latitude, lng: longitude }}
           calculateDistanceAndPrice(newRelInf);
           setLocation( { lat: latitude, lng: longitude })
+          setIsBackdropActive(false);
         }
         else {
-          alert("Du befinner deg utenfor vårt leveringsområde.")
+          setAlertDescription('Du befinner deg utenfor vårt leveringsområde.');
+          setIsAlertActive(true);
         }
       },
       (error) => {
-        alert("Det ser ut til at du har deaktivert stedstjenester. Du kan enten aktivere dette eller finne din lokasjon manuelt.")
+        setAlertDescription('Det ser ut til at du har deaktivert stedstjenester. Du kan enten aktivere dette eller finne din lokasjon manuelt.');
+        setIsAlertActive(true);
+        // alert("Det ser ut til at du har deaktivert stedstjenester. Du kan enten aktivere dette eller finne din lokasjon manuelt.")
         console.error(error);
       }
       );
+      setIsBackdropActive(false);
+    }, 1000);
   };
       
   const geocoder = new google.maps.Geocoder();
@@ -109,7 +121,7 @@ const { isLoaded, loadError } = useLoadScript({
           .geocode({ location: {lat: lat, lng: lng } })
           .then((response: { results: any[]; }) => {
             if (response.results[0]) {
-              console.log(response.results[0])
+              // console.log(response.results[0])
               const newRelInf = {...relevantInfo, formattedAdress: response.results[0].formatted_address }
               // setRelevantInfo(newRelInf);
               calculateDistanceAndPrice(newRelInf);
@@ -129,7 +141,9 @@ const { isLoaded, loadError } = useLoadScript({
                 geocodeLatLng(lat, lng, retries + 1);
               }, delay);
             } else {
-              alert("Det har oppstått et problem med å finne adressen. Vennligst prøv igjen eller ring oss på 489 12 203");
+              setAlertDescription('Det har oppstått et problem med å finne adressen. Vennligst prøv igjen eller ring oss på 489 12 203');
+              setIsAlertActive(true);
+              // alert("Det har oppstått et problem med å finne adressen. Vennligst prøv igjen eller ring oss på 489 12 203");
             }
           });
           // Reject the promise with an error message
@@ -162,7 +176,7 @@ const { isLoaded, loadError } = useLoadScript({
       else {
         pris = 119 + (20 * (km - 4));
       }
-      console.log('Pris i kalkulasjon: ',pris);
+      // console.log('Pris i kalkulasjon: ',pris);
       const newRelInf = {...info, distancePrice: Math.round(pris) }
       setRelevantInfo(newRelInf);
     }
@@ -277,6 +291,29 @@ for (var i = 0; i < 36; i++) {
             </div>
           )}
         </PlacesAutocomplete> */}
+        {isBackdropActive &&
+          <Backdrop 
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={isBackdropActive}>
+             <CircularProgress color="success" />
+          </Backdrop>
+        }
+        {isAlertActive &&
+            <Dialog open={isAlertActive} 
+                    onClose={() => setIsAlertActive(false)} 
+                    // PaperProps={{ style: { backgroundColor: 'darkgreen' } }}
+                    >
+            <DialogTitle>Ouups! Her mangler det noe. </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                {alertDescription}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setIsAlertActive(false)}>OK</Button>
+            </DialogActions>
+          </Dialog>
+            }
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={location || center}

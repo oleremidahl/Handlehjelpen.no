@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.ecacf800.css",
+    "main.css": "/static/css/main.3a44ddef.css",
     "main.js": "/static/js/main.d67caba8.js",
     "static/js/787.120382a6.chunk.js": "/static/js/787.120382a6.chunk.js",
     "static/media/pexels-yaroslava-bondareva-10162244.jpg": "/static/media/pexels-yaroslava-bondareva-10162244.c92a62687c6ef880e9ff.jpg",
@@ -8,12 +8,12 @@
     "static/media/pexels-ella-olsson-1640777(1).jpg": "/static/media/pexels-ella-olsson-1640777(1).ded7e579ff9c3eefbaec.jpg",
     "static/media/vilkarsavtale.jpg": "/static/media/vilkarsavtale.e57c0f188b68e2bcf00f.jpg",
     "index.html": "/index.html",
-    "main.ecacf800.css.map": "/static/css/main.ecacf800.css.map",
+    "main.3a44ddef.css.map": "/static/css/main.3a44ddef.css.map",
     "main.d67caba8.js.map": "/static/js/main.d67caba8.js.map",
     "787.120382a6.chunk.js.map": "/static/js/787.120382a6.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ecacf800.css",
+    "static/css/main.3a44ddef.css",
     "static/js/main.d67caba8.js"
   ]
 }

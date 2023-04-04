@@ -9,7 +9,7 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 
 const Footer = () => {
     return(
-        <div style={{backgroundColor: 'rgb(157, 157, 157)', width: '100%', paddingBottom: '30px'}}>
+        <div className="footContainer">
 
             <div className="footer">
                 <div className="ToS">

@@ -24,6 +24,7 @@ const Navbar = () => {
                 <Link to="/">
                     <img src={simpleLogo} alt="Logo" style={{width: '80px', marginTop: '10px'}}/>
                 </Link>
+                <p className="navTitle">Handlehjelpen Mandal</p>
                 {!user ?
                     <div>
                         <Link to="/login" >

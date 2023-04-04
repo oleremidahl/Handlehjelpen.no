@@ -56,8 +56,8 @@ const Calendar = (props: any) => {
       dateFormat="dd/MM/yyyy"
       placeholderText='Klikk for å velge dato'
       onChange={handleDateChange}
-      // minDate={new Date(Date.now() + 86400000)} // tomorrow
-      minDate={new Date(2023,3,3)}
+      minDate={new Date(Date.now() + 86400000)} // tomorrow
+      // minDate={new Date(2023,3,3)}
       maxDate={maxDate}
       wrapperClassName="react-datepicker-wrapper"
       withPortal

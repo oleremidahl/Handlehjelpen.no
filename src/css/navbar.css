@@ -6,31 +6,40 @@
     height: 80px;
   }
 
-  .navInfo {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
+.navInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .loginbutton, .loginbutton2 {
-    background-color: rgb(139, 182, 139);
-    margin-right: 25px; 
-    margin-top: 15px; 
-    border-radius: 10px; 
-    height: 50px;
-    width: 130px;
-    cursor: pointer;
-    color: black;
-  }
-  
-  .loginbutton span {
-    margin-left: 10px;
-    outline: none;
-  }
-  
-  .loginbutton:hover, .loginbutton2:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
+.navTitle {
+  font-size: 1.9rem;
+  margin-left: 25px;
+  margin-top: 25px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: #3e6b00;
+}
+
+.loginbutton, .loginbutton2 {
+  background-color: rgb(139, 182, 139);
+  margin-right: 25px; 
+  margin-top: 15px; 
+  border-radius: 10px; 
+  height: 50px;
+  width: 130px;
+  cursor: pointer;
+  color: black;
+}
+
+.loginbutton span {
+  margin-left: 10px;
+  outline: none;
+}
+
+.loginbutton:hover, .loginbutton2:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
 
   /* Media queries */
 @media screen and (max-width: 480px) {
@@ -42,5 +51,12 @@
   }
   .navInfo {
       font-size: 1rem;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+  .navTitle {
+    display: none;
   }
 }

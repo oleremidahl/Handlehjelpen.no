@@ -3,7 +3,7 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     height: 100%;
-    background-color: #a3a3a3;
+    background-color: #c7c1c1;
   }
 
   .four-part-container img {
@@ -49,7 +49,7 @@
   .faq-item {
     margin-bottom: 1rem;
     cursor: pointer;
-    border: 1px solid #ccc;
+    border: 1px solid #676767;
     border-radius: 0.5rem;
     padding: 1rem;
     transition: background-color 0.2s;

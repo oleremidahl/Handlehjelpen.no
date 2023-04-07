@@ -19,6 +19,8 @@ import TermsAndConditions from './pages/T&C';
 import ScrollToTop from './components/ScrollToTop';
 import { firestore } from './base';
 import { doc, getDoc } from 'firebase/firestore';
+import DeliveryView from './components/DeliveryView';
+import Groceries from './components/Groceries';
 
 function App() {
   const user = useContext(AuthContext);
@@ -74,6 +76,10 @@ function App() {
                 <Route path='/profile' element={<ProfilePage isAdmin = {isAdmin}/>}/>
 
                 <Route path='/terms-and-conditions' element={<TermsAndConditions/>}/>
+
+                <Route path="/offers" element={<DeliveryView></DeliveryView>}/>
+
+                <Route path='/dagligvarer' element={<Groceries/>}/>
 
               </Routes>
           </div>

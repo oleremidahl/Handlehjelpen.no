@@ -1,6 +1,11 @@
+import { useState } from "react";
 import InfoComp from "../components/InfoComp";
 import ProductCard from "../components/ProductCard";
+import LocationSearchInput from "../components/Searchbar";
+import AddressSelection from "../components/Searchbar";
+import SearchBar from "../components/Searchbar";
 import "../css/home.css";
+import { PlaceAddress } from "../types";
 
 const Home = () => {
     
@@ -21,7 +26,7 @@ const Home = () => {
     return (
       <>
         <div className="home-container" style={{display: 'flex', 
-                    justifyContent: 'space-between', 
+                    // justifyContent: 'space-between', 
                     height: '100vh',
                     borderBottom: '3px solid black'
                   }}>

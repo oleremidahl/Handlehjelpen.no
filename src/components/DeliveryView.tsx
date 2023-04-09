@@ -37,10 +37,10 @@ const DeliveryView = () => {
   const navigate = useNavigate();
   const loc = useLocation();
   const [address, setAddress] = useState(loc.state.address);
-  const [price, setPrice] = useState(loc.state.distance);
+  const [price, setPrice] = useState(loc.state.price);
 
   const handleCardClick = (linkUrl: string) => {
-    navigate(linkUrl, { state: { address: address, distance: price } });
+    navigate(linkUrl, { state: { address: address, price: price } });
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -26,7 +26,7 @@ function AddressSelection({ onAddressSelected, onValidAddress }: AddressSelectio
       autocomplete.addListener("place_changed", async () => {
         const place = autocomplete.getPlace();
         if (!place.geometry) {
-          setAlertDescription(`Ingen adresser funnet for: '${place.name}'`);
+          setAlertDescription(`Ingen adresser funnet for: '${place.name}'. Om adressen kom opp som et alternativ, vennligst klikk på alternativet.`);
           setIsAlertActive(true);
           return;
         }
@@ -109,10 +109,12 @@ function AddressSelection({ onAddressSelected, onValidAddress }: AddressSelectio
 
   function calculatePrice(km: number) {
       var pris = 0
-      if (km <= 5) pris = 119;
+      if (km == 0) return 0;
+      else if (km <= 5) pris = 119;
       else {
         pris = 119 + (20 * (km - 5));
       }
+      pris = Math.round(pris);
       return pris;
   }
   

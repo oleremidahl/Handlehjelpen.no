@@ -446,15 +446,15 @@ const OrderField = () => {
                             </p>
                         </div>}
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Checkbox 
-                        color='success'
-                        checked={isExtraChecked}
-                        onChange={handleExtraCheckboxChange}
-                    /> 
-                    <p style={{ marginLeft: '10px' }}>
-                        Hvis en eller flere matvarer er utsolgt eller ikke tilgjengelig ønsker jeg fortsatt resten av min bestilling. 
-                    </p>
-                    </div>
+                            <Checkbox 
+                                color='success'
+                                checked={isExtraChecked}
+                                onChange={handleExtraCheckboxChange}
+                            /> 
+                            <p style={{ marginLeft: '10px' }}>
+                                Hvis en eller flere matvarer er utsolgt eller ikke tilgjengelig ønsker jeg fortsatt resten av min bestilling. 
+                            </p>
+                        </div>
                     <Button type="submit" variant="contained" color='success' style={{maxWidth: '300px'}}>Send inn bestilling</Button>
                 </form>
             </div>

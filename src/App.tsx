@@ -21,6 +21,8 @@ import { firestore } from './base';
 import { doc, getDoc } from 'firebase/firestore';
 import DeliveryView from './components/DeliveryView';
 import Groceries from './components/Groceries';
+import InformationForm from './components/InformationForm';
+import TakeAway from './components/Takeaway';
 
 function App() {
   const user = useContext(AuthContext);
@@ -80,6 +82,10 @@ function App() {
                 <Route path="/offers" element={<DeliveryView></DeliveryView>}/>
 
                 <Route path='/dagligvarer' element={<Groceries/>}/>
+
+                <Route path='/takeaway' element={<TakeAway/>}/>
+                
+                <Route path='/ContactInfo' element={<InformationForm/>}/>
 
               </Routes>
           </div>

@@ -21,15 +21,18 @@ const Calendar = (props: any) => {
   };
 
   const filterDate = (date: any) => {
-    // Disable dates before 3rd of April
-    // if (date < new Date("2023-04-02")) return false;
+    const timeOfDay = new Date().getHours();
+    
+    // Enable today before 20:00
 
     // Enable dates between 3rd of April and 10th of April
     if (date >= new Date("2023-04-02") && date <= new Date("2023-04-10")){
-      
+      if (date.getDate() === new Date().getDate() && timeOfDay > 20) {
+        return false;
+      }
       return true;
     }
-
+  
     // Enable every Tuesday after 10th of April up until 17th of June
     if (
       date >= new Date("2023-04-10") &&
@@ -38,17 +41,17 @@ const Calendar = (props: any) => {
     ){
       return true;
     }
-
+  
     // Enable every date after 17th of June up until 17th of August
-    if (
-      date >= new Date("2023-06-17") &&
-      date <= new Date("2023-08-17")
-    )
+    if (date >= new Date("2023-06-17") && date <= new Date("2023-08-17")) {
       return true;
-
+    }
+  
+  
     // Disable all other dates
     return false;
   };
+  
 
   return (
     <DatePicker
@@ -56,7 +59,7 @@ const Calendar = (props: any) => {
       dateFormat="dd/MM/yyyy"
       placeholderText='Klikk for å velge dato'
       onChange={handleDateChange}
-      minDate={new Date(Date.now() + 86400000)} // tomorrow
+      minDate={new Date()} // today
       // minDate={new Date(2023,3,3)}
       maxDate={maxDate}
       wrapperClassName="react-datepicker-wrapper"

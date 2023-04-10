@@ -54,6 +54,10 @@
     padding: 1rem;
     transition: background-color 0.2s;
   }
+
+  .faq-item:hover {
+    background-color: #ddd;
+  }
   
   .faq-item.open {
     background-color: #eee;

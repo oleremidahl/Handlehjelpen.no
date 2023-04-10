@@ -21,9 +21,10 @@ const Home = () => {
     return (
       <>
         <div className="home-container" style={{display: 'flex', 
-                    justifyContent: 'space-between', 
+                    // justifyContent: 'space-between', 
                     height: '100vh',
-                    borderBottom: '3px solid black'
+                    borderBottom: '3px solid black',
+                    minHeight: '850px',
                   }}>
           <ProductCard />
         </div>

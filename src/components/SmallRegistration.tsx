@@ -27,25 +27,26 @@ const RegistrationForm = () => {
 
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isChecked){
-      try {
+    if (!user){
+      if (isChecked){
+        try {
           await auth.createUserWithEmailAndPassword(
             email,
             password
-          ).then((user) => {
-            if (user.user){
-              addToDatabase({
-                uid: user.user.uid,
-                navn: name, 
-                email: email,
-                tlf: phone,
-                mottaMail: isEmailChecked
-              })
-              
-            }
-          });
-          navigate("/");
-        } catch (error: any) {
+            ).then((user) => {
+              if (user.user){
+                addToDatabase({
+                  uid: user.user.uid,
+                  navn: name, 
+                  email: email,
+                  tlf: phone,
+                  mottaMail: isEmailChecked
+                })
+                
+              }
+            });
+            navigate("/");
+          } catch (error: any) {
             if (error.code === 'auth/weak-password') {
               setAlertDescription('Passordet må være minst 6 tegn.');
               setIsAlertActive(true);
@@ -68,10 +69,16 @@ const RegistrationForm = () => {
               console.log(error);
             }
           }
+        }
+        else {
+          setAlertDescription('Du må bekrefte at du har lest og forstått Vilkårsavtalen.');
+          setIsAlertActive(true);
+        }
       }
       else {
-        setAlertDescription('Du må bekrefte at du har lest og forstått Vilkårsavtalen.');
+        setAlertDescription('Du er allerede logget inn.');
         setIsAlertActive(true);
+        navigate("/");
       }
   };
 
@@ -113,6 +120,7 @@ const RegistrationForm = () => {
           value={name}
           onChange={(event) => setName(event.target.value)}
           required
+          style={{maxWidth: '400px'}}
         />
         <label htmlFor="phone">Tlf:</label>
         <input
@@ -121,6 +129,7 @@ const RegistrationForm = () => {
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
           required
+          style={{maxWidth: '400px'}}
         />
         <label htmlFor="email">Email:</label>
         <input
@@ -129,6 +138,7 @@ const RegistrationForm = () => {
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
+          style={{maxWidth: '400px'}}
         />
         <label htmlFor="password">Passord:</label>
         <input
@@ -137,6 +147,7 @@ const RegistrationForm = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
+          style={{maxWidth: '400px'}}
         />
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Checkbox 
@@ -144,14 +155,14 @@ const RegistrationForm = () => {
             checked={isChecked}
             onChange={handleCheckboxChange}
           /> 
-          <p style={{ marginLeft: '10px' }}>
+          <p style={{ marginLeft: '10px', maxWidth: '500px' }}>
             Ved å huke av bekrefter du å ha lest og forstått&nbsp;
             <Link to="/terms-and-conditions"><strong style={{ fontStyle: 'italic' }}>
                Vilkårsavtalen</strong>
             </Link>
           </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', maxWidth: '481px' }}>
           <Checkbox 
             color='success'
             checked={isEmailChecked}

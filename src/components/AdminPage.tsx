@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { firestore } from "../base";
 
@@ -9,7 +9,6 @@ const AdminPage = () => {
         const ordersRef = collection(firestore, 'orders');
         const q = query(ordersRef, orderBy("mottatt", "desc"));
         const data = await getDocs(q);
-        console.log(data.docs);
         return data.docs;
       }
 
@@ -38,7 +37,7 @@ const AdminPage = () => {
                                 {allOrders.map((order: any) => (
                                 <tr key={order.id}>
                                     <td>{order.data().mottatt}</td>
-                                    <td>{order.data().leveringstid === 'En annen dato' ? order.data().annenDato : order.data().leveringstid}</td>
+                                    <td>{order.data().leveringsdato ? order.data().leveringsdato : order.data().annenDato + ", " + order.data().annenDatoTid}</td>
                                     <td>{order.data().leveringspris} kr</td>
                                     <td>{order.data().varer.join(", ")}</td>
                                 </tr>

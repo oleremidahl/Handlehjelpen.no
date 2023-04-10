@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 
 import { AuthContext } from './context/AuthContext';
-import OrderField from './components/OrderField';
 import OneOrderConfirmation from './components/OneOrderConfirmation';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,6 +18,10 @@ import TermsAndConditions from './pages/T&C';
 import ScrollToTop from './components/ScrollToTop';
 import { firestore } from './base';
 import { doc, getDoc } from 'firebase/firestore';
+import DeliveryView from './components/DeliveryView';
+import Groceries from './components/Groceries';
+import InformationForm from './components/InformationForm';
+import TakeAway from './components/Takeaway';
 
 function App() {
   const user = useContext(AuthContext);
@@ -67,13 +70,19 @@ function App() {
 
                 <Route path='/register' element={<ProtectedRoute><SmallRegistration/></ProtectedRoute>}/>
 
-                <Route path='/Order' element={<OrderField/>}/>
-
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 
                 <Route path='/profile' element={<ProfilePage isAdmin = {isAdmin}/>}/>
 
                 <Route path='/terms-and-conditions' element={<TermsAndConditions/>}/>
+
+                <Route path="/offers" element={<DeliveryView></DeliveryView>}/>
+
+                <Route path='/dagligvarer' element={<Groceries/>}/>
+
+                <Route path='/takeaway' element={<TakeAway/>}/>
+                
+                <Route path='/ContactInfo' element={<InformationForm/>}/>
 
               </Routes>
           </div>

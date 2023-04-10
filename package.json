@@ -14,11 +14,12 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/googlemaps": "^3.43.3",
     "@types/mini-css-extract-plugin": "^2.5.1",
-    "@types/react": "^18.0.27",
+    "@types/react": "^18.0.33",
     "@types/react-datepicker": "^4.8.0",
-    "@types/react-dom": "^18.0.10",
+    "@types/react-dom": "^18.0.11",
     "@types/react-modal": "^3.13.1",
     "@types/react-places-autocomplete": "^7.2.9",
+    "@types/styled-components": "^5.1.26",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.3",
     "file-loader": "^6.2.0",
@@ -26,6 +27,7 @@
     "firebase-tools": "^11.24.0",
     "firestore": "^1.1.6",
     "html-webpack-plugin": "^5.5.0",
+    "http-proxy-middleware": "^2.0.6",
     "mini-css-extract-plugin": "^2.7.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
@@ -39,6 +41,7 @@
     "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
     "style-loader": "^3.3.1",
+    "styled-components": "^5.3.9",
     "terser-webpack-plugin": "^5.3.7",
     "typescript": "^4.9.4",
     "url-loader": "^4.1.1",
@@ -49,6 +52,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "proxy": "node proxy.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
@@ -74,6 +78,7 @@
     ]
   },
   "devDependencies": {
+    "@types/google.maps": "^3.52.4",
     "gh-pages": "^5.0.0"
   }
 }

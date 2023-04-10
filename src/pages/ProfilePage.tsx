@@ -1,21 +1,18 @@
-import { collection, doc, DocumentData, DocumentSnapshot, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, DocumentData, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { DataContext } from '../context/DataContext';
 import {firestore} from '../base';
 import AdminPage from "../components/AdminPage";
 
 const ProfilePage = ({ isAdmin }: { isAdmin: boolean }) => {
     const [data, setData] = useState<DocumentData>();
     const user = useContext(AuthContext);
-    const navigate = useNavigate();
     
     async function getOrdersByOwner() {
         const ordersRef = collection(firestore, 'orders');
         const q = query(ordersRef, orderBy("mottatt", "desc"), where('ownerId', '==', user?.uid));
         const data = await getDocs(q);
-        console.log(data.docs);
         return data.docs;
       }
 

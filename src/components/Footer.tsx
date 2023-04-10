@@ -17,7 +17,6 @@ const Footer = () => {
                     <Link to="/terms-and-conditions" style={{color: 'black'}}>
                         <p style={{color: 'black'}}>Betingelser og Vilkår</p>
                     </Link>
-                    {/* <p>©kultnavn - Alle rettigheter reservert</p> */}
                 </div>
                 <div className="footInfo">
                     <div className="contact">

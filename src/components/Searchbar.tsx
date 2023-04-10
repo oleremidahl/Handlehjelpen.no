@@ -109,7 +109,7 @@ function AddressSelection({ onAddressSelected, onValidAddress }: AddressSelectio
 
   function calculatePrice(km: number) {
       var pris = 0
-      if (km == 0) return 0;
+      if (km === 0) return 0;
       else if (km <= 5) pris = 119;
       else {
         pris = 119 + (20 * (km - 5));
@@ -124,7 +124,6 @@ function AddressSelection({ onAddressSelected, onValidAddress }: AddressSelectio
          {isAlertActive &&
         <Dialog open={isAlertActive} 
                 onClose={() => setIsAlertActive(false)} 
-                // PaperProps={{ style: { backgroundColor: 'darkgreen' } }}
                 >
             <DialogTitle>Ouups! Her mangler det noe. </DialogTitle>
             <DialogContent>
@@ -142,7 +141,7 @@ function AddressSelection({ onAddressSelected, onValidAddress }: AddressSelectio
           <img className="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="" />
           <span className="sb-title">Søk etter adresse</span>
         </div>
-        <input type="text" placeholder="Skriv inn og klikk på addressen " ref={locationInputRef} />
+        <input type="text" placeholder="Skriv inn og klikk på addressen " ref={locationInputRef}/>
         {/* {distance !== 0 && <div className="address-text">{distance}</div>} */}
         {warning && <div className="address-text">{warning}</div>}
       </div>

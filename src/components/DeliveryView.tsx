@@ -1,6 +1,6 @@
 import Modal from "react-modal";
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import rema from "../images/2022-06-11.jpeg";
 import takeaway from "../images/pexels-diego-pontes-2323398.jpg";
@@ -53,21 +53,19 @@ const DeliveryView = () => {
     setIsModalOpen(false);
   };
 
+  function handleAddressSelected(placeAddress: PlaceAddress, price: number) {
+    setAddress(placeAddress.street + ", " + placeAddress.postalCode + " " + placeAddress.city);
+    setPrice(price);
+  }
 
-
-    function handleAddressSelected(placeAddress: PlaceAddress, price: number) {
-      setAddress(placeAddress.street + ", " + placeAddress.postalCode + " " + placeAddress.city);
-      setPrice(price);
+  function handleValidAddress(validAddress: boolean) {
+    if (validAddress) {
+      handleCloseModal();
+      console.log(price, address)
     }
+  }
 
-    function handleValidAddress(validAddress: boolean) {
-      if (validAddress) {
-        handleCloseModal();
-        console.log(price, address)
-      }
-    }
-
-    Modal.setAppElement('#root');
+  Modal.setAppElement('#root');
 
 
   return (

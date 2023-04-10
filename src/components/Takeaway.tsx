@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThreeStepProgressBar from "./ThreeStepProgressBar";
 import { Loader } from '@googlemaps/js-api-loader';
+import "../css/AI/AI_OrderField.css";
+
 
 
 const TakeAway = () => {
@@ -20,7 +22,7 @@ const TakeAway = () => {
 
 
     useEffect(() => {
-        localStorage.setItem('items', JSON.stringify(takeawayItems));
+        localStorage.setItem('takeawayItems', JSON.stringify(takeawayItems));
     }, [takeawayItems]);
 
     const handleRemove = (index: number) => {
@@ -70,12 +72,12 @@ const TakeAway = () => {
     const txtAreaPlaceholder = `Her kan du legge inn det du vil ha fra ${restaurant ? restaurant : 'din valgte restaurant'} `;
 
     useEffect(() => {
-        // const loader = new Loader({
-        //   apiKey: "AIzaSyB6sUX3FkoYzCqh62Pmiuq0kTfFGHLZ9Pc",
-        //   libraries: ["places"],
-        // });
+        const loader = new Loader({
+          apiKey: "AIzaSyB6sUX3FkoYzCqh62Pmiuq0kTfFGHLZ9Pc",
+          libraries: ["places", "geometry"],
+        });
       
-        // loader.load().then(() => {
+        loader.load().then(() => {
           const service = new window.google.maps.places.PlacesService(
             document.createElement("div")
           );
@@ -115,6 +117,7 @@ const TakeAway = () => {
                 setRestaurants(sortedPlaceNames);
             })
             .catch((error) => console.error(error));
+        });
       }, []);
 
     return (
@@ -145,6 +148,7 @@ const TakeAway = () => {
                     ))}
                     <option value="Andre">Annen restaurant</option>
                     </select> 
+                <div className="select__arrow" style={{marginTop: '-6px'}}></div>
                 </div>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <textarea 

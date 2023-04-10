@@ -40,7 +40,7 @@ const InformationForm: React.FC = () => {
   const [isTomorrow, setIsTomorrow] = useState<boolean>();
   const [isOffSeason, setIsOffSeason] = useState<boolean>();
   const [timeOfDay, setTimeOfDay] = useState(new Date().getHours());
-  const baseMessage: string = "NY ORDRE! \n" +  "Navn: " + formValues.name + "\nTlf: " + formValues.phone;
+  const baseMessage: string = `NY ORDRE! \nNavn: ${formValues.name}\nTlf: ${formValues.phone}`;
   const dateMessage: string = `\nDato: ${formValues.dato}, ${formValues.tid}`;
   const addressMessage: string = `\nLeveres til: ${formValues.address}`;
   const priceMessage: string = `\nLeveringspris: ${formValues.price !== 0 ? formValues.price + " kr" : "Ikke estimert, må regnes ut manuelt."}`
@@ -153,6 +153,7 @@ const InformationForm: React.FC = () => {
             var date = year + '/' + month + '/' + day;
             var dateTime =   date + '-' + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
             const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage + misingItemsOrder + (additionalInfoMessage? additionalInfoMessage : '');
+            console.log(fullMessage);
             addToFS({
                 navn: formValues.name,
                 tlf: formValues.phone,
@@ -160,12 +161,14 @@ const InformationForm: React.FC = () => {
                 lokasjon: formValues.address,
                 leveringspris: formValues.price,
                 leveringstid: formValues.tid,
+                leveringsdato: formValues.dato,
                 mottatt: dateTime,
                 ekstraInfo: formValues.additionalInfo,
                 to: phoneNumbers,
                 body: fullMessage,
                 ownerId: uid,
                 onskerOrdreMedMangler: formValues.extraChecked,
+                salgsSted: formValues.type,
             }).then((newOrder: any) => {
                 navigate('/OrderConfirmation', { state: {formValues, today} })
               }).catch((error: any) => {
@@ -230,7 +233,7 @@ const InformationForm: React.FC = () => {
 
     function calculatePrice(km: number) {
         var pris = 0
-        if (km == 0) return 0;
+        if (km === 0) return 0;
         else if (km <= 5) pris = 119;
         else {
         pris = 119 + (20 * (km - 5));

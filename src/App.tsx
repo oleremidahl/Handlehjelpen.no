@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 
 import { AuthContext } from './context/AuthContext';
-import OrderField from './components/OrderField';
 import OneOrderConfirmation from './components/OneOrderConfirmation';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -70,8 +69,6 @@ function App() {
                 />
 
                 <Route path='/register' element={<ProtectedRoute><SmallRegistration/></ProtectedRoute>}/>
-
-                <Route path='/Order' element={<OrderField/>}/>
 
                 <Route path='/OrderConfirmation' element={<OneOrderConfirmation/>}/>
 

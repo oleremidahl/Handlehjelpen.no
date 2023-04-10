@@ -1,11 +1,6 @@
-import { useState } from "react";
 import InfoComp from "../components/InfoComp";
 import ProductCard from "../components/ProductCard";
-import LocationSearchInput from "../components/Searchbar";
-import AddressSelection from "../components/Searchbar";
-import SearchBar from "../components/Searchbar";
 import "../css/home.css";
-import { PlaceAddress } from "../types";
 
 const Home = () => {
     
@@ -29,7 +24,7 @@ const Home = () => {
                     // justifyContent: 'space-between', 
                     height: '100vh',
                     borderBottom: '3px solid black',
-                    minHeight: '800px',
+                    minHeight: '850px',
                   }}>
           <ProductCard />
         </div>

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/SmallLoginStyles.css';
 import { AuthContext } from '../context/AuthContext';
-import { auth, firestore } from '../base';
+import { auth } from '../base';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 

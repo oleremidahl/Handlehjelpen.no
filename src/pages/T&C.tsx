@@ -1,4 +1,3 @@
-import { margin } from "@mui/system";
 import React from "react";
 import bckgrnd from "../images/vilkarsavtale.jpg";
 

@@ -61,6 +61,7 @@ const Groceries = () => {
             <div className="OrderDetails" style={{width: '80%', margin: '60px auto', maxWidth: '600px'}}>
                 <ThreeStepProgressBar currentStep={1} />
                 <h1>Ny bestilling</h1>
+                <p><strong>Levering av take-away kommer tilbake til sommeren!</strong></p>
                 <p>Gjerne vær så spesifikk som mulig for å sikre at du får det du vil ha!</p>
                 <textarea 
                 name="varer"

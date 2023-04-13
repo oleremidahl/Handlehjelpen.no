@@ -28,7 +28,7 @@ const ProductCard = () => {
     }
 
     const handleContinue = () => { 
-        navigate('/offers', {state: {address: address, price: price}});
+        navigate('/dagligvarer', {state: {address: address, price: price}});
     };
      
     return (
@@ -37,7 +37,7 @@ const ProductCard = () => {
                 <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg - Mandal</h1>
                 <br/>
                     <div className="information"> 
-                       <p> Levering fra alle byens restauranter <br/>og dagligvarer fra Rema 1000!
+                       <p> Morgenlevering hver tirsdag fra Rema 1000 <br/>frem til sommeren!
                         <br/>
                         <strong>Kun kr 119 innen 4km!</strong></p>
                         <p>Finner du ikke addressen eller ønsker levering til offentlig plass?<br/> Ring oss på 489 12 203!</p>

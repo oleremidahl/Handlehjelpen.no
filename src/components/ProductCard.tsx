@@ -10,7 +10,7 @@ const ProductCard = () => {
     const navigate = useNavigate();
     const [address, setAddress] = useState("");
     const [validAddress, setValidAddress] = useState(false);
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState<number | null>(null);
 
     function handleAddressSelected(placeAddress: PlaceAddress, price: number) {
       
@@ -44,6 +44,7 @@ const ProductCard = () => {
                     </div>
                 <div>
                     <AddressSelection onAddressSelected={handleAddressSelected} onValidAddress={handleValidAddress}></AddressSelection><br/>
+                        {price && <p>Levering til {address}: {price} kr</p>}
                     {validAddress && <Button onClick={handleContinue} className="buy_btn" variant="contained" color="success">
                         {/* <span className="shopping-cart"><i className="fa fa-shopping-cart" aria-hidden="true"></i></span> */}
                         <span className="buy">Gå videre</span>

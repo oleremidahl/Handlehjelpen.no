@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import rema from "../images/2022-06-11.jpeg";
@@ -36,8 +36,13 @@ const cards: CardData[] = [
 const DeliveryView = () => {
   const navigate = useNavigate();
   const loc = useLocation();
-  const [address, setAddress] = useState(loc.state.address);
-  const [price, setPrice] = useState(loc.state.price);
+  const [address, setAddress] = useState(localStorage.getItem('address') || loc.state.address);
+  const [price, setPrice] = useState(localStorage.getItem('price') || loc.state.price);
+
+  useEffect(() => {
+    localStorage.setItem('address', address || '');
+    localStorage.setItem('price', price || '');
+  }, [address, price])
 
   const handleCardClick = (linkUrl: string) => {
     navigate(linkUrl, { state: { address: address, price: price } });
@@ -71,7 +76,8 @@ const DeliveryView = () => {
   return (
     <Container>
       <DeliveryInfo>
-        Leveres til: {address} <Button onClick={handleOpenModal}>Ny adresse</Button>
+        Leveres til: {address} <Button onClick={handleOpenModal}>Ny adresse</Button> 
+        {price &&<p>Pris levering: {price} kr</p>}
       </DeliveryInfo>
       <h1 style={{textAlign: 'center', color: '#3e6b00'}}>Hva vil du ha idag? </h1>
       <Cards>

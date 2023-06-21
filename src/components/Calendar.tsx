@@ -23,8 +23,6 @@ const Calendar = (props: any) => {
   const filterDate = (date: any) => {
     const timeOfDay = new Date().getHours();
     
-    // Enable today before 20:00
-
     // Enable dates between 3rd of April and 10th of April
     if (date >= new Date("2023-04-02") && date <= new Date("2023-04-10")){
       if (date.getDate() === new Date().getDate() && timeOfDay > 20) {
@@ -42,8 +40,8 @@ const Calendar = (props: any) => {
       return true;
     }
   
-    // Enable every date after 17th of June up until 17th of August
-    if (date >= new Date("2023-06-17") && date <= new Date("2023-08-17")) {
+    // Enable every date after 2nd of July up until 17th of August
+    if (date >= new Date("2023-07-02") && date <= new Date("2023-08-17")) {
       return true;
     }
   

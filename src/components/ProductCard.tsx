@@ -28,7 +28,7 @@ const ProductCard = () => {
     }
 
     const handleContinue = () => { 
-        navigate('/dagligvarer', {state: {address: address, price: price}});
+        navigate('/offers', {state: {address: address, price: price}});
     };
      
     return (

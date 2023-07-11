@@ -31,6 +31,7 @@ const OneOrderConfirmation = () => {
                 </p>
                 <div>
                     <h3>Din bestilling</h3>
+                    <p>Fra: {formValues.type}</p>
                     <ol >
                         {formValues.varer.map((item: string) => (
                             <li key={item}>{item}</li>

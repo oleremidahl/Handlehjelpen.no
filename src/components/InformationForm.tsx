@@ -44,7 +44,7 @@ const InformationForm: React.FC = () => {
   const dateMessage: string = `\nDato: ${formValues.dato}, ${formValues.tid}`;
   const addressMessage: string = `\nLeveres til: ${formValues.address}`;
   const priceMessage: string = `\nLeveringspris: ${formValues.price !== 0 ? formValues.price + " kr" : "Ikke estimert, må regnes ut manuelt."}`
-  const itemsMessage: string = `\nBestilling:\n${formValues.varer.join('\n')}`;
+  const itemsMessage: string = `\nBestilling: \nFra: ${formValues.type}\n${formValues.varer.join('\n')}`;
   const additionalInfoMessage: string = formValues.additionalInfo ? `\nEkstra info: ${formValues.additionalInfo}` : "";
   const phoneNumbers: string[] = ['+4748912203'];
   const misingItemsOrder: string = `\n${formValues.extraChecked ? "Kunden ønsker å få levering selv om noen varer mangler" : "Kunden ønsker IKKE levering om det mangler en vare. "}`

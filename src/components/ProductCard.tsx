@@ -13,7 +13,6 @@ const ProductCard = () => {
     const [price, setPrice] = useState<number | null>(null);
 
     function handleAddressSelected(placeAddress: PlaceAddress, price: number) {
-      
       setAddress(placeAddress.street + ", " + placeAddress.postalCode + " " + placeAddress.city);
       setPrice(price);
     }
@@ -28,6 +27,8 @@ const ProductCard = () => {
     }
 
     const handleContinue = () => { 
+        localStorage.setItem('address', address || '');
+        localStorage.setItem('price', price?.toString() || '');
         navigate('/offers', {state: {address: address, price: price}});
     };
      

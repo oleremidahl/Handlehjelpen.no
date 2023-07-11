@@ -11,7 +11,7 @@ const TakeAway = () => {
     const loc = useLocation();
     const address = loc.state.address;
     const price = loc.state.price;
-    const [takeawayItems, setTakeawayItems] = useState<string[]>(JSON.parse(localStorage.getItem('takeawayItems') || '[]'));
+    const [takeawayItems, setTakeawayItems] = useState<string[]>(JSON.parse('[]')); //localStorage.getItem('takeawayItems') || 
     const [inpGoods, setInpGoods] = useState("");
     const navigate = useNavigate();
     const [isExtraChecked, setIsExtraChecked] = useState(true);
@@ -21,9 +21,9 @@ const TakeAway = () => {
     const [alertDescription, setAlertDescription] = useState<string>('');
 
 
-    useEffect(() => {
-        localStorage.setItem('takeawayItems', JSON.stringify(takeawayItems));
-    }, [takeawayItems]);
+    // useEffect(() => {
+    //     localStorage.setItem('takeawayItems', JSON.stringify(takeawayItems));
+    // }, [takeawayItems]);
 
     const handleRemove = (index: number) => {
         const newItems = [...takeawayItems];

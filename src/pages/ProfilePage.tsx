@@ -65,7 +65,7 @@ const ProfilePage = ({ isAdmin }: { isAdmin: boolean }) => {
                                 {prevOrders.map((order: any) => (
                                 <tr key={order.id}>
                                     <td>{order.data().mottatt}</td>
-                                    <td>{order.data().leveringstid === 'En annen dato' ? order.data().annenDato : order.data().leveringstid}</td>
+                                    <td>{order.data().leveringsdato}, {order.data().leveringstid}</td>
                                     <td>{order.data().leveringspris} kr</td>
                                     <td>{order.data().varer.join(", ")}</td>
                                 </tr>

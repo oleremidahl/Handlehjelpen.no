@@ -37,7 +37,7 @@ const AdminPage = () => {
                                 {allOrders.map((order: any) => (
                                 <tr key={order.id}>
                                     <td>{order.data().mottatt}</td>
-                                    <td>{order.data().leveringsdato ? order.data().leveringsdato : order.data().annenDato + ", " + order.data().annenDatoTid}</td>
+                                    <td>{order.data().leveringsdato}, {order.data().leveringstid}</td>
                                     <td>{order.data().leveringspris} kr</td>
                                     <td>{order.data().varer.join(", ")}</td>
                                 </tr>

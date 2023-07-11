@@ -22,7 +22,10 @@ const Calendar = (props: any) => {
 
   const filterDate = (date: any) => {
     const timeOfDay = new Date().getHours();
-    
+
+    if (timeOfDay > 20 && date.getDate() === new Date().getDate()) {
+      return false;
+    }
     // Enable dates between 3rd of April and 10th of April
     if (date >= new Date("2023-04-02") && date <= new Date("2023-04-10")){
       if (date.getDate() === new Date().getDate() && timeOfDay > 20) {

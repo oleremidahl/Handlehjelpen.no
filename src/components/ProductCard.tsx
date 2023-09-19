@@ -38,19 +38,18 @@ const ProductCard = () => {
                 <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg - Mandal</h1>
                 <br/>
                     <div className="information"> 
-                       <h2>Vi er tilbake sommeren 2024!</h2>
-                       {/* <p> 
-                        <strong>Kun kr 119 innen 4km!</strong></p> */}
-                        {/* <p>Finner du ikke addressen eller ønsker levering til offentlig plass?<br/> Ring oss på 489 12 203!</p> */}
+                       {/* <h2>Vi er tilbake sommeren 2024!</h2> */}
+                       <p> 
+                        <strong>Kun kr 119 innen 4km!</strong></p>
+                        <p>Finner du ikke addressen eller ønsker levering til offentlig plass?<br/> Ring oss på 489 12 203!</p>
                     </div>
                 <div>
-                    {/* <AddressSelection onAddressSelected={handleAddressSelected} onValidAddress={handleValidAddress}></AddressSelection><br/>
+                    <AddressSelection onAddressSelected={handleAddressSelected} onValidAddress={handleValidAddress}></AddressSelection><br/>
                         {price && <p>Levering til {address}: {price} kr</p>}
-                    {validAddress && <Button onClick={handleContinue} className="buy_btn" variant="contained" color="success">
-                        {/* <span className="shopping-cart"><i className="fa fa-shopping-cart" aria-hidden="true"></i></span> */}
-                        {/* <span className="buy">Gå videre</span> */}
-                    {/* </Button> */} 
-                    {/* } */}
+                        {validAddress && <Button onClick={handleContinue} className="buy_btn" variant="contained" color="success">
+                        <span className="shopping-cart"><i className="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                        <span className="buy">Gå videre</span>
+                        </Button> }
                     
                 </div>		
             </div>

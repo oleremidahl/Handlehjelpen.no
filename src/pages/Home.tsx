@@ -21,9 +21,9 @@ const Home = () => {
       <>
         <div className="home-container" style={{display: 'flex', 
                     // justifyContent: 'space-between', 
-                    height: '100vh',
+                    minHeight: '100vh',
                     borderBottom: '3px solid black',
-                    minHeight: '850px',
+
                   }}>
           <ProductCard />
         </div>

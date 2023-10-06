@@ -153,7 +153,6 @@ const InformationForm: React.FC = () => {
             var date = year + '/' + month + '/' + day;
             var dateTime =   date + '-' + today.getHours().toString().padStart(2, '0') + ":" + today.getMinutes().toString().padStart(2, '0');
             const fullMessage = baseMessage + dateMessage + addressMessage + priceMessage + itemsMessage + misingItemsOrder + (additionalInfoMessage? additionalInfoMessage : '');
-            console.log(fullMessage);
             addToFS({
                 navn: formValues.name,
                 tlf: formValues.phone,
@@ -301,7 +300,7 @@ const InformationForm: React.FC = () => {
             </DialogActions>
           </Dialog>
         <div className='form-container' style={{marginTop: '30px'}}>
-            <form onSubmit={handleOrder}>
+            <form > {/*onSubmit={handleOrder} */}
             <h2 >Informasjon</h2>
             <div>
                 <Calendar onRetrievedDate={handleRetrievedDate}/><br/>

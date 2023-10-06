@@ -38,7 +38,8 @@ const ProductCard = () => {
                 <h1>Få ferske matvarer <br/> levert rett hjem <br/> til deg - Mandal</h1>
                 <br/>
                     <div className="information"> 
-                       {/* <h2>Vi er tilbake sommeren 2024!</h2> */}
+                       <h2>Vi er tilbake sommeren 2024!</h2>
+                       <p>Vi har dessverre stengt for sesongen. <br/> Men du kan fortsatt ta deg en titt rundt på den flotte siden vår! </p>
                        <p> 
                         <strong>Kun kr 119 innen 4km!</strong></p>
                         <p>Finner du ikke addressen eller ønsker levering til offentlig plass?<br/> Ring oss på 489 12 203!</p>
